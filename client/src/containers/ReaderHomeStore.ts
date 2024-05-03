@@ -1,15 +1,17 @@
+import { makeObservable, observable, action } from 'mobx';
 import { FileIDType, ReaderFileType } from "../consts/dataTypes";
 import { dataExampleFiles } from "../consts/dataExamples";
 
 export class ReaderHomeStore {
   readerFiles: ReaderFileType[] = [];
-  fileSelected: FileIDType = null;
+  @observable fileSelected: FileIDType = null;
 
   constructor() {
+    makeObservable(this);
     this.readerFiles = dataExampleFiles;
   }
 
-  setFileID = (id : FileIDType) => {
+  @action setFileID = (id : FileIDType) => {
     this.fileSelected = id;
   }
 

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ReaderHomeStore } from './ReaderHomeStore';
 import { ReaderFileLink } from '../components/ReaderFileLink';
+import { observer, useObserver } from 'mobx-react-lite';
+import './ReaderHome.css';
 
-export function ReaderHome() {
+export const ReaderHome = observer((props) => {
   const [store, setStore] = useState<ReaderHomeStore | null>(null);
 
   useEffect(() => {
@@ -10,7 +12,6 @@ export function ReaderHome() {
     setStore(store);
   }, []);
 
-  console.log('selected:', store?.fileSelected);
   return (
     <div>
       <div>
@@ -27,4 +28,4 @@ export function ReaderHome() {
       </div>
     </div>
   );
-}
+});

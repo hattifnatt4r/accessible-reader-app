@@ -12,7 +12,9 @@ export function ReaderFileLink(props : { file: ReaderFileType, className?: strin
   
   return (
     <div className={classNames(cl)}>
-      <div onClick={() => setFileID(file?.id)}>{file?.name}</div>
+      <div onClick={() => setFileID(file?.id)} className="file-link__name">
+        {file?.name}
+      </div>
        <AppLink to={`/file/${file?.id}`}>
         Open
       </AppLink>
