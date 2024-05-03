@@ -1,0 +1,26 @@
+
+.fileview {
+
+}
+.fileview__file {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 70vw;
+}
+
+.fileview__title {
+
+}
+
+.fileview__body {
+
+}
+
+.fileview__nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30vw;
+}
+

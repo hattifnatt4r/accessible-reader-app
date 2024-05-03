@@ -2,7 +2,7 @@ import { makeObservable, observable, action } from 'mobx';
 import { FileIDType, ReaderFileType } from "../consts/dataTypes";
 import { dataExampleFiles } from "../consts/dataExamples";
 
-export class ReaderHomeStore {
+export class FilehomeStore {
   readerFiles: ReaderFileType[] = [];
   @observable fileSelected: FileIDType = null;
 
@@ -15,4 +15,8 @@ export class ReaderHomeStore {
     this.fileSelected = id;
   }
 
+  getFile = (id:FileIDType) => {
+    const file = this.readerFiles.find(t => t?.id === id);
+    return file || null;
+  }
 }

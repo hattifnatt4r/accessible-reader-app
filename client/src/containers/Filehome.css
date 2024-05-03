@@ -1,0 +1,28 @@
+.filehome {
+
+}
+
+.filehome__files {
+  position: absolute;
+  left: 0;
+  top: 0;
+  max-width: 70vw;
+}
+
+.filehome__fileicons {
+
+}
+
+.filehome__nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30vw;
+}
+
+
+
+
+.filehome-link__name {
+  cursor: pointer;
+}

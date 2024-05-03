@@ -1,7 +1,7 @@
 import { FileIDType, ReaderFileType, ReaderTextType } from "../consts/dataTypes";
 import { dataExampleFiles, dataExampleText } from "../consts/dataExamples";
 
-export class ReaderFileStore {
+export class FileviewStore {
   file: ReaderFileType = null;
   text: ReaderTextType = null;
 
