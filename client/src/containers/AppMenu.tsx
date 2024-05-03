@@ -3,7 +3,7 @@ import { Icon } from '../components/Icon';
 import { AppLink } from '../components/AppLink';
 
 
-export function AppHeader() {
+export function AppMenu() {
 
   return (
     <div>

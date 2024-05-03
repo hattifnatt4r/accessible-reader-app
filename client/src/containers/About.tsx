@@ -1,9 +1,9 @@
 import React from 'react';
 
-export function Reader() {
+export function About() {
   return (
     <div>
-      Reader
+      About
     </div>
   );
 }
