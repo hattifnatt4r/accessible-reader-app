@@ -3,6 +3,7 @@ export type FileIDType = number | null;
 export type ReaderFileType = {
   id: FileIDType,
   name: string | null,
+  title: string | null,
   author: string | null,
 } | null;
 

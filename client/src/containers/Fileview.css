@@ -1,26 +1,37 @@
 
-.fileview {
+.fview {
 
 }
-.fileview__file {
+.fview__file {
   position: absolute;
   top: 0;
   left: 0;
   max-width: 70vw;
+  min-width: 70vw;
+  height: 100%;
+  border-right: solid 1px rgba(0,0,0,0.1);
 }
 
-.fileview__title {
+.fview__title {
 
 }
 
-.fileview__body {
+.fview__body {
 
 }
 
-.fileview__nav {
+.fview__nav {
   position: absolute;
   top: 0;
   right: 0;
   width: 30vw;
 }
 
+
+/* misc */
+.fview-button {
+  display: inline-block;
+  width: 40%;
+  min-height: 100px;
+  padding: 1rem;
+}

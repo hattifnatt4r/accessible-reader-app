@@ -15,4 +15,10 @@ export class FileviewStore {
     const text = dataExampleText.find(t => t?.id === id);
     return text || null;
   }
+
+  getFileTitle = (id:FileIDType) => {
+    // todo: retrive from config
+    const file = dataExampleFiles.find(t => t?.id === id);
+    return file || null;
+  }
 }

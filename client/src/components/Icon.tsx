@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 
-export function Icon(props : { name: string, className?: string }) {
+export function Icon(props : { name: string | null, className?: string }) {
   const { name, className, ...rest } = props;
   const cl = {
     'material-symbols-outlined': 1,

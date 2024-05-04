@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FilehomeStore } from './FilehomeStore';
-import { FilehomeFile } from './FilehomeFile';
+import { FilehomeButton, FilehomeFile } from './FilehomeMisc';
 import { observer, useObserver } from 'mobx-react-lite';
 import './Filehome.css';
 
@@ -14,19 +14,49 @@ export const Filehome = observer((props) => {
 
   if (!store) return null;
   return (
-    <div className="filehome">
-      <div className="filehome__files">
-        <div className="filehome__fileicons">
+    <div className="fhome">
+      <div className="fhome__files">
+        <div className="fhome__fileicons">
           {store?.readerFiles.map(f => <FilehomeFile file={f} setFileID={store.setFileID} key={f?.id} />)}
         </div>
 
-        <div className="filehome__magnify">
+        <div className="fhome__magnify">
           Filename: {store.getFile(store.fileSelected)?.name}
         </div>
       </div>
 
-      <div className="filehome__nav">
-        Buttons
+      <div className="fhome__nav">
+        <FilehomeButton iconName="menu">
+          Nav
+        </FilehomeButton>
+
+        <FilehomeButton iconName="person">
+          User
+        </FilehomeButton>
+
+        <FilehomeButton iconName="settings">
+          Settings
+        </FilehomeButton>
+
+        <FilehomeButton iconName="group">
+          Messages
+        </FilehomeButton>
+
+        <FilehomeButton iconName="arrow_right_alt">
+          Enter
+        </FilehomeButton>
+
+        <FilehomeButton iconName="add">
+          New
+        </FilehomeButton>
+
+        <FilehomeButton iconName="arrow_left">
+          Prev
+        </FilehomeButton>
+
+        <FilehomeButton iconName="arrow_right">
+          Right
+        </FilehomeButton>
       </div>
     </div>
   );
