@@ -3,29 +3,36 @@ import { Icon } from '../components/Icon';
 import { AppLink } from '../components/AppLink';
 import { AppMenu } from '../containers/AppMenu'; 
 import './Home.css';
+import { ModalLogin } from './ModalLogin';
 
 export function Home() {
   return (
     <div className="home">
-      <div className="home-top-text">
-        Welcome to Accessible Reader-Editor App!
+      <div className="home-body">
+        <div className="home-top-text">
+          Welcome to Accessible Reader-Editor App!
+          <br />
+          Short info.
         <br />
-        Short info.
-      <br />
-      </div>
-      <div className="home-nav">
-        Settings buttons
-      </div>
+        </div>
 
-      <div className="home-links">
-        <AppLink to="/about" className="home-links__link"><Icon name="info" /> About</AppLink>
-        <AppLink to="/reader" className="home-links__link"><Icon name="book" /> Reader</AppLink>
-        <AppLink to="/chat" className="home-links__link"><Icon name="chat" /> Messages</AppLink>
-        <AppLink to="/settings" className="home-links__link"><Icon name="settings" /> Settings</AppLink>
+        <div className="home-links">
+          <AppLink to="/about" className="home-links__link"><Icon name="info" /> About</AppLink>
+          <AppLink to="/reader" className="home-links__link"><Icon name="book" /> Reader</AppLink>
+          <AppLink to="/chat" className="home-links__link"><Icon name="chat" /> Messages</AppLink>
+          <AppLink to="/settings" className="home-links__link"><Icon name="settings" /> Settings</AppLink>
+          
+          <ModalLogin>
+            Login
+          </ModalLogin>
+        </div>
+
       </div>
+      
 
       <div className="home-footer">
-        Footer
+        GitHub <br/>
+        LinkedIn
       </div>
     </div>
   );

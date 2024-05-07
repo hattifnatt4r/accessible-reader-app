@@ -1,4 +1,11 @@
 .home {
+  
+}
+
+.home-body {
+  min-height: 80vh;
+  width: 100vw;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
   padding: 2rem;
 }
 
@@ -22,5 +29,5 @@
 }
 
 .home-footer {
-  
+  padding: 2rem;
 }

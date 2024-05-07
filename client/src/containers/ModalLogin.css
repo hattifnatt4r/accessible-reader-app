@@ -1,0 +1,22 @@
+.login-input {
+  outline: none;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgb(54, 54, 54);
+  border: none;
+  z-index: 1;
+  border-radius: 2rem;
+  padding: 0.4rem 1rem;
+  line-height: 1.8rem;
+  margin-bottom: 0.8rem;
+  box-shadow: 0 0 0 1px rgba(54, 54, 54, 0.18);
+  max-width: 200px;
+}
+.login-input:focus {
+  box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+  box-shadow: 0 0 0 0.2rem rgba(6, 195, 154, 0.513);
+}
+.login-input.input_empty {
+  color: rgba(127, 127, 127, 0.2) !important;
+}
