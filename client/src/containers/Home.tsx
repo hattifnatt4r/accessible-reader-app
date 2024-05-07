@@ -21,6 +21,7 @@ export function Home() {
         <AppLink to="/about" className="home-links__link"><Icon name="info" /> About</AppLink>
         <AppLink to="/reader" className="home-links__link"><Icon name="book" /> Reader</AppLink>
         <AppLink to="/chat" className="home-links__link"><Icon name="chat" /> Messages</AppLink>
+        <AppLink to="/settings" className="home-links__link"><Icon name="settings" /> Settings</AppLink>
       </div>
 
       <div className="home-footer">

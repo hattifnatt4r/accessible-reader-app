@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FileviewStore } from './FileviewStore';
 import { useParams } from 'react-router-dom';
-import './Fileview.css';
 import { FileviewButton } from './FileviewMisc';
+import { ModalNav } from './ModalNav';
+import './Fileview.css';
+
 
 export function Fileview() {
   const [store, setStore] = useState<FileviewStore | null>(null);
@@ -40,7 +42,9 @@ export function Fileview() {
 
       <div className="fview__nav">
         <FileviewButton iconName="menu">
-          Nav
+          <ModalNav>
+            Nav
+          </ModalNav>
         </FileviewButton>
 
         <FileviewButton>

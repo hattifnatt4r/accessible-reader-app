@@ -7,6 +7,7 @@ import { Fileview } from './containers/Fileview';
 import { Editor } from './containers/Editor';
 import { Chat } from './containers/Chat';
 import { About } from './containers/About';
+import { UserSettings } from './containers/UserSettings';
 import { AppNopage } from './containers/AppNopage'; 
 import './App.css';
 
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="file/:fileID" element={<Fileview />} />
           <Route path="editor" element={<Editor />} />
           <Route path="chat" element={<Chat />} />
+          <Route path="settings" element={<UserSettings />} />
           <Route path="about" element={<About />} />
           <Route path="*" element={<AppNopage />} />
         </Routes>
