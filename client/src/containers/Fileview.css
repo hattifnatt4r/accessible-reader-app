@@ -5,6 +5,19 @@
   width: 100vw;
   height: 100vh;
 }
+.fview-20 .fview__body {
+  font-size: calc(1.3rem * 2);
+  line-height: calc(2rem * 2);
+}
+.fview-15 .fview__body {
+  font-size: calc(1.3rem * 1.5);
+  line-height: calc(2rem * 1.5);
+}
+.fview-12 .fview__body {
+  font-size: calc(1.3rem * 1.25);
+  line-height: calc(2rem * 1.25);
+}
+
 .fview__file {
   position: absolute;
   top: 1rem;

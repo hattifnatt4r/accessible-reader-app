@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import './Button.css';
 
-export function Button(props : { className?: string, children: any, onClick?: any }) {
-  const { children, className, onClick, ...rest } = props;
+export function Button(props : { className?: string, children: any, onClick?: any, selected?: boolean }) {
+  const { children, className, onClick, selected, ...rest } = props;
   const cl = {
     'button': 1,
+    'button_selected': selected,
     [className || '']: !!className,
   };
   return (

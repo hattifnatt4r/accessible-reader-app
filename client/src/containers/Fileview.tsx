@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import classNames from 'classnames';
 import { Icon } from '../components/Icon';
 import { FileviewStore } from './FileviewStore';
 import { useParams } from 'react-router-dom';
@@ -6,6 +8,7 @@ import { FileviewButton } from './FileviewMisc';
 import { ModalNav } from './ModalNav';
 import { ModalSettings } from './ModalSettings';
 import './Fileview.css';
+
 
 function getDisplayText(text: string) {
   let newText = text.replaceAll('<br/>', '<br>').replaceAll('\n', '<br>').replaceAll('\r\n', '<br>');
@@ -17,9 +20,10 @@ function getDisplayText(text: string) {
   );
 }
 
-export function Fileview() {
+export const Fileview = observer(() => {
   const [store, setStore] = useState<FileviewStore | null>(null);
   const { fileID } = useParams();
+  const appStore = (window as any)?.app;
 
   useEffect(() => {
     const s = new FileviewStore({ id: Number(fileID) });
@@ -39,8 +43,15 @@ export function Fileview() {
 
   const displayText = getDisplayText(store?.text?.text || '');
 
+  const cl = {
+    'fview': 1,
+    'fview-12': appStore.userSettings.readerFontSize == 1.25,
+    'fview-15': appStore.userSettings.readerFontSize == 1.5,
+    'fview-20': appStore.userSettings.readerFontSize == 2,
+  };
+
   return (
-    <div className="fview">
+    <div className={classNames(cl)}>
       <div className="fview__file">
         <div className="fview__filename">
           {file?.name}
@@ -101,4 +112,4 @@ export function Fileview() {
       </div>
     </div>
   );
-}
+});

@@ -9,7 +9,10 @@ import { Chat } from './containers/Chat';
 import { About } from './containers/About';
 import { UserSettings } from './containers/UserSettings';
 import { AppNopage } from './containers/AppNopage'; 
+import { AppStore } from './AppStore';
 import './App.css';
+
+(window as any).app = new AppStore();
 
 export default function App() {
   return (

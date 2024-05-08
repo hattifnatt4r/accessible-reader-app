@@ -8,15 +8,16 @@ import { Icon } from '../components/Icon';
 export const ModalSettings = observer((props : { children: any }) => {
   const { children } = props;
   const [open, setOpen] = useState(false);
+  const appStore = (window as any)?.app;
+  const currentFontSize = appStore.userSettings.readerFontSize;
 
   function toggle() {
-    console.log('open:', open);
+    console.log('open:', open, appStore.userSettings);
     setOpen(!open);
   }
 
   function setFontSize(fontSize: number) {
-    localStorage.setItem('readerFontSize', fontSize.toString());
-    console.log('f:', fontSize);
+    appStore.updateSettings({ readerFontSize: fontSize });
   }
   
   return (
@@ -31,10 +32,10 @@ export const ModalSettings = observer((props : { children: any }) => {
         <ModalBody>
           <div>
             Font Size <br/>
-            <Button onClick={() => setFontSize(1)}>100%</Button>
-            <Button onClick={() => setFontSize(1.25)}>125%</Button>
-            <Button onClick={() => setFontSize(1.5)}>150%</Button>
-            <Button onClick={() => setFontSize(2)}>200%</Button>
+            <Button onClick={() => setFontSize(1)} selected={currentFontSize == 1}>100% </Button>
+            <Button onClick={() => setFontSize(1.25)} selected={currentFontSize == 1.25}>125% </Button>
+            <Button onClick={() => setFontSize(1.5)} selected={currentFontSize == 1.5}>150% </Button>
+            <Button onClick={() => setFontSize(2)} selected={currentFontSize == 2}>200%</Button>
           </div>
 
           <div>
