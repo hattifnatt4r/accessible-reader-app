@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from '../components/Button';
 import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { Icon } from '../components/Icon';
@@ -12,6 +13,11 @@ export const ModalSettings = observer((props : { children: any }) => {
     console.log('open:', open);
     setOpen(!open);
   }
+
+  function setFontSize(fontSize: number) {
+    localStorage.setItem('readerFontSize', fontSize.toString());
+    console.log('f:', fontSize);
+  }
   
   return (
     <>
@@ -23,8 +29,17 @@ export const ModalSettings = observer((props : { children: any }) => {
 
         </ModalHeader>
         <ModalBody>
-          Font Size <br/>
-          Sound Volume <br/>
+          <div>
+            Font Size <br/>
+            <Button onClick={() => setFontSize(1)}>100%</Button>
+            <Button onClick={() => setFontSize(1.25)}>125%</Button>
+            <Button onClick={() => setFontSize(1.5)}>150%</Button>
+            <Button onClick={() => setFontSize(2)}>200%</Button>
+          </div>
+
+          <div>
+            Sound Volume
+          </div>
 
         </ModalBody>
       </Modal>

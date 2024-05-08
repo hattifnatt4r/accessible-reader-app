@@ -8,7 +8,6 @@ export function FileviewButton(props: { iconName?: string | null, onClick?: any 
 
   return (
     <div className="fview-button">
-      <Icon name={iconName || null}/>
       {children}
     </div>
   );

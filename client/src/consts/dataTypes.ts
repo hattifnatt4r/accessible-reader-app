@@ -16,8 +16,8 @@ export type UserProfile = {
 
 };
 
-export type UserSettings = {
-
+export type UserSettingsType = {
+  readerFontSize: number,
 };
 
 export type ChatMessage = {

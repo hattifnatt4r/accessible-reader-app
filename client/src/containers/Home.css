@@ -4,7 +4,6 @@
 
 .home-body {
   min-height: 80vh;
-  width: 100vw;
   border-bottom: 1px solid rgba(0,0,0,0.1);
   padding: 2rem;
 }
@@ -13,19 +12,18 @@
   margin-bottom: 1rem;
 }
 
-.home-nav {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 1rem;
-}
-
 .home-links {
-
+  margin: -1rem;
 }
 
 .home-links__link {
-  
+  display: inline-block;
+  min-width: 170px;
+  min-height: 150px;
+  border: 1px solid rgba(0,0,0,0.1);
+  text-align: center;
+  padding: 2rem;
+  margin: 1rem;
 }
 
 .home-footer {

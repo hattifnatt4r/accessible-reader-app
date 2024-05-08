@@ -17,10 +17,18 @@ export function Home() {
         </div>
 
         <div className="home-links">
-          <AppLink to="/about" className="home-links__link"><Icon name="info" /> About</AppLink>
-          <AppLink to="/reader" className="home-links__link"><Icon name="book" /> Reader</AppLink>
-          <AppLink to="/chat" className="home-links__link"><Icon name="chat" /> Messages</AppLink>
-          <AppLink to="/settings" className="home-links__link"><Icon name="settings" /> Settings</AppLink>
+          <div className="home-links__link">
+            <AppLink to="/about"><Icon name="info" /> About</AppLink>
+          </div>
+          <div className="home-links__link">
+            <AppLink to="/reader"><Icon name="book" /> Reader</AppLink>
+          </div>
+          <div className="home-links__link">
+            <AppLink to="/chat"><Icon name="chat" /> Messages</AppLink>
+          </div>
+          <div className="home-links__link">
+            <AppLink to="/settings"><Icon name="settings" /> Settings</AppLink>  
+          </div>
           
           <ModalLogin>
             Login
