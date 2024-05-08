@@ -23,7 +23,7 @@ function getDisplayText(text: string) {
 export const Fileview = observer(() => {
   const [store, setStore] = useState<FileviewStore | null>(null);
   const { fileID } = useParams();
-  const appStore = (window as any)?.app;
+  const appStore = window.app;
 
   useEffect(() => {
     const s = new FileviewStore({ id: Number(fileID) });

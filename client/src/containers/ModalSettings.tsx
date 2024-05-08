@@ -5,10 +5,10 @@ import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { Icon } from '../components/Icon';
 
 
-export const ModalSettings = observer((props : { children: any }) => {
+export const ModalSettings = observer((props : { children: React.ReactNode }) => {
   const { children } = props;
   const [open, setOpen] = useState(false);
-  const appStore = (window as any)?.app;
+  const appStore = window.app;
   const currentFontSize = appStore.userSettings.readerFontSize;
 
   function toggle() {

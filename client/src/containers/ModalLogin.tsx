@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { Icon } from '../components/Icon';
@@ -12,7 +12,7 @@ function getInputValid(v : string) {
   return true; 
 }
 
-export const ModalLogin = observer((props : { children: any }) => {
+export const ModalLogin = observer((props : { children: React.ReactNode }) => {
   const { children } = props;
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ person_id: '', person_pw: '', error: '', message: '' });
@@ -22,12 +22,12 @@ export const ModalLogin = observer((props : { children: any }) => {
     setOpen(!open);
   }
 
-  function handleChange(ev : any) {
-    const name : 'person_id' | 'person_pw' = ev?.target?.name;
+  function handleChange(ev : React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = ev?.target;
     if (!name) return;
 
-    form[name] = ev.target?.value || '';
     form.error = '';
+    setForm({ ...form, [name]: value, error: '' });
   }
 
 

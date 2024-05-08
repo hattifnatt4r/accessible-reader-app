@@ -5,7 +5,7 @@ import { AppLink } from '../components/AppLink';
 import { Icon } from '../components/Icon';
 
 
-export const ModalNav = observer((props : { children: any }) => {
+export const ModalNav = observer((props : { children: React.ReactNode }) => {
   const { children } = props;
   const [open, setOpen] = useState(false);
 

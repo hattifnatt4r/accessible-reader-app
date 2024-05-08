@@ -12,7 +12,12 @@ import { AppNopage } from './containers/AppNopage';
 import { AppStore } from './AppStore';
 import './App.css';
 
-(window as any).app = new AppStore();
+declare global {
+  interface Window {
+    app: {[key:string] : any};
+  }
+}
+window.app = new AppStore();
 
 export default function App() {
   return (
