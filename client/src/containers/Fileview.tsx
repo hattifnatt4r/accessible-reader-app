@@ -10,15 +10,6 @@ import { ModalSettings } from './ModalSettings';
 import './Fileview.css';
 
 
-function getDisplayText(text: string) {
-  let newText = text.replaceAll('<br/>', '<br>').replaceAll('\n', '<br>').replaceAll('\r\n', '<br>');
-  const paragraphs = newText.split('<br>');
-  return (
-    <>
-      {paragraphs.map((p, ii) => <div key={ii}>{p}&nbsp;</div>)}
-    </>
-  );
-}
 
 export const Fileview = observer(() => {
   const [store, setStore] = useState<FileviewStore | null>(null);
@@ -30,18 +21,15 @@ export const Fileview = observer(() => {
     setStore(s);
   }, []);
 
-  if (!fileID) return null;
 
+  if (!store) return null;
   const file = store?.getFileTitle(Number(fileID));
   if (!file) {
-    return (
-      <div>
-        File not found
-      </div>
-    );
+    return <div>File not found</div>;
   }
 
-  const displayText = getDisplayText(store?.text?.text || '');
+  const paragraphs = store.paragraphs;
+  const sentences = store.getSplitParagraph(paragraphs[store.pID]);
 
   const cl = {
     'fview': 1,
@@ -49,6 +37,19 @@ export const Fileview = observer(() => {
     'fview-15': appStore.userSettings.readerFontSize == 1.5,
     'fview-20': appStore.userSettings.readerFontSize == 2,
   };
+
+  const pcl = (pID: number) => ({
+    'fview__p': 1,
+    'fview__p_selected': pID === store.pID,
+  });
+  const scl = (pID: number, sID: number) => ({
+    'fview__s': 1,
+    'fview__s_selected': sID === store.sID && pID === store.pID,
+  });
+  const wcl = (pID: number, sID: number, wID: number) => ({
+    'fview__w': 1,
+    'fview__w_selected': wID === store.wID && sID === store.sID && pID === store.pID,
+  });
 
   return (
     <div className={classNames(cl)}>
@@ -60,7 +61,17 @@ export const Fileview = observer(() => {
           {file?.title}
         </div>
         <div className="fview__body">
-          {displayText}
+          {paragraphs.map((p, pID) => (
+            <div key={pID} id={'p' + pID} className={classNames(pcl(pID))}>
+              {store.pID !== pID && p}
+              {store.pID == pID && sentences.map((s, sID) => (
+                <span key={sID} id={'p' + pID + 's' + sID} className={classNames(scl(pID, sID))}>
+                  {s.map((w, wID) => <span key={wID} id={'p' + pID + 's' + pID + 'w' + wID} className={classNames(wcl(pID, sID, wID))}>{w} </span>)}
+                </span>
+              ))}
+              &nbsp;
+            </div>
+          ))}
         </div>
       </div>
 
@@ -89,9 +100,13 @@ export const Fileview = observer(() => {
         </FileviewButton>
         <br />
 
-        <FileviewButton>
-          <Icon name="more_horiz"/>
-          Select
+        <FileviewButton onClick={store.changeSelectionType}>
+          Select <br />
+          <div>
+            {store.selectionType === 'w' && <>&bull;</>}
+            {store.selectionType === 's' && <>&bull; &bull;</>}
+            {store.selectionType === 'p' && <>&bull; &bull; &bull;</>}
+          </div>
         </FileviewButton>
 
         <FileviewButton iconName="play_circle">
@@ -100,12 +115,12 @@ export const Fileview = observer(() => {
         </FileviewButton>
         <br />
 
-        <FileviewButton iconName="arrow_left">
+        <FileviewButton iconName="arrow_left" onClick={() => store.changeSelection(-1)}>
           <Icon name="arrow_left"/>
           Prev
         </FileviewButton>
 
-        <FileviewButton iconName="arrow_right">
+        <FileviewButton iconName="arrow_right" onClick={() => store.changeSelection(1)}>
           <Icon name="arrow_right"/>
           Next
         </FileviewButton>

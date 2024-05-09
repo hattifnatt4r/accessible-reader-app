@@ -46,6 +46,16 @@
   line-height: 2rem;
 }
 
+.fview__p_selected {
+  background-color: rgba(0,0,0,0.06);
+}
+.fview__s_selected {
+  background-color: rgba(0,200,0,0.1);
+}
+.fview__w_selected {
+  background-color: rgba(0,200,0,0.4);
+}
+
 .fview__nav {
   position: absolute;
   top: 0;
