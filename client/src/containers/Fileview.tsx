@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { FileviewButton } from './FileviewMisc';
 import { ModalNav } from './ModalNav';
 import { ModalSettings } from './ModalSettings';
+import { getSplitParagraph } from './FileviewStoreUtils';
 import './Fileview.css';
 
 
@@ -29,7 +30,7 @@ export const Fileview = observer(() => {
   }
 
   const paragraphs = store.paragraphs;
-  const sentences = store.getSplitParagraph(paragraphs[store.pID]);
+  const sentences = getSplitParagraph(paragraphs[store.textVar.pID]);
 
   const cl = {
     'fview': 1,
@@ -40,15 +41,15 @@ export const Fileview = observer(() => {
 
   const pcl = (pID: number) => ({
     'fview__p': 1,
-    'fview__p_selected': pID === store.pID,
+    'fview__p_selected': pID === store.textVar.pID,
   });
   const scl = (pID: number, sID: number) => ({
     'fview__s': 1,
-    'fview__s_selected': sID === store.sID && pID === store.pID,
+    'fview__s_selected': sID === store.textVar.sID && pID === store.textVar.pID,
   });
   const wcl = (pID: number, sID: number, wID: number) => ({
     'fview__w': 1,
-    'fview__w_selected': wID === store.wID && sID === store.sID && pID === store.pID,
+    'fview__w_selected': wID === store.textVar.wID && sID === store.textVar.sID && pID === store.textVar.pID,
   });
 
   return (
@@ -63,8 +64,8 @@ export const Fileview = observer(() => {
         <div className="fview__body">
           {paragraphs.map((p, pID) => (
             <div key={pID} id={'p' + pID} className={classNames(pcl(pID))}>
-              {store.pID !== pID && p}
-              {store.pID == pID && sentences.map((s, sID) => (
+              {store.textVar.pID !== pID && p}
+              {store.textVar.pID == pID && sentences.map((s, sID) => (
                 <span key={sID} id={'p' + pID + 's' + sID} className={classNames(scl(pID, sID))}>
                   {s.map((w, wID) => <span key={wID} id={'p' + pID + 's' + pID + 'w' + wID} className={classNames(wcl(pID, sID, wID))}>{w} </span>)}
                 </span>
