@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { toJS } from 'mobx';
 import classNames from 'classnames';
 import { Icon } from '../components/Icon';
 import { FileviewStore } from './FileviewStore';
@@ -7,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import { FileviewButton } from './FileviewMisc';
 import { ModalNav } from './ModalNav';
 import { ModalSettings } from './ModalSettings';
-import { getSplitParagraph } from './FileviewStoreUtils';
+import { getSplitParagraph } from './FileviewUtils';
 import './Fileview.css';
 
 
@@ -52,6 +53,7 @@ export const Fileview = observer(() => {
     'fview__w_selected': wID === store.textVar.wID && sID === store.textVar.sID && pID === store.textVar.pID,
   });
 
+  // console.log('p:', toJS(store.textVar));
   return (
     <div className={classNames(cl)}>
       <div className="fview__file">

@@ -22,7 +22,7 @@ window.app = new AppStore();
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="app">
+      <div className="app" data-testid="app">
         <Routes>
           <Route index element={<Home />} />
           <Route path="home" element={<Home />} />

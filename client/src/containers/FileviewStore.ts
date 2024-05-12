@@ -1,7 +1,7 @@
 import { makeObservable, observable, action } from "mobx";
 import { FileIDType, ReaderFileType } from "../consts/dataTypes";
 import { dataExampleFiles, dataExampleText } from "../consts/dataExamples";
-import { TextVarType, changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSplitParagraph, setTextParams } from "./FileviewStoreUtils";
+import { TextVarType, changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSplitParagraph, setTextParams } from "./FileviewUtils";
 
 type SelectionTypeType = 'w' | 's' | 'p';
 
@@ -9,7 +9,7 @@ type SelectionTypeType = 'w' | 's' | 'p';
 export class FileviewStore {
   file: ReaderFileType = null;
   @observable paragraphs: string[] = [];
-  @observable textVar: TextVarType = { maxW: 0, maxS: 0, maxP: 0, wID: 0, sID: 0, pID: 0 };
+  @observable textVar: TextVarType = { maxP: 0, maxS: 0, maxW: 0, pID: 0, sID: 0, wID: 0 };
   @observable selectionType: SelectionTypeType = 's';
 
 

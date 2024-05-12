@@ -1,15 +1,8 @@
-export type TextVarType = { maxW: number, maxS: number, maxP: number, wID: number, sID: number, pID: number };
+import { toJS } from "mobx";
+
+export type TextVarType = { maxP: number, maxS: number, maxW: number, pID: number, sID: number, wID: number };
 export type TextParagraphsType = string[];
 
-export function getSplitParagraph(text: string | null): string[][] {
-  if (!text) return [];
-
-  // const regex = /\b(?<!\b(?:Mr|Mrs|Ms|Dr|Sr|Jr|Prof|Inc)\.)(?<=[.?!])\s+(?=[A-Z])|(?<=[.?!])\s*$/g;
-  const regex = /(?<!\b(?:Mr|Mrs|Ms|Dr|Sr|Jr|Prof|Inc)\.)(?<=[.?!])\s+(?=[A-Z])|(?<=[.?!])\s*$/g;
-  const sentences = text.split(regex).filter(d => d);
-  const words = sentences.map(s => s.split(' ').filter(word => word));
-  return words;
-}
 
 export function getParagraphs(text: string | null): string[] {
   if (!text) return [];
@@ -17,15 +10,26 @@ export function getParagraphs(text: string | null): string[] {
   return paragraphs;
 }
 
+export function getSplitParagraph(text: string | null): string[][] {
+  if (!text) {
+    return [[' ']];
+  }
+  // const regex = /\b(?<!\b(?:Mr|Mrs|Ms|Dr|Sr|Jr|Prof|Inc)\.)(?<=[.?!])\s+(?=[A-Z])|(?<=[.?!])\s*$/g;
+  const regex = /(?<!\b(?:Mr|Mrs|Ms|Dr|Sr|Jr|Prof|Inc)\.)(?<=[.?!])\s+(?=[A-Z])|(?<=[.?!])\s*$/g;
+  const sentences = text.split(regex).filter(d => d);
+  const words = sentences.map(s => (s ? s.split(' ').filter(word => word) : [' ']));
+  return words;
+}
+
 export function setTextParams(textVar: TextVarType, paragraphs: TextParagraphsType) : TextVarType {
   const newVar = { ...textVar };
 
-  newVar.maxP = paragraphs.length;
+  newVar.maxP = paragraphs.length - 1;
   const sentences = getSplitParagraph(paragraphs[newVar.pID]);
-  newVar.maxS = sentences.length - 1;
+  newVar.maxS = Math.max(0, sentences.length - 1);
   const s = sentences[newVar.sID];
   if (s) {
-    newVar.maxW = s.length - 1;
+    newVar.maxW = Math.max(0, s.length - 1);
   } else {
     newVar.maxW = 0;
   }
@@ -50,7 +54,7 @@ export function changeSelectionS(diff: number, textVar: TextVarType, paragraphs:
   if (sID < 0 && newVar.pID <= 0 || sID > newVar.maxS && newVar.pID >= newVar.maxP) {
     return newVar;
   }
-  if (sID < 0 ) {
+  if (sID < 0) {
     newVar = changeSelectionP(-1, newVar, paragraphs);
     newVar.sID = newVar.maxS;
   }
@@ -68,9 +72,14 @@ export function changeSelectionW(diff: number, textVar: TextVarType, paragraphs:
   let newVar = { ...textVar };
 
   let wID = newVar.wID + diff;
+
+  if (wID < 0 && newVar.sID <= 0 && newVar.pID <=0) {
+    return newVar;
+  }
+
   if (wID < 0) {
     newVar = changeSelectionS(-1, newVar, paragraphs);
-    newVar.wID = textVar.maxW;
+    newVar.wID = newVar.maxW;
   }
   else if (wID > textVar.maxW) {
     newVar = changeSelectionS(1, newVar, paragraphs);
