@@ -6,12 +6,29 @@ import { TextVarType, changeSelectionP, changeSelectionS, changeSelectionW, getP
 type SelectionTypeType = 'w' | 's' | 'p';
 
 
+function speakAll(text: string[], cb?: () => void,) {
+  speechSynthesis.cancel();
+  const volume = window.app.userSettings.readerVolume;
+  const n = text.length;
+
+  text.forEach((t, ii) => {
+    const utterance = new SpeechSynthesisUtterance(t);
+    utterance.volume = volume ?? 1;
+    if (cb && ii === n - 1) {
+      utterance.onend = cb;
+    }
+    speechSynthesis.speak(utterance);
+  });
+}
+
 export class FileviewStore {
   file: ReaderFileType = null;
   @observable paragraphs: string[] = [];
+  @observable sentences: string[][] = [];
   @observable textVar: TextVarType = { maxP: 0, maxS: 0, maxW: 0, pID: 0, sID: 0, wID: 0 };
   @observable selectionType: SelectionTypeType = 's';
-
+  @observable isSpeaking: boolean = false;
+  @observable isPaused: boolean = false;
 
   constructor(props : { id:FileIDType }) {
     makeObservable(this);
@@ -24,6 +41,8 @@ export class FileviewStore {
     const text = this.getFileText(id);
     this.paragraphs = [title, ...getParagraphs(text || null)];
     this.textVar = setTextParams(this.textVar, this.paragraphs);
+  
+    this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
   }
 
   getFileText = (id:FileIDType) => {
@@ -43,13 +62,13 @@ export class FileviewStore {
     if (this.selectionType == 'w') { this.selectionType = 's'; } 
     else if (this.selectionType == 's') { this.selectionType = 'p'; }  
     else { this.selectionType = 'w'; }
-    console.log('type:', this.selectionType);
     localStorage.setItem('readerSelectionType', this.selectionType);
     this.textVar= setTextParams(this.textVar, this.paragraphs);
   }
 
   @action
   changeSelection = (diff: number) => {
+    const { pID } = this.textVar;
     
     if (this.selectionType === 'p') {
       this.textVar = changeSelectionP(diff, this.textVar, this.paragraphs);
@@ -60,5 +79,67 @@ export class FileviewStore {
     if (this.selectionType === 'w') {
       this.textVar = changeSelectionW(diff, this.textVar, this.paragraphs);
     }
+
+    if (pID !== this.textVar.pID) {
+      this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
+    }
+
+    const appStore = window.app;
+    if (appStore.userSettings.readerNarrateSelection !== 0) {
+      this.narrate();
+    }
+  }
+
+  @action
+  narrate = () => {
+    this.isSpeaking = true;
+    if (this.selectionType === 'p') {
+      speakAll(this.sentences.map(s => s.join(' ')), this.narrateFinished);
+    }
+    if (this.selectionType === 's') {
+      speakAll([this.sentences[this.textVar.sID].join(' ')], this.narrateFinished);
+    }
+    if (this.selectionType === 'w') {
+      speakAll([this.sentences[this.textVar.sID][this.textVar.wID]], this.narrateFinished);
+    }
+  }
+
+  @action
+  narrateFinished = () => {
+    this.isSpeaking = false;
+    this.isPaused = false;
+  }
+
+  @action
+  narratePause = () => {
+    speechSynthesis.pause();
+    this.isSpeaking = false;
+    this.isPaused = true;
+  }
+
+  @action
+  narrateResume = () => {
+    if (this.isPaused) {
+      this.isSpeaking = true;
+      speechSynthesis.resume();
+    } else {
+      this.narrate();
+    }
+  }
+
+  @action
+  narrateAll = () => {
+    this.isSpeaking = true;
+    const cb = () => {
+      if (this.textVar.pID < this.textVar.maxP) {
+        this.textVar.pID += 1;
+        this.textVar = setTextParams(this.textVar, this.paragraphs);
+        this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
+        this.narrateAll();
+      } else {
+        this.narrateFinished();
+      }
+    }
+    speakAll(this.sentences.map(s => s.join(' ')), cb);
   }
 }

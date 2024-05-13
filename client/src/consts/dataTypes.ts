@@ -18,7 +18,9 @@ export type UserProfile = {
 };
 
 export type UserSettingsType = {
-  readerFontSize: number,
+  readerFontSize: number, // 1-2
+  readerVolume: 0.25 | 0.5 | 0.75 | 1,
+  readerNarrateSelection: 0 | 1,
 };
 
 export type ChatMessage = {

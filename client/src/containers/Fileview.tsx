@@ -8,7 +8,6 @@ import { useParams } from 'react-router-dom';
 import { FileviewButton } from './FileviewMisc';
 import { ModalNav } from './ModalNav';
 import { ModalSettings } from './ModalSettings';
-import { getSplitParagraph } from './FileviewUtils';
 import './Fileview.css';
 
 
@@ -31,7 +30,7 @@ export const Fileview = observer(() => {
   }
 
   const paragraphs = store.paragraphs;
-  const sentences = getSplitParagraph(paragraphs[store.textVar.pID]);
+  const sentences = store.sentences;
 
   const cl = {
     'fview': 1,
@@ -90,10 +89,16 @@ export const Fileview = observer(() => {
           </ModalSettings>
         </FileviewButton>
 
-        <FileviewButton>
-          <Icon name="edit"/>
-          Read All
-        </FileviewButton>
+        {store.isSpeaking && (
+          <FileviewButton onClick={store.narratePause}>
+            <Icon name="pause_circle"/>Stop
+          </FileviewButton>
+        )}
+        {!store.isSpeaking && (
+          <FileviewButton onClick={store.isPaused ? store.narrateResume : store.narrateAll}>
+            <Icon name="play_circle" />Read All
+          </FileviewButton>
+        )}
 
         <FileviewButton>
           <Icon name="edit"/>
@@ -110,10 +115,16 @@ export const Fileview = observer(() => {
           </div>
         </FileviewButton>
 
-        <FileviewButton iconName="play_circle">
-          <Icon name="play_circle"/>
-          Play
-        </FileviewButton>
+        {store.isSpeaking && (
+          <FileviewButton onClick={store.narratePause}>
+            <Icon name="pause_circle"/>Stop
+          </FileviewButton>
+        )}
+        {!store.isSpeaking && (
+          <FileviewButton onClick={store.narrateResume}>
+            <Icon name="play_circle" />Play
+          </FileviewButton>
+        )}
         <br />
 
         <FileviewButton iconName="arrow_left" onClick={() => store.changeSelection(-1)}>
