@@ -20,8 +20,9 @@ export class FileviewStore {
     const selectionType = localStorage.getItem('readerSelectionType') as SelectionTypeType;
     if (selectionType) this.selectionType = selectionType;
 
+    const title = this.getFile(id)?.title || '';
     const text = this.getFileText(id);
-    this.paragraphs = getParagraphs(text || null);
+    this.paragraphs = [title, ...getParagraphs(text || null)];
     this.textVar = setTextParams(this.textVar, this.paragraphs);
   }
 
@@ -31,7 +32,7 @@ export class FileviewStore {
     return text?.text || null;
   }
 
-  getFileTitle = (id:FileIDType) => {
+  getFile = (id:FileIDType) => {
     // todo: retrive from config
     const file = dataExampleFiles.find(t => t?.id === id);
     return file || null;

@@ -14,7 +14,6 @@ export function getSplitParagraph(text: string | null): string[][] {
   if (!text) {
     return [[' ']];
   }
-  // const regex = /\b(?<!\b(?:Mr|Mrs|Ms|Dr|Sr|Jr|Prof|Inc)\.)(?<=[.?!])\s+(?=[A-Z])|(?<=[.?!])\s*$/g;
   const regex = /(?<!\b(?:Mr|Mrs|Ms|Dr|Sr|Jr|Prof|Inc)\.)(?<=[.?!])\s+(?=[A-Z])|(?<=[.?!])\s*$/g;
   const sentences = text.split(regex).filter(d => d);
   const words = sentences.map(s => (s ? s.split(' ').filter(word => word) : [' ']));

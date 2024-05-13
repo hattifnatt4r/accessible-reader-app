@@ -25,7 +25,7 @@ export const Fileview = observer(() => {
 
 
   if (!store) return null;
-  const file = store?.getFileTitle(Number(fileID));
+  const file = store?.getFile(Number(fileID));
   if (!file) {
     return <div>File not found</div>;
   }
@@ -43,6 +43,7 @@ export const Fileview = observer(() => {
   const pcl = (pID: number) => ({
     'fview__p': 1,
     'fview__p_selected': pID === store.textVar.pID,
+    'fview__title': pID === 0,
   });
   const scl = (pID: number, sID: number) => ({
     'fview__s': 1,
@@ -58,10 +59,7 @@ export const Fileview = observer(() => {
     <div className={classNames(cl)}>
       <div className="fview__file">
         <div className="fview__filename">
-          {file?.name}
-        </div>
-        <div className="fview__title">
-          {file?.title}
+          {file.folder}/{file.name}
         </div>
         <div className="fview__body">
           {paragraphs.map((p, pID) => (
