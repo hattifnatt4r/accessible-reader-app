@@ -1,4 +1,4 @@
-import { makeObservable, observable, action } from "mobx";
+import { makeObservable, observable, action, runInAction } from "mobx";
 import { FileIDType, ReaderFileType } from "../consts/dataTypes";
 import { dataExampleFiles, dataExampleText } from "../consts/dataExamples";
 import { TextVarType, changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSplitParagraph, setTextParams } from "./FileviewUtils";
@@ -90,24 +90,23 @@ export class FileviewStore {
     }
   }
 
-  @action
-  narrate = () => {
-    this.isSpeaking = true;
-    if (this.selectionType === 'p') {
-      speakAll(this.sentences.map(s => s.join(' ')), this.narrateFinished);
-    }
-    if (this.selectionType === 's') {
-      speakAll([this.sentences[this.textVar.sID].join(' ')], this.narrateFinished);
-    }
-    if (this.selectionType === 'w') {
-      speakAll([this.sentences[this.textVar.sID][this.textVar.wID]], this.narrateFinished);
-    }
-  }
 
+  // -- narrate ----------------------------------------
   @action
   narrateFinished = () => {
     this.isSpeaking = false;
     this.isPaused = false;
+  }
+
+  @action
+  narrate = () => {
+    this.isSpeaking = true;
+    let text: string[] = [];
+    if (this.selectionType === 'p') { text = this.sentences.map(s => s.join(' ')); } // api cannot read the whole paragraph - split by sentence
+    if (this.selectionType === 's') { text = [this.sentences[this.textVar.sID].join(' ')]; }
+    if (this.selectionType === 'w') { text = [this.sentences[this.textVar.sID][this.textVar.wID]]; }
+    speakAll(text, this.narrateFinished);
+    return text;
   }
 
   @action
@@ -129,16 +128,18 @@ export class FileviewStore {
 
   @action
   narrateAll = () => {
+    // read all paragraphs recursively
     this.isSpeaking = true;
     const cb = () => {
-      if (this.textVar.pID < this.textVar.maxP) {
-        this.textVar.pID += 1;
-        this.textVar = setTextParams(this.textVar, this.paragraphs);
-        this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
-        this.narrateAll();
-      } else {
-        this.narrateFinished();
-      }
+      runInAction(() => {
+        if (this.textVar.pID < this.textVar.maxP) {
+          this.textVar = changeSelectionP(1, this.textVar, this.paragraphs);
+          this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
+          this.narrateAll();
+        } else {
+          this.narrateFinished();
+        }
+      });
     }
     speakAll(this.sentences.map(s => s.join(' ')), cb);
   }
