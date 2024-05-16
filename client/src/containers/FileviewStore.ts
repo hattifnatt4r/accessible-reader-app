@@ -29,6 +29,7 @@ export class FileviewStore {
   @observable selectionType: SelectionTypeType = 's';
   @observable isSpeaking: boolean = false;
   @observable isPaused: boolean = false;
+  @observable isEditing: boolean = false;
 
   constructor(props : { id:FileIDType }) {
     makeObservable(this);
@@ -55,6 +56,14 @@ export class FileviewStore {
     // todo: retrive from config
     const file = dataExampleFiles.find(t => t?.id === id);
     return file || null;
+  }
+
+  getSelectedText = () => {
+    let selectedText = '';
+    if (this.selectionType === 'p') { selectedText = this.paragraphs[this.textVar.pID]; }
+    if (this.selectionType === 's') { selectedText = this.sentences[this.textVar.sID].join(' '); }
+    if (this.selectionType === 'w') { selectedText = this.sentences[this.textVar.sID][this.textVar.wID]; }
+    return selectedText;
   }
 
   @action
@@ -90,6 +99,11 @@ export class FileviewStore {
     }
   }
 
+  @action
+  toggleEdit = () => {
+    this.isEditing = !this.isEditing;
+  }
+
 
   // -- narrate ----------------------------------------
   @action
@@ -101,11 +115,10 @@ export class FileviewStore {
   @action
   narrate = () => {
     this.isSpeaking = true;
-    let text: string[] = [];
-    if (this.selectionType === 'p') { text = this.sentences.map(s => s.join(' ')); } // api cannot read the whole paragraph - split by sentence
-    if (this.selectionType === 's') { text = [this.sentences[this.textVar.sID].join(' ')]; }
-    if (this.selectionType === 'w') { text = [this.sentences[this.textVar.sID][this.textVar.wID]]; }
-    speakAll(text, this.narrateFinished);
+    const text = this.getSelectedText();
+    // api cannot read the whole paragraph - split by sentence
+    const textNarrate = this.selectionType === 'p' ? text.split('.') : [text];
+    speakAll(textNarrate, this.narrateFinished);
     return text;
   }
 

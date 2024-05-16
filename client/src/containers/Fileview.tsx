@@ -9,6 +9,7 @@ import { FileviewButton } from './FileviewMisc';
 import { ModalNav } from './ModalNav';
 import { ModalSettings } from './ModalSettings';
 import './Fileview.css';
+import { Fileedit } from './Fileedit';
 
 
 
@@ -41,16 +42,16 @@ export const Fileview = observer(() => {
 
   const pcl = (pID: number) => ({
     'fview__p': 1,
-    'fview__p_selected': pID === store.textVar.pID,
+    'fview__p_selected': pID === store.textVar.pID && store.selectionType === 'p',
     'fview__title': pID === 0,
   });
   const scl = (pID: number, sID: number) => ({
     'fview__s': 1,
-    'fview__s_selected': sID === store.textVar.sID && pID === store.textVar.pID,
+    'fview__s_selected': sID === store.textVar.sID && pID === store.textVar.pID && store.selectionType === 's',
   });
   const wcl = (pID: number, sID: number, wID: number) => ({
     'fview__w': 1,
-    'fview__w_selected': wID === store.textVar.wID && sID === store.textVar.sID && pID === store.textVar.pID,
+    'fview__w_selected': wID === store.textVar.wID && sID === store.textVar.sID && pID === store.textVar.pID && store.selectionType === 'w',
   });
 
   // console.log('p:', toJS(store.textVar));
@@ -100,7 +101,7 @@ export const Fileview = observer(() => {
           </FileviewButton>
         )}
 
-        <FileviewButton>
+        <FileviewButton onClick={store.toggleEdit}>
           <Icon name="edit"/>
           Edit
         </FileviewButton>
@@ -137,6 +138,8 @@ export const Fileview = observer(() => {
           Next
         </FileviewButton>
       </div>
+
+      <Fileedit open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} />
     </div>
   );
 });

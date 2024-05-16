@@ -32,7 +32,7 @@ class FileviewStoreTest extends FileviewStore {
 
 
 
-describe('FileviewStore narrate function', () => {
+describe('FileviewStore', () => {
 
   it('should initialize FileviewStore', () => {
     const store = new FileviewStoreTest({ id: 1 });
@@ -51,5 +51,26 @@ describe('FileviewStore narrate function', () => {
     expect(store.selectionType).toEqual('s');
   });
 
+  it('should select text correctly', () => {
+    const store = new FileviewStoreTest({ id: 1 });
+    window.app = { userSettings: { readerNarrateSelection: 0 } };
+
+    // by sentence
+    expect(store.getSelectedText()).toEqual('Book Title');
+    store.changeSelection(1);
+    expect(store.getSelectedText()).toEqual('Lorem ipsum dolor sit amet.');
+
+    // by paragraph
+    store.changeSelectionType();
+    expect(store.getSelectedText()).toEqual('Lorem ipsum dolor sit amet. Consectetur adipiscing elit.');
+    store.changeSelection(1);
+    expect(store.getSelectedText()).toEqual('Excepteur sint, sunt in culpa qui. ');
+
+    // by word
+    store.changeSelectionType();
+    expect(store.getSelectedText()).toEqual('Excepteur');
+    store.changeSelection(1);
+    expect(store.getSelectedText()).toEqual('sint,');
+  });
 
 })
