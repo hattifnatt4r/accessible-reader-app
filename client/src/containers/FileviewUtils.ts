@@ -2,7 +2,7 @@ import { toJS } from "mobx";
 
 export type TextVarType = { maxP: number, maxS: number, maxW: number, pID: number, sID: number, wID: number };
 export type TextParagraphsType = string[];
-
+export type SelectionTypeType = 'w' | 's' | 'p';
 
 export function getParagraphs(text: string | null): string[] {
   if (!text) return [];
@@ -10,13 +10,18 @@ export function getParagraphs(text: string | null): string[] {
   return paragraphs;
 }
 
-export function getSplitParagraph(text: string | null): string[][] {
+export function getSentences(text: string | null): string[] {
   if (!text) {
-    return [[' ']];
+    return [' '];
   }
   const regex = /(?<!\b(?:Mr|Mrs|Ms|Dr|Sr|Jr|Prof|Inc)\.)(?<=[.?!])\s+(?=[A-Z])|(?<=[.?!])\s*$/g;
   const sentences = text.split(regex).filter(d => d);
-  const words = sentences.map(s => (s ? s.split(' ').filter(word => word) : [' ']));
+  return sentences;
+}
+
+export function getSplitParagraph(text: string | null): string[][] {
+  const sentences = getSentences(text);
+  const words = sentences.map(s => (s > ' ' ? s.split(' ').filter(word => word) : [' ']));
   return words;
 }
 
@@ -87,4 +92,31 @@ export function changeSelectionW(diff: number, textVar: TextVarType, paragraphs:
     newVar.wID = wID;
   }
   return newVar;
+}
+
+
+export function replaceText(textEdited: string, selectionType: SelectionTypeType, textVar: TextVarType, paragraphsOld: TextParagraphsType) : [string, string] {
+
+  const sentencesOld = getSplitParagraph(paragraphsOld[textVar.pID]);
+
+  if (selectionType === 'w') {
+    sentencesOld[textVar.sID][textVar.wID] = textEdited;
+  }
+  const sentences = sentencesOld.map((words: string[]) => words.join(' '));
+
+  if (selectionType === 's') {
+    sentences[textVar.sID] = textEdited;
+  }
+  let paragraphText = sentences.join(' ');
+  
+  if (selectionType === 'p') {
+    paragraphText = textEdited;
+  }
+
+  const paragraphs = [...paragraphsOld];
+  paragraphs[textVar.pID] = paragraphText;
+  const titleToSave = paragraphs[0];
+  const textToSave = paragraphs.slice(1).join('<br>');
+  
+  return [titleToSave, textToSave];
 }

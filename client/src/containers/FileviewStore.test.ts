@@ -7,7 +7,7 @@ import { getParagraphs, getSplitParagraph, setTextParams } from "./FileviewUtils
 const file = { id: 1, folder: 'examples', name: 'Book 1', author: 'Jhon Doe', title: 'Book Title' };
 const textExample = {
   id: 1,
-  text: `Lorem ipsum dolor sit amet. Consectetur adipiscing elit.<br/>Excepteur sint, sunt in culpa qui. <br/><br/>Excepteur sint occaecat cupidatat non proident.`,
+  text: `Lorem ipsum dolor sit amet. Consectetur elit.<br/>Excepteur sint, sunt in culpa qui. <br/><br/>Excepteur sint occaecat cupidatat non proident.`,
 };
 const textVar = { maxP: 4, maxS: 0, maxW: 1, pID: 0, sID: 0, wID: 0 };
 
@@ -62,7 +62,7 @@ describe('FileviewStore', () => {
 
     // by paragraph
     store.changeSelectionType();
-    expect(store.getSelectedText()).toEqual('Lorem ipsum dolor sit amet. Consectetur adipiscing elit.');
+    expect(store.getSelectedText()).toEqual('Lorem ipsum dolor sit amet. Consectetur elit.');
     store.changeSelection(1);
     expect(store.getSelectedText()).toEqual('Excepteur sint, sunt in culpa qui. ');
 
@@ -73,4 +73,12 @@ describe('FileviewStore', () => {
     expect(store.getSelectedText()).toEqual('sint,');
   });
 
+  it('should replace edited text', () => {
+    const store = new FileviewStoreTest({ id: 1 });
+    
+    store.selectionType = 's';
+    store.changeSelection(1);
+    store.save('Replace sentence.');
+    expect(store.paragraphs).toEqual(["Book Title", "Replace sentence. Consectetur elit.", "Excepteur sint, sunt in culpa qui. ", "", "Excepteur sint occaecat cupidatat non proident."]);  
+  });
 })

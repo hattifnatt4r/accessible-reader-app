@@ -1,9 +1,7 @@
-import { makeObservable, observable, action, runInAction } from "mobx";
+import { makeObservable, observable, action, runInAction, toJS } from "mobx";
 import { FileIDType, ReaderFileType } from "../consts/dataTypes";
 import { dataExampleFiles, dataExampleText } from "../consts/dataExamples";
-import { TextVarType, changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSplitParagraph, setTextParams } from "./FileviewUtils";
-
-type SelectionTypeType = 'w' | 's' | 'p';
+import { SelectionTypeType, TextVarType, changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSplitParagraph, replaceText, setTextParams } from "./FileviewUtils";
 
 
 function speakAll(text: string[], cb?: () => void,) {
@@ -42,7 +40,6 @@ export class FileviewStore {
     const text = this.getFileText(id);
     this.paragraphs = [title, ...getParagraphs(text || null)];
     this.textVar = setTextParams(this.textVar, this.paragraphs);
-  
     this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
   }
 
@@ -56,6 +53,17 @@ export class FileviewStore {
     // todo: retrive from config
     const file = dataExampleFiles.find(t => t?.id === id);
     return file || null;
+  }
+
+  @action
+  save = (textEdited: string) => {
+    const [title, text] = replaceText(textEdited, this.selectionType, this.textVar, this.paragraphs);
+    // todo: save to server
+
+    this.paragraphs = [title, ...getParagraphs(text || null)];
+    this.textVar = setTextParams(this.textVar, this.paragraphs);
+    this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
+    this.isEditing = false;
   }
 
   getSelectedText = () => {
@@ -102,10 +110,6 @@ export class FileviewStore {
   @action
   toggleEdit = () => {
     this.isEditing = !this.isEditing;
-  }
-  @action
-  save = () => {
-    
   }
 
 

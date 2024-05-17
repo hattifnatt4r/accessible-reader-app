@@ -1,4 +1,4 @@
-import { changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSplitParagraph, setTextParams } from "./FileviewUtils"; 
+import { changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSentences, getSplitParagraph, replaceText, setTextParams } from "./FileviewUtils"; 
 
 
 const textAll = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
@@ -19,14 +19,20 @@ describe('getParagraphs', () => {
   });
 })
 
+describe('getSentences', () => {
+  it('should split into sentences/words', () => {
+    const p1 = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud. Duis aute irure dolor.';
+    const w1 = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Ut enim ad minim veniam, quis nostrud.', 'Duis aute irure dolor.'];
+    expect(getSentences(p1)).toEqual(w1);
+    expect(getSentences('')).toEqual([' ']);
+    expect(getSentences(null)).toEqual([' ']);
+  });
+})
+
 describe('getSplitParagraph', () => {
   it('should split into sentences/words', () => {
-    const p1 = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.';
-    const w1 = [
-      ["Lorem","ipsum","dolor","sit","amet,","consectetur","adipiscing","elit."],
-      ["Ut","enim","ad","minim","veniam,","quis","nostrud","aliquip","ex","ea","commodo","consequat."],
-      ["Duis","aute","irure","dolor","in","reprehenderit","in","voluptate","velit","esse","cillum","dolore","eu","fugiat","nulla","pariatur."]
-    ];
+    const p1 = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor.';
+    const w1 = [["Lorem","ipsum","dolor","sit","amet,","consectetur","adipiscing","elit."], ["Duis","aute","irure","dolor."]];
     expect(getSplitParagraph(p1)).toEqual(w1);
     expect(getSplitParagraph('')).toEqual([[' ']]);
     expect(getSplitParagraph(null)).toEqual([[' ']]);
@@ -104,5 +110,23 @@ describe('changeSelection', () => {
     expect(changeSelectionW(-1, { maxP: 4, maxS: 2, maxW: 7, pID: 0, sID: 0, wID: 0 }, paragraphs)).toEqual({ maxP: 4, maxS: 2, maxW: 7, pID: 0, sID: 0, wID: 0 });
 
   });
-})
 
+  describe('replaceText', () => {
+    it('should replace edited text', () => {      
+      const paragraphs = ['Book Title','Lorem ipsum dolor sit amet. Consectetur elit.', 'Excepteur sint, sunt in culpa qui. ', '', 'Excepteur sint occaecat cupidatat non proident.'];
+
+      const r1 = replaceText('L', 'w', { pID: 1, sID: 0, wID: 0, maxP: 4, maxS: 1, maxW: 4 }, paragraphs);
+      expect(r1).toEqual(["Book Title", "L ipsum dolor sit amet. Consectetur elit.<br>Excepteur sint, sunt in culpa qui. <br><br>Excepteur sint occaecat cupidatat non proident."]);
+      
+      const r2 = replaceText('L.', 's', { pID: 1, sID: 0, wID: 0, maxP: 4, maxS: 1, maxW: 4 }, paragraphs);
+      expect(r2).toEqual(["Book Title", "L. Consectetur elit.<br>Excepteur sint, sunt in culpa qui. <br><br>Excepteur sint occaecat cupidatat non proident."]);
+      
+      const r3 = replaceText('L.', 'p', { pID: 1, sID: 0, wID: 0, maxP: 4, maxS: 1, maxW: 4 }, paragraphs);
+      expect(r3).toEqual(["Book Title", "L.<br>Excepteur sint, sunt in culpa qui. <br><br>Excepteur sint occaecat cupidatat non proident."]);
+      
+      const r4 = replaceText('L.', 's', { maxP: 4, maxS: 1, maxW: 1, pID: 1, sID: 1, wID: 0 }, paragraphs);
+      expect(r4).toEqual(["Book Title", "Lorem ipsum dolor sit amet. L.<br>Excepteur sint, sunt in culpa qui. <br><br>Excepteur sint occaecat cupidatat non proident."]);
+      
+    });
+  })
+})

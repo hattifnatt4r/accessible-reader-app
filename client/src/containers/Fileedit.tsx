@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import './Fileedit.css';
 import { Icon } from '../components/Icon';
 import { FileeditSettings } from './FileeditSettings';
+import './Fileedit.css';
 
 
-
-export const Fileedit = observer((props: { open: boolean, text: string, toggle: () => void, save: () => void }) => {
+export const Fileedit = observer((props: { open: boolean, text: string, toggle: () => void, save: (textEdited: string) => void }) => {
   const { open, text, toggle, save } = props;
   const [textvalue, setTextvalue] = useState<string>('');
   const [cursor, setCursor] = useState<number>(0);
@@ -34,7 +33,7 @@ export const Fileedit = observer((props: { open: boolean, text: string, toggle: 
     }
   }
   function handleSave() {
-    save();
+    save(textvalue);
   }
   function handleReset() {
     setTextvalue(text);
