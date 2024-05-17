@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { observer } from 'mobx-react-lite';
 import { toJS } from 'mobx';
+import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
 import { Icon } from '../components/Icon';
 import { FileviewStore } from './FileviewStore';
@@ -139,7 +139,7 @@ export const Fileview = observer(() => {
         </FileviewButton>
       </div>
 
-      <Fileedit open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} save={store.save} />
+      {store.isEditing && <Fileedit open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} save={store.save} />}
     </div>
   );
 });

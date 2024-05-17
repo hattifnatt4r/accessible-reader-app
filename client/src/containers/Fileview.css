@@ -44,6 +44,7 @@
 .fview__body {
   font-size: 1.3rem;
   line-height: 2rem;
+  white-space-collapse: preserve;
 }
 
 .fview__p_selected {
