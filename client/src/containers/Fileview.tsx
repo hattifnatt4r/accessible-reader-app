@@ -7,9 +7,9 @@ import { FileviewStore } from './FileviewStore';
 import { useParams } from 'react-router-dom';
 import { FileviewButton } from './FileviewMisc';
 import { ModalNav } from './ModalNav';
-import { ModalSettings } from './ModalSettings';
-import './Fileview.css';
+import { FileviewSettings } from './FileviewSettings';
 import { Fileedit } from './Fileedit';
+import './Fileview.css';
 
 
 
@@ -84,10 +84,10 @@ export const Fileview = observer(() => {
           </ModalNav>
         </FileviewButton>
         <FileviewButton>
-          <ModalSettings>
+          <FileviewSettings>
             <Icon name="settings"/>
             Settings
-          </ModalSettings>
+          </FileviewSettings>
         </FileviewButton>
 
         {store.isSpeaking && (
@@ -139,7 +139,7 @@ export const Fileview = observer(() => {
         </FileviewButton>
       </div>
 
-      <Fileedit open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} />
+      <Fileedit open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} save={store.save} />
     </div>
   );
 });

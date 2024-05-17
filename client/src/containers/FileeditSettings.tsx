@@ -2,30 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../components/Button';
 import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
-import { Icon } from '../components/Icon';
-import './ModalSettings.css';
+import './FileviewSettings.css';
 
-export const ModalSettings = observer((props : { children: React.ReactNode }) => {
+export const FileeditSettings = observer((props : { children: React.ReactNode }) => {
   const { children } = props;
   const [open, setOpen] = useState(false);
   const appStore = window.app;
-  const currentFontSize = appStore.userSettings.readerFontSize;
+  const currentFontSize = appStore.userSettings.editorFontSize;
   const currentVolume = appStore.userSettings.readerVolume;
-  const currentNarrate = appStore.userSettings.readerNarrateSelection;
+  const currentNarrate = appStore.userSettings.editorNarrateSelection;
 
   function toggle() {
-    console.log('open:', open, appStore.userSettings);
     setOpen(!open);
   }
 
   function setFontSize(value: number) {
-    appStore.updateSettings({ readerFontSize: value });
+    appStore.updateSettings({ editorFontSize: value });
   }
   function setVolume(value: number) {
     appStore.updateSettings({ readerVolume: value });
   }
   function setNarrateSelection(value: number) {
-    appStore.updateSettings({ readerNarrateSelection: value });
+    appStore.updateSettings({ editorNarrateSelection: value });
   }
   
   return (
@@ -39,11 +37,20 @@ export const ModalSettings = observer((props : { children: React.ReactNode }) =>
         </ModalHeader>
         <ModalBody>
           <div className="modal-settings__group">
-            Font Size <br/>
+            Editor Font Size <br/>
             <Button onClick={() => setFontSize(1)} selected={currentFontSize == 1}>100% </Button>
             <Button onClick={() => setFontSize(1.25)} selected={currentFontSize == 1.25}>125% </Button>
             <Button onClick={() => setFontSize(1.5)} selected={currentFontSize == 1.5}>150% </Button>
             <Button onClick={() => setFontSize(2)} selected={currentFontSize == 2}>200%</Button>
+            <Button onClick={() => setFontSize(2.5)} selected={currentFontSize == 2.5}>250%</Button>
+            <Button onClick={() => setFontSize(3)} selected={currentFontSize == 3}>300%</Button>
+            <Button onClick={() => setFontSize(4)} selected={currentFontSize == 4}>400%</Button>
+          </div>
+
+          <div className="modal-settings__group">
+            Narrate when cursor moves <br/>
+            <Button onClick={() => setNarrateSelection(0)} selected={currentNarrate == 0}>Off </Button>
+            <Button onClick={() => setNarrateSelection(1)} selected={currentNarrate == 1}>On </Button>
           </div>
 
           <div className="modal-settings__group">
@@ -53,13 +60,6 @@ export const ModalSettings = observer((props : { children: React.ReactNode }) =>
             <Button onClick={() => setVolume(0.75)} selected={currentVolume == 0.75}>75% </Button>
             <Button onClick={() => setVolume(1)} selected={currentVolume == 1}>100% </Button>
           </div>
-
-          <div className="modal-settings__group">
-            Narrate when selecting text <br/>
-            <Button onClick={() => setNarrateSelection(0)} selected={currentNarrate == 0}>Off </Button>
-            <Button onClick={() => setNarrateSelection(1)} selected={currentNarrate == 1}>On </Button>
-          </div>
-
         </ModalBody>
       </Modal>
     </>

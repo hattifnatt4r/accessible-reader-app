@@ -103,6 +103,10 @@ export class FileviewStore {
   toggleEdit = () => {
     this.isEditing = !this.isEditing;
   }
+  @action
+  save = () => {
+    
+  }
 
 
   // -- narrate ----------------------------------------
