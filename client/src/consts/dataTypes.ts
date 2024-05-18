@@ -23,6 +23,7 @@ export type UserSettingsType = {
   readerNarrateSelection: 0 | 1,
   editorFontSize: number, // 1-3
   editorNarrateSelection: 0 | 1,
+  editorLayout: number,
 };
 
 export type ChatMessage = {

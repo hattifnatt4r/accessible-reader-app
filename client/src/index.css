@@ -2,6 +2,16 @@ html {
   font-size: 18px;
   line-height: 25px;
 }
+@media (orientation: landscape) {
+  html {
+    font-size: 2vh;
+  }
+}
+@media (orientation: portrait) {
+  html {
+    font-size: 2vw;
+  }
+}
 
 body {
   margin: 0;

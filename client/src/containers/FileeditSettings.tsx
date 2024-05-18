@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../components/Button';
 import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
-import './FileviewSettings.css';
+import './FileeditSettings.css';
 
-export const FileeditSettings = observer((props : { children: React.ReactNode }) => {
-  const { children } = props;
+export const FileeditSettings = observer((props : { children: React.ReactNode, className: string }) => {
+  const { children, className } = props;
   const [open, setOpen] = useState(false);
   const appStore = window.app;
   const currentFontSize = appStore.userSettings.editorFontSize;
   const currentVolume = appStore.userSettings.readerVolume;
   const currentNarrate = appStore.userSettings.editorNarrateSelection;
+  const currentEditorLayout = appStore.userSettings.editorLayout;
 
   function toggle() {
     setOpen(!open);
@@ -25,13 +26,17 @@ export const FileeditSettings = observer((props : { children: React.ReactNode })
   function setNarrateSelection(value: number) {
     appStore.updateSettings({ editorNarrateSelection: value });
   }
+  function setEditorLayout(value: number) {
+    appStore.updateSettings({ editorLayout: value });
+  }
   
+  console.log('e:', currentEditorLayout);
   return (
     <>
-      <div onClick={toggle} className='modal-toggle'>
+      <div onClick={toggle} className={className}>
         {children}
       </div>
-      <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
+      <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle} className="fileedit-modal">
         <ModalHeader>
 
         </ModalHeader>
@@ -59,6 +64,12 @@ export const FileeditSettings = observer((props : { children: React.ReactNode })
             <Button onClick={() => setVolume(0.5)} selected={currentVolume == 0.5}>50% </Button>
             <Button onClick={() => setVolume(0.75)} selected={currentVolume == 0.75}>75% </Button>
             <Button onClick={() => setVolume(1)} selected={currentVolume == 1}>100% </Button>
+          </div>
+
+          <div className="modal-settings__group">
+            Buttons layout <br/>
+            <Button onClick={() => setEditorLayout(1)} selected={currentEditorLayout == 1}>#1 </Button>
+            <Button onClick={() => setEditorLayout(2)} selected={currentEditorLayout == 2}>#2 </Button>
           </div>
         </ModalBody>
       </Modal>

@@ -7,11 +7,39 @@ import { getTextAroundCursor } from './FileeditUtils';
 import './Fileedit.css';
 
 type CharType = { id: string, val: string, label: string };
-const simpleChars: string[] = ['a', 'b'];
+const simpleChars: string[] = 'abcdefghijklmnopqrstuvwxyz.,'.split('');
 let otherChars : CharType[] = [
-  { id: 'space', val: ' ', label: ' ' },
+  { id: 'space', val: ' ', label: '_' },
 ];
 const allChars = [...otherChars, ...simpleChars.map(char => ({ id: char, val: char, label: char }))];
+const layouts = [
+  { id: 1,
+    cols: 9,
+    rows: 5,
+    keys: ['reset', 'settings', '', 'save', '', 'p', 'read', '',
+      'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o',
+      'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
+      'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.',
+      '123', '', 'space', 'prev', 'next',
+    ],
+    keysTop: ['exit', 'erase'],
+    doubleWidth: ['prev', 'next', 'read'],
+    tripleWidth: ['space'],
+  },
+  { id: 2,
+    cols: 9,
+    rows: 5,
+    keys: ['reset', 'settings', '', 'save', '', 'p', 'read', '',
+      'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o',
+      'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
+      'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.',
+      '123', '', 'space', 'prev', 'next',
+    ],
+    keysTop: ['exit', 'erase'],
+    doubleWidth: ['prev', 'next', 'read'],
+    tripleWidth: ['space'],
+  }
+];
 
 
 export const Fileedit = observer((props: { open: boolean, text: string, toggle: () => void, save: (textEdited: string) => void }) => {
@@ -48,31 +76,76 @@ export const Fileedit = observer((props: { open: boolean, text: string, toggle: 
     setTextvalue(text);
     setCursor(0);
   }
+  function handleRead() {
+    
+  }
+  function handleToggleView() {
 
+  }
+
+  function onKeydown(event: KeyboardEvent) {
+    // support keyboard input
+    console.log('code:', event.key);
+    const key = event.key;
+    if (key === 'Backspace') { document.getElementById('fedit-erase')?.click(); }
+    if (key === 'ArrowRight') { document.getElementById('fedit-next')?.click(); }
+    if (key === 'ArrowLeft') { document.getElementById('fedit-prev')?.click(); }
+    if (key === ' ') { document.getElementById('fedit-space')?.click(); }
+    if (/^[a-z0-9]+$/.test(key)) { document.getElementById('fedit-'+key)?.click(); }
+  }
 
   useEffect(() => {
     setTextvalue(text);
+
+    document.removeEventListener("keydown", onKeydown);
+    document.addEventListener("keydown", onKeydown);
+    return function cleanup() {
+      document.removeEventListener("keydown", onKeydown);
+    };
   }, [text]);
 
 
   if (!open) return null;
 
-  const cl = {
+  const layoutID = appStore.userSettings.editorLayout || 1;
+  const layout = layouts.find(l => l.id === layoutID) || layouts[0];
+  const clContainer = {
     'fedit': 1,
-    'fedit-12': appStore.userSettings.editorFontSize == 1.25,
-    'fedit-15': appStore.userSettings.editorFontSize == 1.5,
-    'fedit-20': appStore.userSettings.editorFontSize == 2,
-    'fedit-25': appStore.userSettings.editorFontSize == 2.5,
-    'fedit-30': appStore.userSettings.editorFontSize == 3,
-    'fedit-40': appStore.userSettings.editorFontSize == 4,
+    ['fedit_l' + layoutID]: 1,
   };
-
-
+  const clText = {
+    'fedit__text': 1,
+    'fedit__text_12': appStore.userSettings.editorFontSize == 1.25,
+    'fedit__text_15': appStore.userSettings.editorFontSize == 1.5,
+    'fedit__text_20': appStore.userSettings.editorFontSize == 2,
+    'fedit__text_25': appStore.userSettings.editorFontSize == 2.5,
+    'fedit__text_30': appStore.userSettings.editorFontSize == 3,
+    'fedit__text_40': appStore.userSettings.editorFontSize == 4,
+  };
+  const clButton = (id: string) => ({
+    'fedit__btn': 1,
+    'fedit__btn_double': layout.doubleWidth.includes(id),
+    'fedit__btn_triple': layout.tripleWidth.includes(id),
+    'fedit__btn_empty': !id,
+    'fedit__btn_top': layout.keysTop.includes(id),
+  });
+  const buttons = [
+    { id: 'prev', comp: <div onClick={handlePrev} className={classNames(clButton('prev'))} id="fedit-prev" key="prev"><Icon name="keyboard_arrow_left" /></div> },
+    { id: 'next', comp: <div onClick={handleNext} className={classNames(clButton('next'))} id="fedit-next" key="next"><Icon name="keyboard_arrow_right" /></div> },
+    { id: 'erase', comp: <div onClick={handleErase} className={classNames(clButton('erase'))} id="fedit-erase" key="erase"><Icon name="backspace" /></div> },
+    { id: 'reset', comp: <div onClick={handleReset} className={classNames(clButton('reset'))} key="reset"><Icon name="refresh" /></div> },
+    { id: 'save', comp: <div onClick={handleSave} className={classNames(clButton('save'))} key="save"><Icon name="save" /></div> },
+    { id: 'exit', comp: <div onClick={toggle} className={classNames(clButton('exit'))} key="exit"><Icon name="close" /></div> },
+    { id: 'read', comp: <div onClick={handleRead} className={classNames(clButton('read'))} key="read"><Icon name="campaign" /></div> },
+    { id: '123', comp: <div onClick={handleToggleView} className={classNames(clButton('toggleview'))} key="toggleview">123</div> },
+    { id: 'settings', comp: <FileeditSettings className={classNames(clButton('settings'))} key="settings"><Icon name="settings" /></FileeditSettings> },
+  ];
   const [textBeforeCursor, wordBeforeCursor, wordAfterCursor, textAfterCursor] = getTextAroundCursor(textvalue, cursor);
 
+
   return (
-    <div className={classNames(cl)}>
-      <div className="fedit__text" id="fedit__text">
+    <div className={classNames(clContainer)}>
+      <div className={classNames(clText)} id="fedit__text">
         {textBeforeCursor}
         <span className="fedit__cursor-word">
           {wordBeforeCursor}
@@ -81,20 +154,26 @@ export const Fileedit = observer((props: { open: boolean, text: string, toggle: 
         </span>
         {' '}{textAfterCursor}
       </div>
-      
+
       <div className="fedit__controls">
-        <div onClick={toggle} className="fedit__btn"><Icon name="close" /></div>
-        <div onClick={handleSave} className="fedit__btn"><Icon name="save" /></div>
-        <div onClick={handleReset} className="fedit__btn"><Icon name="refresh" /></div>
-        <div onClick={handleErase} className="fedit__btn" id="fedit-erase"><Icon name="backspace" /></div>
-        <div onClick={handlePrev} className="fedit__btn" id="fedit-prev"><Icon name="keyboard_arrow_left" /></div>
-        <div onClick={handleNext} className="fedit__btn" id="fedit-next"><Icon name="keyboard_arrow_right" /></div>
+        {layout.keys.map((key: string, ii: number) => {
+            if (['prev', 'next', 'save', 'reset', 'erase', 'exit', 'settings', 'read', '123'].includes(key)) {
+              const btn = buttons.find(b => b.id === key);
+              return btn?.comp;
+            }
+            if (!key) {
+              return <div className={classNames(clButton(key))} key={ii}>-</div>
+            }
+            const char = allChars.find((ch: CharType) => ch.id === key) || { id: '', val: '', label: '' };
+            return <div onClick={() => handleEnterChar(char.val)} className={classNames(clButton(char.id))} id={'fedit-' + char.id} key={ii}><span>{char.label}</span></div>
+        })}
+      </div>
 
-        {allChars.map((char: CharType) => <div onClick={() => handleEnterChar(char.val)} className="fedit__btn" id={'fedit-' + char.id} key={'ch' + char.id}>{char.label}</div>)}
-
-        <FileeditSettings>
-          <div className="fedit__btn"><Icon name="settings" /></div>
-        </FileeditSettings>
+      <div className="fedit__controls-top">
+        {layout.keysTop.map((key: string, ii: number) => {
+            const btn = buttons.find(b => b.id === key);
+            return btn?.comp;
+        })}
       </div>
     </div>
   );
