@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Button } from '../components/Button';
 import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { Icon } from '../components/Icon';
 import './FileviewSettings.css';
 
-export const FileviewSettings = observer((props : { children: React.ReactNode }) => {
-  const { children } = props;
+export const FileviewSettings = observer((props : { children: React.ReactNode, className?: string }) => {
+  const { children, className = '' } = props;
   const [open, setOpen] = useState(false);
   const appStore = window.app;
   const currentFontSize = appStore.userSettings.readerFontSize;
@@ -27,9 +28,14 @@ export const FileviewSettings = observer((props : { children: React.ReactNode })
     appStore.updateSettings({ readerNarrateSelection: value });
   }
   
+  const cl = {
+    'modal-toggle': 1,
+    [className]: className,
+  };
+
   return (
     <>
-      <div onClick={toggle} className='modal-toggle'>
+      <div onClick={toggle} className={classNames(cl)}>
         {children}
       </div>
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import classNames from 'classnames';
 import { Icon } from '../components/Icon';
 import { FileviewStore } from './FileviewStore';
 import { useParams } from 'react-router-dom';
@@ -77,18 +77,14 @@ export const Fileview = observer(() => {
       </div>
 
       <div className="fview__nav">
-        <FileviewButton>
-          <ModalNav>
-            <Icon name="menu"/>
-            Nav
-          </ModalNav>
-        </FileviewButton>
-        <FileviewButton>
-          <FileviewSettings>
-            <Icon name="settings"/>
-            Settings
-          </FileviewSettings>
-        </FileviewButton>
+        <ModalNav className="fview-button">
+          <Icon name="menu"/>
+          Nav
+        </ModalNav>
+        <FileviewSettings className="fview-button">
+          <Icon name="settings"/>
+          Settings
+        </FileviewSettings>
 
         {store.isSpeaking && (
           <FileviewButton onClick={store.narratePause}>

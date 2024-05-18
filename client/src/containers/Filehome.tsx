@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Modal } from '../components/Modal';
 import { FilehomeStore } from './FilehomeStore';
 import { FilehomeButton, FilehomeFile } from './FilehomeMisc';
 import { observer, useObserver } from 'mobx-react-lite';
-import './Filehome.css';
 import { ModalNav } from './ModalNav';
+import './Filehome.css';
+
 
 export const Filehome = observer((props) => {
   const [store, setStore] = useState<FilehomeStore | null>(null);
@@ -28,11 +28,9 @@ export const Filehome = observer((props) => {
       </div>
 
       <div className="fhome__nav">
-        <FilehomeButton iconName="menu">
-          <ModalNav>
-            Nav
-          </ModalNav>
-        </FilehomeButton>
+        <ModalNav className="fview-button">
+          Nav
+        </ModalNav>
 
         <FilehomeButton iconName="person">
           User

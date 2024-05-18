@@ -13,6 +13,7 @@
   max-width: 1000px;
   height: 50vh;
   background-color: white;
+  text-align: left;
 }
 .modal-body {
   padding: 2rem;

@@ -1,0 +1,10 @@
+.modal-nav__link {
+  display: inline-block;
+  min-width: 10rem;
+  max-width: 10rem;
+  min-height: 5rem;
+  border: 1px solid rgba(0,0,0,0.1);
+  text-align: center;
+  padding: 2rem;
+  margin: 1rem;
+}
