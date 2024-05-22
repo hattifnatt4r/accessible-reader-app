@@ -5,11 +5,25 @@ html {
 @media (orientation: landscape) {
   html {
     font-size: 2vh;
+    font-size: 2svh;
+    line-height: 3vh;
+    line-height: 3svh;
   }
 }
 @media (orientation: portrait) {
   html {
     font-size: 2vw;
+    font-size: 2svw;
+    line-height: 3vw;
+    line-height: 3svw;
+  }
+}
+@media (orientation: portrait) and (max-width: 600px) {
+  html {
+    font-size: 3vw;
+    font-size: 3svw;
+    line-height: 4.5vw;
+    line-height: 4.5svw;
   }
 }
 
@@ -18,6 +32,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  /* font-family: "Open Sans", sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

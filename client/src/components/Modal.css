@@ -3,21 +3,26 @@
   top: 0;
   left: 0;
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(211, 214, 217, 0.6);
+  z-index: 101;
 }
 
 .modal {
-  margin: 15vh auto 0 auto;
+  margin: 20svh auto 0 auto;
   width: 60vw;
   max-width: 1000px;
   height: 50vh;
   background-color: white;
   text-align: left;
+  z-index: 102;
+  border-radius: 0.15rem;
 }
 .modal-body {
   padding: 2rem;
 }
 .modal-toggle {
   cursor: pointer;
+  display: inline-block;
 }

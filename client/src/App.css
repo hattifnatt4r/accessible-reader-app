@@ -1,3 +1,27 @@
 * {
   box-sizing: border-box;
 }
+
+.page-simple {
+  padding: 6rem 3rem;
+  display: flex;
+}
+.page-simple__content {
+  padding: 0 3rem;
+  width: calc(100% - 10rem);
+}
+.page-simple__title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.page-simple__text {
+  font-family: "Open Sans", sans-serif;
+
+}
+
+.page-simple__controls {
+  width: 10rem;
+
+}

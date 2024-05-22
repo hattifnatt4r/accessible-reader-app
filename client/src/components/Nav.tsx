@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import { Modal, ModalBody, ModalHeader } from '../components/Modal';
-import { AppLink } from '../components/AppLink';
-import { Icon } from '../components/Icon';
-import './ModalNav.css';
+import { Modal, ModalBody, ModalHeader } from './Modal';
+import { AppLink } from './AppLink';
+import { Icon } from './Icon';
+import { PageButton } from './PageButton';
+import './Nav.css';
 
 
-export const ModalNav = observer((props : { children: React.ReactNode, className?: string }) => {
-  const { children, className = '' } = props;
+export const NavModal = observer((props : { className?: string }) => {
+  const { className = '' } = props;
   const [open, setOpen] = useState(false);
 
   function toggle() {
@@ -17,15 +18,15 @@ export const ModalNav = observer((props : { children: React.ReactNode, className
   }
 
   const cl = {
-    'modal-toggle': 1,
+    'page-button': 1,
     [className]: className,
   };
   
   return (
     <>
-      <div onClick={toggle} className={classNames(cl)}>
-        {children}
-      </div>
+      <PageButton onClick={toggle} className={classNames(cl)}>
+        <Icon name="menu" className="page-button__icon" />
+      </PageButton>
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
         <ModalHeader>
 
@@ -40,3 +41,14 @@ export const ModalNav = observer((props : { children: React.ReactNode, className
     </>
   );
 });
+
+export function NavBackButton() {
+  function back() {
+    window.history.back();
+  }
+  return (
+    <PageButton onClick={back}>
+      <Icon name="arrow_back" className="page-button__icon" />
+    </PageButton>
+  );
+}

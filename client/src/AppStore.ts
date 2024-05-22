@@ -3,6 +3,7 @@ import { UserSettingsType } from "./consts/dataTypes";
 
 export class AppStore {
   @observable userSettings : UserSettingsType = { readerFontSize: 1, readerVolume: 1, readerNarrateSelection: 1, editorFontSize: 1, editorNarrateSelection: 1, editorLayout: 1 };
+  // @observable userID : number;
 
   constructor() {
     makeObservable(this);
@@ -18,6 +19,5 @@ export class AppStore {
     this.userSettings = { ...this.userSettings, ...newSettings };
 
     localStorage.setItem('userSettings', JSON.stringify(this.userSettings));
-    console.log('upate:', newSettings);
   }
 }

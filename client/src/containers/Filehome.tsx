@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FilehomeStore } from './FilehomeStore';
-import { FilehomeButton, FilehomeFile } from './FilehomeMisc';
+import { FilehomeFile } from './FilehomeMisc';
 import { observer, useObserver } from 'mobx-react-lite';
-import { ModalNav } from './ModalNav';
+import { NavBackButton, NavModal } from '../components/Nav';
+import { PageButton } from '../components/PageButton';
 import './Filehome.css';
 
 
@@ -28,37 +29,15 @@ export const Filehome = observer((props) => {
       </div>
 
       <div className="fhome__nav">
-        <ModalNav className="fview-button">
-          Nav
-        </ModalNav>
+        <PageButton iconName="settings" />
+        <NavBackButton />
+        <NavModal />
+        <br />
 
-        <FilehomeButton iconName="person">
-          User
-        </FilehomeButton>
-
-        <FilehomeButton iconName="settings">
-          Settings
-        </FilehomeButton>
-
-        <FilehomeButton iconName="group">
-          Messages
-        </FilehomeButton>
-
-        <FilehomeButton iconName="arrow_right_alt">
-          Enter
-        </FilehomeButton>
-
-        <FilehomeButton iconName="add">
-          New
-        </FilehomeButton>
-
-        <FilehomeButton iconName="arrow_left">
-          Prev
-        </FilehomeButton>
-
-        <FilehomeButton iconName="arrow_right">
-          Right
-        </FilehomeButton>
+        <PageButton iconName="arrow_right_alt" />
+        <PageButton iconName="add" />
+        <PageButton iconName="arrow_left" />
+        <PageButton iconName="arrow_right" />
       </div>
     </div>
   );

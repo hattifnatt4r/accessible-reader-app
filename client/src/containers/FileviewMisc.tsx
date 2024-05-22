@@ -5,7 +5,7 @@ export function FileviewButton(props: { iconName?: string | null, onClick?: () =
   const { iconName, onClick, children } = props;
 
   return (
-    <div className="fview-button" onClick={onClick}>
+    <div className="page-button" onClick={onClick}>
       {children}
     </div>
   );

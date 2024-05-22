@@ -2,45 +2,59 @@ import React from 'react';
 import { Icon } from '../components/Icon';
 import { AppLink } from '../components/AppLink';
 import { AppMenu } from '../containers/AppMenu'; 
-import './Home.css';
 import { ModalLogin } from './ModalLogin';
+import { Button } from '../components/Button';
+import './Home.css';
+
 
 export function Home() {
   return (
     <div className="home">
-      <div className="home-body">
-        <div className="home-top-text">
-          Welcome to Accessible Reader-Editor App!
-          <br />
-          Short info.
-        <br />
-        </div>
+      <div className="home__flex">
+        <div className="home__left">
+          <div className="home__title">
+            Welcome to EazyRead App!
+          </div>
+          <div className="home__descr">
+            An app to help kids with visual and motor skills limitations to improve reading/writing abilities.
+          </div>
 
-        <div className="home-links">
-          <div className="home-links__link">
-            <AppLink to="/about"><Icon name="info" /> About</AppLink>
-          </div>
-          <div className="home-links__link">
-            <AppLink to="/reader"><Icon name="book" /> Reader</AppLink>
-          </div>
-          <div className="home-links__link">
-            <AppLink to="/chat"><Icon name="chat" /> Messages</AppLink>
-          </div>
-          <div className="home-links__link">
-            <AppLink to="/settings"><Icon name="settings" /> Settings</AppLink>  
-          </div>
-          
           <ModalLogin>
-            Login
+            <Button className="home__login-btn">Log In</Button>
           </ModalLogin>
         </div>
 
+        <div className="home__right">
+          <img src="/images/home_polygon_03.svg" className="home__polygon" />
+          <div className="home__links">
+            <AppLink to="/reader" className="home-links__link home-links__link_colored">
+              <img src="images/icon_paper.png" alt="info" className="home-link__icon"/>
+              <div className="home-link__text">Files</div>
+            </AppLink>
+
+            <AppLink to="/about" className="home-links__link">
+              <img src="images/icon_info.png" alt="info" className="home-link__icon"/>
+              <div className="home-link__text">About</div>
+            </AppLink>
+
+            <AppLink to="/messages" className="home-links__link">
+              <img src="images/icon_comment.png" alt="info" className="home-link__icon"/>
+              <div className="home-link__text">Messages</div>
+            </AppLink>
+
+            <AppLink to="/settings" className="home-links__link">
+              <img src="images/icon_friend-request.png" alt="info" className="home-link__icon"/>
+              <div className="home-link__text">Settings</div>
+            </AppLink>
+
+          </div>
+        </div>
       </div>
       
 
-      <div className="home-footer">
-        GitHub <br/>
-        LinkedIn
+      <div className="home__footer">
+        <a href="https://github.com/hattifnatt4r/accessible-reader-app" target="_blank">GitHub</a>
+
       </div>
     </div>
   );

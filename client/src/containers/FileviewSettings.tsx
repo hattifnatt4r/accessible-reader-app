@@ -5,9 +5,10 @@ import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { Icon } from '../components/Icon';
 import './FileviewSettings.css';
+import { PageButton } from '../components/PageButton';
 
-export const FileviewSettings = observer((props : { children: React.ReactNode, className?: string }) => {
-  const { children, className = '' } = props;
+export const FileviewSettings = observer((props : { className?: string }) => {
+  const { className = '' } = props;
   const [open, setOpen] = useState(false);
   const appStore = window.app;
   const currentFontSize = appStore.userSettings.readerFontSize;
@@ -35,9 +36,8 @@ export const FileviewSettings = observer((props : { children: React.ReactNode, c
 
   return (
     <>
-      <div onClick={toggle} className={classNames(cl)}>
-        {children}
-      </div>
+      <PageButton onClick={toggle} iconName="settings" />
+
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
         <ModalHeader>
 

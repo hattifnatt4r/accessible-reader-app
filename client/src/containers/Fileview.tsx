@@ -3,10 +3,10 @@ import classNames from 'classnames';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { Icon } from '../components/Icon';
+import { PageButton } from '../components/PageButton';
 import { FileviewStore } from './FileviewStore';
 import { useParams } from 'react-router-dom';
-import { FileviewButton } from './FileviewMisc';
-import { ModalNav } from './ModalNav';
+import { NavBackButton, NavModal } from '../components/Nav';
 import { FileviewSettings } from './FileviewSettings';
 import { Fileedit } from './Fileedit';
 import './Fileview.css';
@@ -77,62 +77,39 @@ export const Fileview = observer(() => {
       </div>
 
       <div className="fview__nav">
-        <ModalNav className="fview-button">
-          <Icon name="menu"/>
-          Nav
-        </ModalNav>
-        <FileviewSettings className="fview-button">
-          <Icon name="settings"/>
-          Settings
-        </FileviewSettings>
+        <FileviewSettings className="page-button" />
+        <NavBackButton />
+        <NavModal />
+        <br />
+        <PageButton onClick={store.toggleEdit} iconName="edit" />
 
         {store.isSpeaking && (
-          <FileviewButton onClick={store.narratePause}>
-            <Icon name="pause_circle"/>Stop
-          </FileviewButton>
+          <PageButton onClick={store.narratePause} iconName="pause_circle" />
         )}
         {!store.isSpeaking && (
-          <FileviewButton onClick={store.isPaused ? store.narrateResume : store.narrateAll}>
-            <Icon name="play_circle" />Read All
-          </FileviewButton>
+          <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconName="not_started" />
         )}
-
-        <FileviewButton onClick={store.toggleEdit}>
-          <Icon name="edit"/>
-          Edit
-        </FileviewButton>
         <br />
 
-        <FileviewButton onClick={store.changeSelectionType}>
+        <PageButton onClick={store.changeSelectionType}>
           Select <br />
           <div>
             {store.selectionType === 'w' && <>&bull;</>}
             {store.selectionType === 's' && <>&bull; &bull;</>}
             {store.selectionType === 'p' && <>&bull; &bull; &bull;</>}
           </div>
-        </FileviewButton>
+        </PageButton>
 
         {store.isSpeaking && (
-          <FileviewButton onClick={store.narratePause}>
-            <Icon name="pause_circle"/>Stop
-          </FileviewButton>
+          <PageButton onClick={store.narratePause} iconName="pause_circle" />
         )}
         {!store.isSpeaking && (
-          <FileviewButton onClick={store.narrateResume}>
-            <Icon name="play_circle" />Play
-          </FileviewButton>
+          <PageButton onClick={store.narrateResume} iconName="play_circle" />
         )}
         <br />
 
-        <FileviewButton iconName="arrow_left" onClick={() => store.changeSelection(-1)}>
-          <Icon name="arrow_left"/>
-          Prev
-        </FileviewButton>
-
-        <FileviewButton iconName="arrow_right" onClick={() => store.changeSelection(1)}>
-          <Icon name="arrow_right"/>
-          Next
-        </FileviewButton>
+        <PageButton iconName="arrow_left" onClick={() => store.changeSelection(-1)} />
+        <PageButton iconName="arrow_right" onClick={() => store.changeSelection(1)} />
       </div>
 
       {store.isEditing && <Fileedit open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} save={store.save} />}

@@ -23,14 +23,3 @@ export function FilehomeFile(props : { file: ReaderFileType, className?: string,
     </div>
   );
 };
-
-export function FilehomeButton(props: { iconName?: string | null, onClick?: () => void, children?: React.ReactNode | null }) {
-  const { iconName, onClick, children } = props;
-
-  return (
-    <div className="fview-button">
-      <Icon name={iconName || null}/>
-      {children}
-    </div>
-  );
-}

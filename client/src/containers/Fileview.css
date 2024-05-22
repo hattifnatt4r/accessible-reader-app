@@ -4,6 +4,7 @@
   position: absolute;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
 }
 .fview-20 .fview__body {
   font-size: calc(1.3rem * 2);
@@ -67,14 +68,3 @@
   text-align: center;
 }
 
-
-/* misc */
-.fview-button {
-  display: inline-block;
-  width: 7rem;
-  height: 6rem;
-  padding: 0.5rem;
-  border: 1px solid rgba(0,0,0,0.1);
-  margin: 0.8rem;
-  cursor: pointer;
-}
