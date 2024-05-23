@@ -37,7 +37,7 @@ export const FileeditSettings = observer((props : { children: React.ReactNode, c
         {children}
       </div>
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle} className="fileedit-modal">
-        <ModalHeader>
+        <ModalHeader toggle={toggle}>
 
         </ModalHeader>
         <ModalBody>

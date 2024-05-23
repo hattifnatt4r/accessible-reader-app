@@ -31,8 +31,8 @@ export const Filehome = observer((props) => {
       <div className="fhome__nav">
         <PageButton iconName="settings" />
         <NavBackButton />
+        <PageButton empty />
         <NavModal />
-        <br />
 
         <PageButton iconName="arrow_right_alt" />
         <PageButton iconName="add" />

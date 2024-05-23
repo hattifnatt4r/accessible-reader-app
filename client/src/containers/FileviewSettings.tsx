@@ -28,19 +28,15 @@ export const FileviewSettings = observer((props : { className?: string }) => {
   function setNarrateSelection(value: number) {
     appStore.updateSettings({ readerNarrateSelection: value });
   }
-  
-  const cl = {
-    'modal-toggle': 1,
-    [className]: className,
-  };
+
 
   return (
     <>
       <PageButton onClick={toggle} iconName="settings" />
 
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
-        <ModalHeader>
-
+        <ModalHeader toggle={toggle}>
+          File viewer settings
         </ModalHeader>
         <ModalBody>
           <div className="modal-settings__group">

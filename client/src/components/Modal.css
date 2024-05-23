@@ -13,14 +13,33 @@
   margin: 20svh auto 0 auto;
   width: 60vw;
   max-width: 1000px;
-  height: 50vh;
+  min-height: 50vh;
+  height: auto;
   background-color: white;
   text-align: left;
   z-index: 102;
-  border-radius: 0.15rem;
+  border-radius: 0.2rem;
+
+  box-shadow: 0 16px 32px 0 rgba(10, 16, 34, .2), 0 0 0 transparent;
 }
+.modal-header {
+  padding: 2rem 4rem 0rem 4rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(0,0,0,0);
+  color: rgba(0,0,0,0.6);
+  /* color: #6D542D; */
+}
+.modal-header__close {
+  float: right;
+  cursor: pointer;
+}
+.modal-header__close span {
+  font-weight: 700;
+}
+
 .modal-body {
-  padding: 2rem;
+  padding: 3rem 4rem;
 }
 .modal-toggle {
   cursor: pointer;

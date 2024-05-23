@@ -79,17 +79,13 @@ export const Fileview = observer(() => {
       <div className="fview__nav">
         <FileviewSettings className="page-button" />
         <NavBackButton />
+        <PageButton empty />
         <NavModal />
-        <br />
+
         <PageButton onClick={store.toggleEdit} iconName="edit" />
 
-        {store.isSpeaking && (
-          <PageButton onClick={store.narratePause} iconName="pause_circle" />
-        )}
-        {!store.isSpeaking && (
-          <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconName="not_started" />
-        )}
-        <br />
+        {store.isSpeaking && <PageButton onClick={store.narratePause} iconName="pause_circle" />}
+        {!store.isSpeaking && <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconName="not_started" />}
 
         <PageButton onClick={store.changeSelectionType}>
           Select <br />

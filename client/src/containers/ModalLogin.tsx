@@ -39,7 +39,7 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
         {children}
       </div>
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
-        <ModalHeader>
+        <ModalHeader toggle={toggle}>
 
         </ModalHeader>
         <ModalBody>

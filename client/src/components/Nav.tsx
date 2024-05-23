@@ -27,15 +27,40 @@ export const NavModal = observer((props : { className?: string }) => {
       <PageButton onClick={toggle} className={classNames(cl)}>
         <Icon name="menu" className="page-button__icon" />
       </PageButton>
-      <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
-        <ModalHeader>
-
+      <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle} className="nav-modal">
+        <ModalHeader toggle={toggle}>
+          Menu
         </ModalHeader>
         <ModalBody>
-          <AppLink to="/reader" className="modal-nav__link"><Icon name="book" /> Files</AppLink>
-          <AppLink to="/home" className="modal-nav__link"><Icon name="home" /> Home</AppLink>
-          <AppLink to="/chat" className="modal-nav__link"><Icon name="chat" /> Messages</AppLink>
-          <AppLink to="/settings" className="modal-nav__link"><Icon name="settings" /> User Settings</AppLink>
+          <AppLink to="/home" className="nav-link nav-link_colored">
+            <img src="/images/icon_arrowback.png" alt="info" className="nav-link__icon"/>
+            <div className="nav-link__text">Back</div>
+          </AppLink>
+          <AppLink to="/home" className="nav-link">
+            <img src="/images/icon_home.png" alt="info" className="nav-link__icon"/>
+            <div className="nav-link__text">Home</div>
+          </AppLink>
+          <br />
+          <AppLink to="/reader" className="nav-link">
+            <img src="/images/icon_paper.png" alt="info" className="nav-link__icon"/>
+            <div className="nav-link__text">Files</div>
+          </AppLink>
+
+          <AppLink to="/messages" className="nav-link">
+            <img src="/images/icon_comment.png" alt="info" className="nav-link__icon"/>
+            <div className="nav-link__text">Messages</div>
+          </AppLink>
+
+          <AppLink to="/about" className="nav-link">
+            <img src="/images/icon_info.png" alt="info" className="nav-link__icon"/>
+            <div className="nav-link__text">About</div>
+          </AppLink>
+
+          <AppLink to="/settings" className="nav-link">
+            <img src="/images/icon_friend-request.png" alt="info" className="nav-link__icon"/>
+            <div className="nav-link__text">Settings</div>
+          </AppLink>
+
         </ModalBody>
       </Modal>
     </>

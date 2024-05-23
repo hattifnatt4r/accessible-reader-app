@@ -3,11 +3,12 @@ import { Icon } from './Icon';
 import './PageButton.css';
 
 
-export function PageButton(props: { iconName?: string | null, onClick?: () => void, children?: React.ReactNode | null, className?: string }) {
-  const { iconName = '', onClick, children, className = '' } = props;
+export function PageButton(props: { iconName?: string | null, onClick?: () => void, children?: React.ReactNode | null, className?: string, empty?: boolean }) {
+  const { iconName = '', onClick, children, className = '', empty } = props;
 
   const cl = {
     'page-button': 1,
+    'page-button_empty': empty,
     [className]: className,
   };
 

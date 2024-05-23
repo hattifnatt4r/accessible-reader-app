@@ -1,21 +1,10 @@
 import classNames from 'classnames';
 import './Modal.css';
 import { useEffect, useState } from 'react';
+import { Icon } from './Icon';
 
 export function Modal(props : { isOpen?: boolean, className?: string, children: React.ReactNode, toggle: () => void, toggleButton: React.ReactNode }) {
   const { className, children, isOpen, toggleButton, toggle, ...rest } = props;
-  const [open, setOpen] = useState(false);
-
-  /*
-  useEffect(() => {
-    if (!uncontrolled) {
-      setOpen(isOpen || false);
-    }
-  }, [isOpen]);
-
-  function modalToggle() { setOpen(!open); }
-  if (!open && uncontrolled) return toggleButton;
-  */
 
   const cl = {
     'modal': 1,
@@ -44,8 +33,8 @@ export function ModalBody(props : { className?: string, children: React.ReactNod
   );
 }
 
-export function ModalHeader(props : { className?: string, children: React.ReactNode }) {
-  const { className, children, ...rest } = props;
+export function ModalHeader(props : { className?: string, children: React.ReactNode, toggle: () => void }) {
+  const { className, children, toggle, ...rest } = props;
   const cl = {
     'modal-header': 1,
     [className || '']: !!className,
@@ -53,6 +42,7 @@ export function ModalHeader(props : { className?: string, children: React.ReactN
   return (
     <div className={classNames(cl)}>
       {children}
+      <div className="modal-header__close" onClick={toggle}><Icon name="close"/></div>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { ReactNode } from 'react';
 import { FileIDType } from '../consts/dataTypes';
 import { AppLink } from '../components/AppLink';
 import { ReaderFileType } from '../consts/dataTypes';
