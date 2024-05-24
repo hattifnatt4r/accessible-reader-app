@@ -9,7 +9,7 @@ export function AppMenu() {
     <div>
       <AppLink to="/home"><Icon name="home" /> Home</AppLink>
       <AppLink to="/login"><Icon name="person" /> Login</AppLink>
-      <AppLink to="/reader"><Icon name="book" /> Reader</AppLink>
+      <AppLink to="/files"><Icon name="book" /> Reader</AppLink>
       <AppLink to="/chat"><Icon name="chat" /> Messages</AppLink>
     </div>
   );

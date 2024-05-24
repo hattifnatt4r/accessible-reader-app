@@ -6,6 +6,7 @@ import { AppLink } from './AppLink';
 import { Icon } from './Icon';
 import { PageButton } from './PageButton';
 import './Nav.css';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 export const NavModal = observer((props : { className?: string }) => {
@@ -13,7 +14,6 @@ export const NavModal = observer((props : { className?: string }) => {
   const [open, setOpen] = useState(false);
 
   function toggle() {
-    console.log('open:', open);
     setOpen(!open);
   }
 
@@ -41,7 +41,7 @@ export const NavModal = observer((props : { className?: string }) => {
             <div className="nav-link__text">Home</div>
           </AppLink>
           <br />
-          <AppLink to="/reader" className="nav-link">
+          <AppLink to="/files" className="nav-link">
             <img src="/images/icon_paper.png" alt="info" className="nav-link__icon"/>
             <div className="nav-link__text">Files</div>
           </AppLink>
@@ -68,8 +68,13 @@ export const NavModal = observer((props : { className?: string }) => {
 });
 
 export function NavBackButton() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   function back() {
-    window.history.back();
+    const path = location.pathname?.split('/');
+    const newPath = path.length > 2 ? path.slice(0, -1).join('/') : '/'
+    navigate(newPath);
   }
   return (
     <PageButton onClick={back}>

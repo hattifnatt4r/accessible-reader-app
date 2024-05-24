@@ -1,29 +1,12 @@
 
-.page-info__polygon {
-  position: absolute;
-  /* background-image: url( '../public/images/home_polygon_03.svg' ); */
-  min-height: 100vh;
-  min-width: 90vw;
-  top: -20vh;
-  left: -20vw;
-  top: -30vh;
-  left: -10vw;
-}
-.page-info__polygon img {
-  min-height: 100%;
-  min-width: 100%;
-  position: relative
-}
 .page-simple {
   display: flex;
-  /* background-color: #DAE9DA; */
+  --rwidth: 10rem;
 }
 .page-simple__left {
-  width: calc(100% - 10rem);
+  width: calc(100% - var(--rwidth));
 }
 .page-simple__content {
-  opacity: 0.99;
-
   padding: 0 3rem;
   padding: 6rem 3rem 6rem 6rem;
   min-height: 80dvh;
@@ -33,12 +16,12 @@
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: rgba(0,0,0,0.8);
+  color: rgba(0,0,0,0.75);
 }
 .page-simple__title-text {
   display: inline-block;
-  opacity: 0.9;
   position: relative;
+  opacity: 0.9;
 }
 .page-simple__title-text span {
   display: inline-block;
@@ -48,7 +31,6 @@
   display: inline-block;
   width: 110%;
   height: 1.9rem;
-  background-color: rgba(255,255,255,1);
   background-color: #DAE9DA;
   background-color: rgb(166, 204, 107, 0.6);
   content: '';

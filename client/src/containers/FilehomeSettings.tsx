@@ -7,26 +7,22 @@ import { Icon } from '../components/Icon';
 import { PageButton } from '../components/PageButton';
 import './FileviewSettings.css';
 
-
-export const FileviewSettings = observer((props : { className?: string }) => {
+export const FilehomeSettings = observer((props : { className?: string }) => {
   const [open, setOpen] = useState(false);
   const appStore = window.app;
-  const currentFontSize = appStore.userSettings.readerFontSize;
+  // const currentFontSize = appStore.userSettings.readerFontSize;
   const currentVolume = appStore.userSettings.globalVolume;
-  const currentNarrate = appStore.userSettings.readerNarrateSelection;
+  const currentNarrate = appStore.userSettings.filesNarrateSelection;
 
   function toggle() {
     setOpen(!open);
   }
 
-  function setFontSize(value: number) {
-    appStore.updateSettings({ readerFontSize: value });
-  }
   function setVolume(value: number) {
     appStore.updateSettings({ globalVolume: value });
   }
   function setNarrateSelection(value: number) {
-    appStore.updateSettings({ readerNarrateSelection: value });
+    appStore.updateSettings({ filesNarrateSelection: value });
   }
 
 
@@ -36,19 +32,12 @@ export const FileviewSettings = observer((props : { className?: string }) => {
 
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>
-          File viewer settings
+          Files settings
         </ModalHeader>
         <ModalBody>
-          <div className="modal-settings__group">
-            Viewer Font Size <br/>
-            <Button onClick={() => setFontSize(1)} selected={currentFontSize == 1}>100% </Button>
-            <Button onClick={() => setFontSize(1.25)} selected={currentFontSize == 1.25}>125% </Button>
-            <Button onClick={() => setFontSize(1.5)} selected={currentFontSize == 1.5}>150% </Button>
-            <Button onClick={() => setFontSize(2)} selected={currentFontSize == 2}>200%</Button>
-          </div>
 
           <div className="modal-settings__group">
-            Narrate when selecting text <br/>
+            Narrate when selecting file <br/>
             <Button onClick={() => setNarrateSelection(0)} selected={currentNarrate == 0}>Off </Button>
             <Button onClick={() => setNarrateSelection(1)} selected={currentNarrate == 1}>On </Button>
           </div>

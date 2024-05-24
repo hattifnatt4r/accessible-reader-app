@@ -2,25 +2,12 @@ import { makeObservable, observable, action, runInAction, toJS } from "mobx";
 import { FileIDType, ReaderFileType } from "../consts/dataTypes";
 import { dataExampleFiles, dataExampleText } from "../consts/dataExamples";
 import { SelectionTypeType, TextVarType, changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSplitParagraph, replaceText, setTextParams } from "./FileviewUtils";
+import { speakAll } from "../utils/narrate";
 
 
-function speakAll(text: string[], cb?: () => void,) {
-  speechSynthesis.cancel();
-  const volume = window.app.userSettings.readerVolume;
-  const n = text.length;
-
-  text.forEach((t, ii) => {
-    const utterance = new SpeechSynthesisUtterance(t);
-    utterance.volume = volume ?? 1;
-    if (cb && ii === n - 1) {
-      utterance.onend = cb;
-    }
-    speechSynthesis.speak(utterance);
-  });
-}
 
 export class FileviewStore {
-  file: ReaderFileType = null;
+  file: ReaderFileType | null = null;
   @observable paragraphs: string[] = [];
   @observable sentences: string[][] = [];
   @observable textVar: TextVarType = { maxP: 0, maxS: 0, maxW: 0, pID: 0, sID: 0, wID: 0 };

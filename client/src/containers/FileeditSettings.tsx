@@ -9,7 +9,7 @@ export const FileeditSettings = observer((props : { children: React.ReactNode, c
   const [open, setOpen] = useState(false);
   const appStore = window.app;
   const currentFontSize = appStore.userSettings.editorFontSize;
-  const currentVolume = appStore.userSettings.readerVolume;
+  const currentVolume = appStore.userSettings.globalVolume;
   const currentNarrate = appStore.userSettings.editorNarrateSelection;
   const currentEditorLayout = appStore.userSettings.editorLayout;
 
@@ -21,7 +21,7 @@ export const FileeditSettings = observer((props : { children: React.ReactNode, c
     appStore.updateSettings({ editorFontSize: value });
   }
   function setVolume(value: number) {
-    appStore.updateSettings({ readerVolume: value });
+    appStore.updateSettings({ globalVolume: value });
   }
   function setNarrateSelection(value: number) {
     appStore.updateSettings({ editorNarrateSelection: value });
@@ -59,7 +59,7 @@ export const FileeditSettings = observer((props : { children: React.ReactNode, c
           </div>
 
           <div className="modal-settings__group">
-            Sound Volume <br/>
+            Sound Volume (global)<br/>
             <Button onClick={() => setVolume(0.25)} selected={currentVolume == 0.25}>25% </Button>
             <Button onClick={() => setVolume(0.5)} selected={currentVolume == 0.5}>50% </Button>
             <Button onClick={() => setVolume(0.75)} selected={currentVolume == 0.75}>75% </Button>

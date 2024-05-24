@@ -25,9 +25,9 @@
 .modal-header {
   padding: 2rem 4rem 0rem 4rem;
   font-size: 1.3rem;
-  font-weight: 500;
+  font-weight: 600;
   border-bottom: 1px solid rgba(0,0,0,0);
-  color: rgba(0,0,0,0.6);
+  color: rgba(0,0,0,0.8);
   /* color: #6D542D; */
 }
 .modal-header__close {

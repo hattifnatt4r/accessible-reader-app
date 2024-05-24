@@ -26,8 +26,8 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="home" element={<Home />} />
           <Route path="login" element={<Login />} />
-          <Route path="reader" element={<Filehome />} />
-          <Route path="file/:fileID" element={<Fileview />} />
+          <Route path="files" element={<Filehome />} />
+          <Route path="files/:fileID" element={<Fileview />} />
           <Route path="messages" element={<Messages />} />
           <Route path="settings" element={<UserSettings />} />
           <Route path="about" element={<About />} />

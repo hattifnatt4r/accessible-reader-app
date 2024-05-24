@@ -36,3 +36,8 @@
   top: 50%;
   line-height: 0;
 }
+
+.page-button_disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

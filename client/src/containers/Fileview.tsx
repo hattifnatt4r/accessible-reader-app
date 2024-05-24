@@ -78,7 +78,7 @@ export const Fileview = observer(() => {
 
       <div className="fview__controls">
         <div className="fview__controls-flex">
-          <FileviewSettings className="page-button" />
+          <FileviewSettings />
           <NavBackButton />
           <PageButton empty />
           <NavModal />

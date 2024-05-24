@@ -27,7 +27,7 @@ export function Home() {
         <div className="home__right">
           <img src="/images/home_polygon_03.svg" className="home__polygon" />
           <div className="home__links">
-            <AppLink to="/reader" className="home-links__link home-links__link_colored">
+            <AppLink to="/files" className="home-links__link home-links__link_colored">
               <img src="/images/icon_paper.png" alt="info" className="home-link__icon"/>
               <div className="home-link__text">Files</div>
             </AppLink>

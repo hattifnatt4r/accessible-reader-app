@@ -4,6 +4,9 @@ export const dataExampleFiles: ReaderFileType[] = [
   { id: 1, folder: 'examples', name: 'Book 1', author: 'Jhon Doe', title: 'Book Title' },
   { id: 2, folder: 'examples', name: 'Book 2 long title long title long title', author: 'Jhon Doe', title: 'Book Title' },
   { id: 3, folder: 'examples', name: 'Moomins', author: 'Jhon Doe', title: 'Moomins' },
+  { id: 4, folder: 'examples', name: 'Book 4', author: 'Jhon Doe', title: 'Moomins' },
+  { id: 5, folder: 'examples', name: 'Book 5', author: 'Jhon Doe', title: 'Moomins' },
+  { id: 6, folder: 'examples', name: 'Book 6', author: 'Jhon Doe', title: 'Moomins' },
 ];
 
 export const dataExampleText: ReaderTextType[] = [

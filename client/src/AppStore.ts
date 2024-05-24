@@ -2,16 +2,28 @@ import { makeObservable, observable, action } from "mobx";
 import { UserSettingsType } from "./consts/dataTypes";
 
 export class AppStore {
-  @observable userSettings : UserSettingsType = { readerFontSize: 1, readerVolume: 1, readerNarrateSelection: 1, editorFontSize: 1, editorNarrateSelection: 1, editorLayout: 1 };
-  // @observable userID : number;
+  @observable userSettings : UserSettingsType = {
+    globalVolume: 1,
+    filesNarrateSelection: 1,
+    readerFontSize: 1,
+    readerNarrateSelection: 1,
+    editorFontSize: 1,
+    editorNarrateSelection: 1,
+    editorLayout: 1,
+  };
+  @observable userID : number | null = null;
 
   constructor() {
     makeObservable(this);
 
     const settings = localStorage.getItem('userSettings');
     if (settings) {
-      this.userSettings = JSON.parse(settings);
+      const s = JSON.parse(settings);
+      if (s.filesNarrateSelection === undefined) s.filesNarrateSelection = 1;
+      if (s.readerNarrateSelection === undefined) s.readerNarrateSelection = 1;
+      this.userSettings = s;
     }
+
   }
 
   @action

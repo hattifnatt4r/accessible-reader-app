@@ -11,6 +11,7 @@
   --rwidth: 22rem; /* controls width */
   --ptop: 1rem; /* padding top */
   --hunit: calc((100vh - 2*var(--ptop)) / (5 * (3 + 1) - 1));
+  overflow: hidden;
 }
 @media (orientation: portrait) and (max-width: 600px) {
   .fhome {
@@ -27,7 +28,13 @@
   height: calc(100% - 2*var(--ptop));
   border: solid 1px rgba(0,0,0,0.1);
   background-color: white;
-  padding: 1rem 2rem 2rem 2rem;
+  overflow-y: auto;
+}
+.fhome__fileicons {
+  padding: 0.5rem;
+
+  position: relative;
+  height: calc(100% - var(--hbot));
   overflow-y: auto;
 }
 
@@ -75,13 +82,23 @@
 .fhome-file {
   cursor: pointer;
   display: inline-block;
-  max-width: 120px;
-  min-width: 120px;
-  min-height: 100px;
-  padding: 1rem;
-  margin: 1rem;
-  border: 1px solid rgba(0,0,0,0.1);
+  max-width: 8.7rem;
+  min-width: 8.7rem;
+  min-height: 7rem;
+  padding: 0.8rem 0.2rem;
+  margin: 2rem 1rem;
+  border: 1px solid rgba(0,0,0,0);
+  text-align: center;
+  border-radius: 0.15rem;
 }
 .fhome-file__name {
-  
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+.fhome-file__icon {
+  max-width: 3.5rem;
+}
+.fhome-file_selected {
+  border-color: green;
 }
