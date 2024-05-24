@@ -14,7 +14,7 @@ export function PageButton(props: { iconName?: string | null, onClick?: () => vo
 
   return (
     <div className={classNames(cl)} onClick={onClick}>
-      <Icon name={iconName} className="page-button__icon" />
+      {iconName && <Icon name={iconName} className="page-button__icon" />}
       {children}
     </div>
   );

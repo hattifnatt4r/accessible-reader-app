@@ -25,7 +25,7 @@
   min-width: 25rem;
   margin-right: -4rem;
   position: relative;
-  padding-top: 1rem;
+  padding-top: 2rem;
 }
 .home__footer {
   width: 100%;
@@ -46,12 +46,6 @@
   margin-top: 1rem;
 }
 .home__descr {
-  /*
-  font-family: "Open Sans", sans-serif;
-  font-family: sans-serif, "Helvetica Neue", "Lucida Grande", Arial;
-  */
-  font-weight: 400;
-  /* font-stretch: expanded; */
   font-size: 1rem;
   color: rgba(0,0,0,0.8);
   margin-bottom: 2.3rem;
@@ -59,12 +53,13 @@
 }
 
 .button.home__login-btn {
+  font-family: "Montserrat", sans-serif;
   border-radius: 3px;
   background-color: #FFE1B3;
   color: #6D542D;
   font-size: 1.2rem;
   line-height: 1.2rem;
-  font-weight: 500;
+  font-weight: 600;
   border: 1px solid #6d542d00;
   padding: 0.9rem 4rem;
   margin-bottom: 6rem;
@@ -139,7 +134,7 @@
   -webkit-transform: translateY(-5px) translateZ(0);
   transform: translateY(-5px) translateZ(0);
   opacity: 1;
-  filter: drop-shadow(1rem 0.5rem 1rem #a1c4a172);
+  filter: drop-shadow(0.5rem 0.7rem 1rem #a1c4a172);
 }
 .home-links__link:hover .home-link__icon {
   opacity: 0.75;
@@ -152,3 +147,23 @@
   background-color: #fee2b3;
 }
 
+
+
+.home__footer-link a {
+  text-decoration: none;
+  color: rgba(0,0,0,0.8);
+  font-size: 0.85rem;
+}
+.home__footer-link:hover a {
+  text-decoration: none;
+  text-decoration: underline;
+  color: rgb(135 132 195);
+  color: rgb(114, 110, 192);
+}
+.home__footer-link__icon {
+  max-width: 1.2rem;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+  margin-top: -0.3rem;
+}

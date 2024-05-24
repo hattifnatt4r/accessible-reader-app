@@ -16,6 +16,8 @@ export const Filehome = observer((props) => {
   }, []);
 
   if (!store) return null;
+
+  const selectedFile = store.getFile(store.fileSelected)?.name;
   return (
     <div className="fhome">
       <div className="fhome__files">
@@ -24,20 +26,22 @@ export const Filehome = observer((props) => {
         </div>
 
         <div className="fhome__magnify">
-          Filename: {store.getFile(store.fileSelected)?.name}
+          {!selectedFile ? <span className="fhome__magnify_empty">Select a file</span> : selectedFile}
         </div>
       </div>
 
-      <div className="fhome__nav">
-        <PageButton iconName="settings" />
-        <NavBackButton />
-        <PageButton empty />
-        <NavModal />
+      <div className="fhome__controls">
+        <div className="fview__controls-flex">
+          <PageButton iconName="settings" />
+          <NavBackButton />
+          <PageButton empty />
+          <NavModal />
 
-        <PageButton iconName="arrow_right_alt" />
-        <PageButton iconName="add" />
-        <PageButton iconName="arrow_left" />
-        <PageButton iconName="arrow_right" />
+          <PageButton iconName="arrow_right_alt" />
+          <PageButton iconName="add" />
+          <PageButton iconName="arrow_left" />
+          <PageButton iconName="arrow_right" />
+        </div>
       </div>
     </div>
   );

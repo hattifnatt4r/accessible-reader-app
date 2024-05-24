@@ -34,11 +34,12 @@
 .nav-link__icon {
   max-width: 3rem;
   display: inline-block;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.6rem;
   opacity: 0.9;
 }
 .nav-link__text {
   opacity: 0.9;
+  font-size: 1.2rem;
 }
 
 .nav-link:before {

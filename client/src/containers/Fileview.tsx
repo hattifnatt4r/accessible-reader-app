@@ -76,36 +76,38 @@ export const Fileview = observer(() => {
         </div>
       </div>
 
-      <div className="fview__nav">
-        <FileviewSettings className="page-button" />
-        <NavBackButton />
-        <PageButton empty />
-        <NavModal />
+      <div className="fview__controls">
+        <div className="fview__controls-flex">
+          <FileviewSettings className="page-button" />
+          <NavBackButton />
+          <PageButton empty />
+          <NavModal />
 
-        <PageButton onClick={store.toggleEdit} iconName="edit" />
+          <PageButton onClick={store.toggleEdit} iconName="edit" />
 
-        {store.isSpeaking && <PageButton onClick={store.narratePause} iconName="pause_circle" />}
-        {!store.isSpeaking && <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconName="not_started" />}
+          {store.isSpeaking && <PageButton onClick={store.narratePause} iconName="pause_circle" />}
+          {!store.isSpeaking && <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconName="not_started" />}
 
-        <PageButton onClick={store.changeSelectionType}>
-          Select <br />
-          <div>
-            {store.selectionType === 'w' && <>&bull;</>}
-            {store.selectionType === 's' && <>&bull; &bull;</>}
-            {store.selectionType === 'p' && <>&bull; &bull; &bull;</>}
-          </div>
-        </PageButton>
+          <PageButton onClick={store.changeSelectionType}>
+            Select <br />
+            <div>
+              {store.selectionType === 'w' && <>&bull;</>}
+              {store.selectionType === 's' && <>&bull; &bull;</>}
+              {store.selectionType === 'p' && <>&bull; &bull; &bull;</>}
+            </div>
+          </PageButton>
 
-        {store.isSpeaking && (
-          <PageButton onClick={store.narratePause} iconName="pause_circle" />
-        )}
-        {!store.isSpeaking && (
-          <PageButton onClick={store.narrateResume} iconName="play_circle" />
-        )}
-        <br />
+          {store.isSpeaking && (
+            <PageButton onClick={store.narratePause} iconName="pause_circle" />
+          )}
+          {!store.isSpeaking && (
+            <PageButton onClick={store.narrateResume} iconName="play_circle" />
+          )}
+          <br />
 
-        <PageButton iconName="arrow_left" onClick={() => store.changeSelection(-1)} />
-        <PageButton iconName="arrow_right" onClick={() => store.changeSelection(1)} />
+          <PageButton iconName="arrow_left" onClick={() => store.changeSelection(-1)} />
+          <PageButton iconName="arrow_right" onClick={() => store.changeSelection(1)} />
+        </div>
       </div>
 
       {store.isEditing && <Fileedit open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} save={store.save} />}

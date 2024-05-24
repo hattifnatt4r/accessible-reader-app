@@ -2,7 +2,7 @@ import { ReaderFileType, ReaderTextType } from "./dataTypes";
 
 export const dataExampleFiles: ReaderFileType[] = [
   { id: 1, folder: 'examples', name: 'Book 1', author: 'Jhon Doe', title: 'Book Title' },
-  { id: 2, folder: 'examples', name: 'Book 2', author: 'Jhon Doe', title: 'Book Title' },
+  { id: 2, folder: 'examples', name: 'Book 2 long title long title long title', author: 'Jhon Doe', title: 'Book Title' },
   { id: 3, folder: 'examples', name: 'Moomins', author: 'Jhon Doe', title: 'Moomins' },
 ];
 

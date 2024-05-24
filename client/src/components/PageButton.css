@@ -1,16 +1,23 @@
 .page-button {
-  background-color: #DAE9DA;
-  border-radius: 0.15rem;
   display: inline-block;
   width: 7rem;
-  height: 6rem;
-  border: 1px solid rgba(0,0,0,0);
-  margin: 0.8rem;
+  height: 7rem;
+  vertical-align: middle;
   cursor: pointer;
   text-align: center;
-  vertical-align: middle;
-  padding-top: 1.3rem;
-
+  border-radius: 0.15rem;
+  border: 1px solid rgba(0,0,0,0);
+  /* background-color: #DAE9DA; */
+  background-color: rgba(106, 141, 155, 0);
+  margin-bottom: 1rem;
+}
+@media (orientation: portrait) and (max-width: 600px) {
+  .page-button {
+    width: 70%;
+    margin-right: 15%;
+    margin-left: 15%;
+    font-size: 2.5rem;
+  }
 }
 .page-button_empty {
   visibility: hidden;
@@ -18,9 +25,14 @@
 }
 .page-button:hover {
   background-color: #96ca96;
+  background-color: rgba(106, 141, 155, 0.2);
 }
 .page-button__icon {
   font-weight: 650;
-  font-size: 2.5rem;
+  font-size: 3rem;
   color: rgba(0,0,0,0.5);
+  color: #738A93;
+  position: relative;
+  top: 50%;
+  line-height: 0;
 }

@@ -1,37 +1,55 @@
 
 .fview {
-  background-color: rgba(0,0,0,0.05);
+  background-color: #EDEEF0;
   position: absolute;
   width: 100vw;
   height: 100vh;
   height: 100dvh;
+  --rwidth: 22rem; /* controls width */
+  --ptop: 1rem; /* padding top */
+  --hunit: calc((100vh - 2*var(--ptop)) / (5 * (3 + 1) - 1));
 }
-.fview-20 .fview__body {
-  font-size: calc(1.3rem * 2);
-  line-height: calc(2rem * 2);
-}
-.fview-15 .fview__body {
-  font-size: calc(1.3rem * 1.5);
-  line-height: calc(2rem * 1.5);
-}
-.fview-12 .fview__body {
-  font-size: calc(1.3rem * 1.25);
-  line-height: calc(2rem * 1.25);
+@media (orientation: portrait) and (max-width: 600px) {
+  .fview {
+    --rwidth: 8rem;
+    --hunit: calc((100vh - 2rem) / (10 * (3 + 1) - 1));
+  }
 }
 
 .fview__file {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  width: calc(100vw - 22rem);
-  max-width: 70vw;
-  min-width: 40vw;
-  height: calc(100% - 2rem);
+  width: calc(100vw - var(--rwidth));
+  height: calc(100% - 2*var(--ptop));
   border: solid 1px rgba(0,0,0,0.1);
   background-color: white;
   padding: 1rem 2rem 2rem 2rem;
+  overflow-y: auto;
 }
 
+
+.fview__controls {
+  position: absolute;
+  top: var(--ptop);
+  right: 0;
+  max-width: var(--rwidth);
+  min-width: var(--rwidth);
+  text-align: center;
+  height: calc(100% - 2*var(--ptop));
+}
+.fview__controls-flex {
+  margin: calc(-0.5 * var(--hunit)) 0;
+  height: calc(100%);
+}
+.fview__controls .page-button {
+  height: calc(var(--hunit) * 3);
+  margin: calc(var(--hunit) * 0.5) 1.3rem;
+}
+
+
+
+/* file text */
 .fview__filename {
   font-size: 1rem;
   margin-bottom: 1rem;
@@ -41,30 +59,38 @@
   font-size: 1.7rem;
   margin-bottom: 1rem;
   font-weight: 500;
+  font-family:   'Ubuntu';
+  color: rgba(0,0,0,0.7);
 }
 .fview__body {
-  font-size: 1.3rem;
-  line-height: 2rem;
+  font-size: 1rem;
+  line-height: 1.8rem;
+  color: rgba(0,0,0,0.8);
   /* white-space-collapse: preserve; */ 
 }
+.fview-20 .fview__body {
+  font-size: calc(1rem * 2);
+  line-height: calc(1.8rem * 2);
+}
+.fview-15 .fview__body {
+  font-size: calc(1rem * 1.5);
+  line-height: calc(1.8rem * 1.5);
+}
+.fview-12 .fview__body {
+  font-size: calc(1rem * 1.25);
+  line-height: calc(1.8rem * 1.25);
+}
+
 
 .fview__p_selected {
-  background-color: rgba(0,0,0,0.06);
+  background-color: rgb(166, 204, 107, 0.4);
+  color: rgb(24, 30, 13);
 }
 .fview__s_selected {
-  background-color: rgba(0,200,0,0.1);
+  background-color: rgb(166, 204, 107, 0.6);
+  color: rgb(24, 30, 13);
 }
 .fview__w_selected {
-  background-color: rgba(0,200,0,0.4);
+  background-color: rgb(166, 204, 107, 0.8);
+  color: rgb(24, 30, 13);
 }
-
-.fview__nav {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 1rem;
-  max-width: 22rem;
-  min-width: 20rem;
-  text-align: center;
-}
-
