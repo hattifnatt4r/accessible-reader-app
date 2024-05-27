@@ -4,8 +4,15 @@ import { NavBackButton, NavModal } from '../components/Nav';
 export function About() {
   return (
     <div className="page-simple">
-      <div className="page-simple__left">
+      <div className="page-simple__topbar">
+        <div className="about-link">
+          <a href="https://github.com/hattifnatt4r/accessible-reader-app" target="_blank">
+            <i className="fab fa-github"></i> GitHub
+          </a>
+        </div>
+      </div>
 
+      <div className="page-simple__left">
         <div className="page-simple__content">
           <div className="page-simple__title">
             <div className="page-simple__title-text"><span>About</span></div>
@@ -26,14 +33,9 @@ export function About() {
           </div>
         </div>
 
-        <div className="page-simple__footer">
-          <div className="page-simple__footer-link">
-            <a href="https://github.com/hattifnatt4r/accessible-reader-app" target="_blank">
-              <i className="fab fa-github"></i> GitHub
-            </a>
-          </div>
-        </div>
+        <div className="page-simple__footer"></div>
       </div>
+      
       <div className="page-simple__controls">
         <NavBackButton />
         <NavModal />

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../components/Button';
 import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
-import './FileeditSettings.css';
+import './EditorSettings.css';
 
-export const FileeditSettings = observer((props : { children: React.ReactNode, className: string }) => {
+export const EditorSettings = observer((props : { children: React.ReactNode, className: string }) => {
   const { children, className } = props;
   const [open, setOpen] = useState(false);
   const appStore = window.app;

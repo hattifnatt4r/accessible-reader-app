@@ -7,7 +7,7 @@ import { Icon } from '../components/Icon';
 import { PageButton } from '../components/PageButton';
 import './FileviewSettings.css';
 
-export const FilehomeSettings = observer((props : { className?: string }) => {
+export const FilesSettings = observer((props : { className?: string }) => {
   const [open, setOpen] = useState(false);
   const appStore = window.app;
   // const currentFontSize = appStore.userSettings.readerFontSize;
@@ -28,7 +28,7 @@ export const FilehomeSettings = observer((props : { className?: string }) => {
 
   return (
     <>
-      <PageButton onClick={toggle} iconName="settings" />
+      <PageButton onClick={toggle} iconSvgname="settings" />
 
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>

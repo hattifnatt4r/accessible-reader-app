@@ -1,4 +1,4 @@
-import { getTextAroundCursor } from "./FileeditUtils";
+import { getTextAroundCursor } from "./EditorUtils";
 
 describe('getTextAroundCursor', () => {
   it('should split text into 4 strings', () => {

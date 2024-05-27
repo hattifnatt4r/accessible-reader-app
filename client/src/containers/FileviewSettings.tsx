@@ -32,7 +32,7 @@ export const FileviewSettings = observer((props : { className?: string }) => {
 
   return (
     <>
-      <PageButton onClick={toggle} iconName="settings" />
+      <PageButton onClick={toggle} iconSvgname="settings" className="page-button_outline" />
 
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>

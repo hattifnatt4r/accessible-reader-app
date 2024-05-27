@@ -3,10 +3,10 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from './Modal';
 import { AppLink } from './AppLink';
-import { Icon } from './Icon';
+import { Icon, SvgIcon } from './Icon';
 import { PageButton } from './PageButton';
-import './Nav.css';
 import { useLocation, useNavigate } from 'react-router-dom';
+import './Nav.css';
 
 
 export const NavModal = observer((props : { className?: string }) => {
@@ -19,45 +19,49 @@ export const NavModal = observer((props : { className?: string }) => {
 
   const cl = {
     'page-button': 1,
+    'page-button_thick': 1,
     [className]: className,
   };
   
   return (
     <>
-      <PageButton onClick={toggle} className={classNames(cl)}>
-        <Icon name="menu" className="page-button__icon" />
-      </PageButton>
+      <PageButton
+        onClick={toggle}
+        className={classNames(cl)}
+        iconSvgname="menu2"
+        // iconName="menu"
+      />
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle} className="nav-modal">
         <ModalHeader toggle={toggle}>
           Menu
         </ModalHeader>
         <ModalBody>
-          <AppLink to="/home" className="nav-link nav-link_colored">
-            <img src="/images/icon_arrowback.png" alt="info" className="nav-link__icon"/>
+          <AppLink to="/home" className="nav-link hover-move nav-link_colored">
+            <SvgIcon iconName="arrowback" className="nav-link__svg"/>
             <div className="nav-link__text">Back</div>
           </AppLink>
-          <AppLink to="/home" className="nav-link">
-            <img src="/images/icon_home.png" alt="info" className="nav-link__icon"/>
+          <AppLink to="/home" className="nav-link hover-move">
+            <SvgIcon iconName="home" className="nav-link__svg"/>
             <div className="nav-link__text">Home</div>
           </AppLink>
           <br />
-          <AppLink to="/files" className="nav-link">
-            <img src="/images/icon_paper.png" alt="info" className="nav-link__icon"/>
+          <AppLink to="/files" className="nav-link hover-move">
+            <SvgIcon iconName="paper" className="nav-link__svg"/>
             <div className="nav-link__text">Files</div>
           </AppLink>
 
-          <AppLink to="/messages" className="nav-link">
-            <img src="/images/icon_comment.png" alt="info" className="nav-link__icon"/>
+          <AppLink to="/messages" className="nav-link hover-move">
+            <SvgIcon iconName="comment" className="nav-link__svg"/>
             <div className="nav-link__text">Messages</div>
           </AppLink>
 
-          <AppLink to="/about" className="nav-link">
-            <img src="/images/icon_info.png" alt="info" className="nav-link__icon"/>
+          <AppLink to="/about" className="nav-link hover-move">
+            <SvgIcon iconName="info" className="nav-link__svg"/>
             <div className="nav-link__text">About</div>
           </AppLink>
 
-          <AppLink to="/settings" className="nav-link">
-            <img src="/images/icon_friend-request.png" alt="info" className="nav-link__icon"/>
+          <AppLink to="/settings" className="nav-link hover-move">
+            <SvgIcon iconName="person2" className="nav-link__svg"/>
             <div className="nav-link__text">Settings</div>
           </AppLink>
 
@@ -77,8 +81,9 @@ export function NavBackButton() {
     navigate(newPath);
   }
   return (
-    <PageButton onClick={back}>
-      <Icon name="arrow_back" className="page-button__icon" />
-    </PageButton>
+    <PageButton
+      onClick={back}
+      iconSvgname="arrowback"
+    />
   );
 }

@@ -3,7 +3,7 @@ import { FileIDType, ReaderFileType } from "../consts/dataTypes";
 import { dataExampleFiles } from "../consts/dataExamples";
 import { speakAll } from '../utils/narrate';
 
-export class FilehomeStore {
+export class FilesStore {
   readerFiles: ReaderFileType[] = [];
   @observable selectedFileID: FileIDType = null;
 
@@ -11,6 +11,7 @@ export class FilehomeStore {
     makeObservable(this);
     this.readerFiles = dataExampleFiles;
     this.readerFiles.sort((a, b) => a?.name > b?.name ? 1 : (a?.name < b?.name ? -1 : 0))
+    if (this.readerFiles.length) this.selectedFileID = this.readerFiles[0].id;
   }
 
   @action setFileID = (id : FileIDType) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Home } from './containers/Home';
 import { Login } from './containers/Login';
-import { Filehome } from './containers/Filehome';
+import { Files } from './containers/Files';
 import { Fileview } from './containers/Fileview';
 import { Messages } from './containers/Messages';
 import { About } from './containers/About';
@@ -26,7 +26,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="home" element={<Home />} />
           <Route path="login" element={<Login />} />
-          <Route path="files" element={<Filehome />} />
+          <Route path="files" element={<Files />} />
           <Route path="files/:fileID" element={<Fileview />} />
           <Route path="messages" element={<Messages />} />
           <Route path="settings" element={<UserSettings />} />

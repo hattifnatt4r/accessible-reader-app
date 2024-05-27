@@ -1,15 +1,11 @@
 .fhome {
-  --hbot: 6rem;
-}
-
-.fhome {
-  background-color: #EDEEF0;
   position: absolute;
   width: 100vw;
   height: 100vh;
   height: 100dvh;
-  --rwidth: 22rem; /* controls width */
-  --ptop: 1rem; /* padding top */
+  --hbot: 6rem;
+  --ptop: 1.5rem; /* padding top */
+  --rwidth: 20rem; /* controls width */
   --hunit: calc((100vh - 2*var(--ptop)) / (5 * (3 + 1) - 1));
   overflow: hidden;
 }
@@ -22,19 +18,15 @@
 
 .fhome__files {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
+  top: var(--ptop);
+  left: var(--ptop);
   width: calc(100vw - var(--rwidth));
   height: calc(100% - 2*var(--ptop));
-  border: solid 1px rgba(0,0,0,0.1);
-  background-color: white;
   overflow-y: auto;
 }
 .fhome__fileicons {
-  padding: 0.5rem;
-
   position: relative;
-  height: calc(100% - var(--hbot));
+  height: calc(100% - var(--hbot) - var(--ptop));
   overflow-y: auto;
 }
 
@@ -48,8 +40,9 @@
   height: calc(100% - 2*var(--ptop));
 }
 .fhome__controls-flex {
-  margin: calc(-0.5 * var(--hunit)) 0;
   height: calc(100%);
+  margin: calc(-0.5 * var(--hunit)) 0;
+  padding-left: 1.5rem;
 }
 .fhome__controls .page-button {
   height: calc(var(--hunit) * 3);
@@ -64,41 +57,21 @@
   bottom: 0;
   left: 0;
   height: var(--hbot);
-  border-top: solid 1px rgba(0,0,0,0.1);
   width: 100%;
   padding: 0 2rem;
-  font-size: 3rem;
+  font-family: "Montserrat", sans-serif;
+  font-size: 2.5rem;
+  font-weight: 600;
   line-height: calc(var(--hbot) - 1px);
   color: rgba(0,0,0,0.7);
   white-space: nowrap;
   overflow-x: auto;
+  background-color: white;
+  border-top: solid 1px #E9EEF0;
+  overflow-y: hidden;
 }
 .fhome__magnify_empty {
   opacity: 0.4;
 }
 
 
-/* misc */
-.fhome-file {
-  cursor: pointer;
-  display: inline-block;
-  max-width: 8.7rem;
-  min-width: 8.7rem;
-  min-height: 7rem;
-  padding: 0.8rem 0.2rem;
-  margin: 2rem 1rem;
-  border: 1px solid rgba(0,0,0,0);
-  text-align: center;
-  border-radius: 0.15rem;
-}
-.fhome-file__name {
-  white-space: nowrap;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-}
-.fhome-file__icon {
-  max-width: 3.5rem;
-}
-.fhome-file_selected {
-  border-color: green;
-}

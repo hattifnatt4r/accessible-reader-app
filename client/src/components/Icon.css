@@ -1,0 +1,33 @@
+.icon_filled {
+  font-variation-settings: 'FILL' 1;
+}
+
+.icon-mask {
+  position: relative;
+  height: 3rem;
+  width: 3rem;
+  top: calc(50% - 1.5rem);
+}
+.icon-mask__svg {
+  position: relative;
+  height: 100%;
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  background-color: var(--color_f1);
+}
+.icon-mask::before {
+  display: inline-block;
+  position: absolute;
+  
+  margin-bottom: 5%;
+  height: 105%;
+  width: 105%;
+  left: -0.4rem;
+  top: -0.1rem;
+  content: '';
+  background-color: var(--color_b2);
+  border-radius: 100%;
+}
+.page-button:hover {
+  
+}

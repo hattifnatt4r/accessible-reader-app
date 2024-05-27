@@ -1,11 +1,10 @@
 
 .fview {
-  background-color: #EDEEF0;
   position: absolute;
   width: 100vw;
   height: 100vh;
   height: 100dvh;
-  --rwidth: 22rem; /* controls width */
+  --rwidth: 19rem; /* controls width */
   --ptop: 1rem; /* padding top */
   --hunit: calc((100vh - 2*var(--ptop)) / (5 * (3 + 1) - 1));
 }
@@ -22,7 +21,6 @@
   left: 1rem;
   width: calc(100vw - var(--rwidth));
   height: calc(100% - 2*var(--ptop));
-  border: solid 1px rgba(0,0,0,0.1);
   background-color: white;
   padding: 1rem 2rem 2rem 2rem;
   overflow-y: auto;
@@ -46,6 +44,7 @@
   height: calc(var(--hunit) * 3);
   margin: calc(var(--hunit) * 0.5) 1.3rem;
 }
+
 
 
 

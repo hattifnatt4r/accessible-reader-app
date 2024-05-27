@@ -89,8 +89,6 @@
   font-weight: 500;
   color: rgba(0,0,0,0.55);
 }
-.fedit__btn .material-symbols-outlined {
-}
 .fedit__btn_empty {
   opacity: 0.3;
   pointer-events: none;

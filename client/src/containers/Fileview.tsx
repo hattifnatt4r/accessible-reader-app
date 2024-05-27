@@ -8,7 +8,7 @@ import { FileviewStore } from './FileviewStore';
 import { useParams } from 'react-router-dom';
 import { NavBackButton, NavModal } from '../components/Nav';
 import { FileviewSettings } from './FileviewSettings';
-import { Fileedit } from './Fileedit';
+import { Editor } from './Editor';
 import './Fileview.css';
 
 
@@ -83,10 +83,10 @@ export const Fileview = observer(() => {
           <PageButton empty />
           <NavModal />
 
-          <PageButton onClick={store.toggleEdit} iconName="edit" />
+          <PageButton onClick={store.toggleEdit} iconSvgname="edit-button" />
 
-          {store.isSpeaking && <PageButton onClick={store.narratePause} iconName="pause_circle" />}
-          {!store.isSpeaking && <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconName="not_started" />}
+          {store.isSpeaking && <PageButton onClick={store.narratePause} iconSvgname="pause" />}
+          {!store.isSpeaking && <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconSvgname="play" />}
 
           <PageButton onClick={store.changeSelectionType}>
             Select <br />
@@ -98,19 +98,19 @@ export const Fileview = observer(() => {
           </PageButton>
 
           {store.isSpeaking && (
-            <PageButton onClick={store.narratePause} iconName="pause_circle" />
+            <PageButton onClick={store.narratePause} iconSvgname="pause" />
           )}
           {!store.isSpeaking && (
-            <PageButton onClick={store.narrateResume} iconName="play_circle" />
+            <PageButton onClick={store.narrateResume} iconSvgname="marketing" />
           )}
           <br />
 
-          <PageButton iconName="arrow_left" onClick={() => store.changeSelection(-1)} />
-          <PageButton iconName="arrow_right" onClick={() => store.changeSelection(1)} />
+          <PageButton iconSvgname="arrow-back" onClick={() => store.changeSelection(-1)} />
+          <PageButton iconSvgname="arrow-forward" onClick={() => store.changeSelection(1)} />
         </div>
       </div>
 
-      {store.isEditing && <Fileedit open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} save={store.save} />}
+      {store.isEditing && <Editor open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} save={store.save} />}
     </div>
   );
 });

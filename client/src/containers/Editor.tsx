@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { Icon } from '../components/Icon';
-import { FileeditSettings } from './FileeditSettings';
-import { getTextAroundCursor } from './FileeditUtils';
-import './Fileedit.css';
+import { EditorSettings } from './EditorSettings';
+import { getTextAroundCursor } from './EditorUtils';
+import './Editor.css';
 
 type CharType = { id: string, val: string, label: string };
 const simpleChars: string[] = 'abcdefghijklmnopqrstuvwxyz.,'.split('');
@@ -42,7 +42,7 @@ const layouts = [
 ];
 
 
-export const Fileedit = observer((props: { open: boolean, text: string, toggle: () => void, save: (textEdited: string) => void }) => {
+export const Editor = observer((props: { open: boolean, text: string, toggle: () => void, save: (textEdited: string) => void }) => {
   const { open, text, toggle, save } = props;
   const [textvalue, setTextvalue] = useState<string>('');
   const [cursor, setCursor] = useState<number>(0);
@@ -138,7 +138,7 @@ export const Fileedit = observer((props: { open: boolean, text: string, toggle: 
     { id: 'exit', comp: <div onClick={toggle} className={classNames(clButton('exit'))} key="exit"><Icon name="close" /></div> },
     { id: 'read', comp: <div onClick={handleRead} className={classNames(clButton('read'))} key="read"><Icon name="campaign" /></div> },
     { id: '123', comp: <div onClick={handleToggleView} className={classNames(clButton('toggleview'))} key="toggleview">123</div> },
-    { id: 'settings', comp: <FileeditSettings className={classNames(clButton('settings'))} key="settings"><Icon name="settings" /></FileeditSettings> },
+    { id: 'settings', comp: <EditorSettings className={classNames(clButton('settings'))} key="settings"><Icon name="settings" /></EditorSettings> },
   ];
   const [textBeforeCursor, wordBeforeCursor, wordAfterCursor, textAfterCursor] = getTextAroundCursor(textvalue, cursor);
 

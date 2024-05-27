@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { FilehomeStore } from './FilehomeStore';
-import { FilehomeFile } from './FilehomeMisc';
+import { FilesStore } from './FilesStore';
+import { FilesFile, FilesEdit, FilesAdd } from './FilesMisc';
 import { observer, useObserver } from 'mobx-react-lite';
 import { NavBackButton, NavModal } from '../components/Nav';
 import { PageButton } from '../components/PageButton';
 import { useNavigate } from 'react-router-dom';
-import { FilehomeSettings } from './FilehomeSettings';
-import { FilehomeAdd } from './FilehomeAdd';
-import { FilehomeEdit } from './FilehomeEdit';
-import './Filehome.css';
+import { FilesSettings } from './FilesSettings';
+import './Files.css';
 
 
-export const Filehome = observer((props) => {
-  const [store, setStore] = useState<FilehomeStore | null>(null);
+export const Files = observer((props) => {
+  const [store, setStore] = useState<FilesStore | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const store = new FilehomeStore();
+    const store = new FilesStore();
     setStore(store);
   }, []);
 
@@ -31,7 +29,7 @@ export const Filehome = observer((props) => {
     <div className="fhome">
       <div className="fhome__files">
         <div className="fhome__fileicons">
-          {store?.readerFiles.map(f => f && <FilehomeFile file={f} setFileID={store.setFileID} key={f.id} selected={f.id == selectedFile?.id} />)}
+          {store?.readerFiles.map(f => f && <FilesFile file={f} setFileID={store.setFileID} key={f.id} selected={f.id == selectedFile?.id} />)}
         </div>
 
         <div className="fhome__magnify">
@@ -40,18 +38,18 @@ export const Filehome = observer((props) => {
       </div>
 
       <div className="fhome__controls">
-        <div className="fview__controls-flex">
-          <FilehomeSettings />
+        <div className="fhome__controls-flex">
+          <FilesSettings />
           <NavBackButton />
-          <FilehomeEdit file={selectedFile} />
+          <FilesEdit file={selectedFile} />
           <NavModal />
 
-          <FilehomeAdd />
-          <PageButton iconName="arrow_right_alt" onClick={openFile} disabled={!selectedFile} />
+          <FilesAdd />
+          <PageButton iconSvgname="right2" /* iconName="subdirectory_arrow_right"*/ onClick={openFile} disabled={!selectedFile} />
           <PageButton empty />
           <PageButton empty />
-          <PageButton iconName="arrow_left" onClick={() => store.nextPrevFile(-1)} />
-          <PageButton iconName="arrow_right" onClick={() => store.nextPrevFile(1)} />
+          <PageButton iconSvgname="arrow-back" onClick={() => store.nextPrevFile(-1)} />
+          <PageButton iconSvgname="arrow-forward" onClick={() => store.nextPrevFile(1)} />
         </div>
       </div>
     </div>

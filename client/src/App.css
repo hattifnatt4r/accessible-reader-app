@@ -13,7 +13,7 @@
 }
 .page-simple__title {
   font-family: "Montserrat", sans-serif;
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: 600;
   margin-bottom: 1rem;
   color: rgba(0,0,0,0.75);
@@ -31,8 +31,7 @@
   display: inline-block;
   width: 110%;
   height: 1.9rem;
-  background-color: #DAE9DA;
-  background-color: rgb(166, 204, 107, 0.6);
+  background-color: var(--color_b1l);
   content: '';
   position: absolute;
   display: inline-block;
@@ -54,37 +53,46 @@
   height: 100dvh;
   height: 50vh;
   text-align: center;
-  border-left: solid 1px rgba(0,0,0,0.1);
-  /*
-  background-color: #DAE9DA;
-  background-color: #EDEEF0;
-  */
+  /* border-left: solid 1px rgba(0,0,0,0.1); */
 }
 
 
-.page-simple__footer {
+.page-simple__topbar {
+  position: absolute;
   width: 100%;
-  padding: 1rem 3rem 1rem 6rem;
+  padding: 0.8rem 3rem 0.8rem 6rem;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
 }
-.page-simple__footer-link a {
+.about-link a {
   text-decoration: none;
   color: rgba(0,0,0,0.8);
   font-size: 0.85rem;
 }
-.page-simple__footer-link:hover a {
+.about-link:hover a {
   text-decoration: none;
   text-decoration: underline;
   color: rgb(135 132 195);
   color: rgb(114, 110, 192);
 }
-.page-simple__footer-link__icon {
-  max-width: 1.2rem;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 0.4rem;
-  margin-top: -0.3rem;
+/*
+.page-simple__footer {
+  width: 100%;
+  padding: 1rem 3rem 1rem 6rem;
 }
+*/
 
-.page-simple .page-button {
-  /* background-color: #DAE9DA; */
+
+
+.hover-move {
+  -webkit-transition: -webkit-transform .2s ease,-webkit-box-shadow .2s ease;
+  transition: -webkit-transform .2s ease,-webkit-box-shadow .2s ease;
+  transition: transform .2s ease,box-shadow .2s ease;
+  transition: transform .2s ease,box-shadow .2s ease,-webkit-transform .2s ease,-webkit-box-shadow .2s ease;
+}
+.hover-move:hover {
+  -webkit-transform: translateY(-5px) translateZ(0);
+  transform: translateY(-5px) translateZ(0);
+  filter: drop-shadow(0.5rem 0.7rem 1rem #9a9fa34a);
+  opacity: 1;
 }

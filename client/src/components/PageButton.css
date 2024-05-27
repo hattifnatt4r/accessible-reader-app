@@ -1,15 +1,16 @@
 .page-button {
   display: inline-block;
-  width: 7rem;
+  position: relative;
+  width: 5.8rem;
   height: 7rem;
   vertical-align: middle;
   cursor: pointer;
   text-align: center;
+  margin-bottom: 1rem;
+
   border-radius: 0.15rem;
   border: 1px solid rgba(0,0,0,0);
-  /* background-color: #DAE9DA; */
   background-color: rgba(106, 141, 155, 0);
-  margin-bottom: 1rem;
 }
 @media (orientation: portrait) and (max-width: 600px) {
   .page-button {
@@ -23,21 +24,35 @@
   visibility: hidden;
   pointer-events: none;
 }
-.page-button:hover {
-  background-color: #96ca96;
-  background-color: rgba(106, 141, 155, 0.2);
+.page-button_disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
+
+
+.page-button__svg {
+  margin: auto;
+  height: 3rem;
+  width: 3rem;
+  top: calc(50% - 1.5rem);
+}
+
+
+/* material icons */
 .page-button__icon {
-  font-weight: 650;
-  font-size: 3rem;
+  font-weight: 500;
+  font-size: 3.5rem;
   color: rgba(0,0,0,0.5);
   color: #738A93;
   position: relative;
   top: 50%;
   line-height: 0;
+  opacity: 0.99;
+  font-variation-settings: 'FILL' 1, 'opsz' 24;
+  filter: drop-shadow(0.2rem 0.2rem 0rem #ffffff) drop-shadow(0.1rem 0.05rem 0rem #ffffff);
 }
-
-.page-button_disabled {
-  opacity: 0.5;
-  pointer-events: none;
+/*
+.page-button_outline .page-button__icon {
+  font-variation-settings: 'FILL' 0, 'opsz' 24;
 }
+*/
