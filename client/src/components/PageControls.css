@@ -1,0 +1,90 @@
+.page-w-controls {
+  --ptop: 1.5rem; /* padding top */
+
+  --btn-h: calc((100dvh - 2*var(--ptop)) / 5);
+  --btn-h-in: min(calc(var(--btn-h) * 0.7), 5rem);
+  --rwidth: calc(4.5*var(--btn-h-in)); /* controls width */
+}
+@media screen and (max-aspect-ratio: 0.7) {
+  .page-w-controls {
+    --btn-h: calc((100dvh - 2*var(--ptop)) / 10);
+    --btn-h-in: min(calc(var(--btn-h) * 0.7), 4rem); 
+    --rwidth: calc(var(--btn-h-in) + 2rem);
+  }
+  .page-button-wrap {
+    width: 90% !important;
+  }
+}
+@media (min-width: 600px) and (max-aspect-ratio: 0.7) {
+  .page-w-controls {
+    --rwidth: calc(var(--btn-h-in) + 4rem);
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .page-w-controls {
+    --btn-h-in: min(calc(var(--btn-h) * 0.7), 3.3rem, 10.5vh);
+  }
+}
+@media screen and (min-width: 1200px) {
+  .page-w-controls {
+    --btn-h-in: min(calc(var(--btn-h) * 0.7), 4rem, 10.5vh);
+  }
+}
+
+/* buttons container */
+.page-controls {
+  width: var(--rwidth);
+  max-width: var(--rwidth);
+  position: absolute;
+  right: 0;
+  top: var(--ptop);
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.page-controls__flex {
+  position: relative;
+  height: calc(100%);
+}
+
+/* button */
+.page-button-wrap {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  vertical-align: top;
+  height: var(--btn-h);
+  width: 45%;
+  min-width: var(--btn-h-in);
+}
+.page-button {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+  top: calc(50% - 0.5 * var(--btn-h-in));
+  height: var(--btn-h-in);
+  width: var(--btn-h-in);
+  min-height: var(--btn-h-in);
+  max-height: var(--btn-h-in);
+}
+.page-button_empty {
+  visibility: hidden;
+  pointer-events: none;
+}
+.page-button_disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.page-button__svg {
+  margin: auto;
+  --h: min(90%, 4.5rem, calc(5* var(--u)));
+  top: calc(50% - 0.5 * var(--h));
+  height: var(--h);
+  width: var(--h);
+}
+

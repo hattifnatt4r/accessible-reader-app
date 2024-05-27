@@ -7,10 +7,12 @@
   width: 100vw;
   background-color: rgba(211, 214, 217, 0.6);
   z-index: 101;
+  display: flex;
+  align-items: center;
 }
 
 .modal {
-  margin: 20svh auto 0 auto;
+  margin: auto;
   width: 60vw;
   max-width: 1000px;
   min-height: 50vh;
@@ -19,6 +21,8 @@
   text-align: left;
   z-index: 102;
   border-radius: 0.2rem;
+  overflow-y: auto;
+  max-height: 100dvh;
 
   box-shadow: 0 16px 32px 0 rgba(10, 16, 34, .2), 0 0 0 transparent;
 }

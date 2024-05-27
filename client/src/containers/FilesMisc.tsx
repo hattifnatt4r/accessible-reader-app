@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
 import { FileIDType, ReaderFileType } from '../consts/dataTypes';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
-import { PageButton } from '../components/PageButton';
+import { PageButton } from '../components/PageControls';
 import { Icon } from '../components/Icon';
 import './FilesMisc.css';
 

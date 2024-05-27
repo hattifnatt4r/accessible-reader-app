@@ -18,13 +18,13 @@ export type UserProfile = {
 };
 
 export type UserSettingsType = {
-  globalVolume: 0.25 | 0.5 | 0.75 | 1,
-  filesNarrateSelection: 0 | 1,
-  readerFontSize: number, // 1-2
-  readerNarrateSelection: 0 | 1,
-  editorFontSize: number, // 1-3
-  editorNarrateSelection: 0 | 1,
-  editorLayout: number,
+  globalVolume: '25' | '50' | '75' | '100',
+  filesNarrateSelection: '0' | '1',
+  readerFontSize: string, // 100-300
+  readerNarrateSelection: '0' | '1',
+  editorFontSize: string, // 100-600
+  editorNarrateSelection: '0' | '1',
+  editorLayout: string,
 };
 
 export type ChatMessage = {

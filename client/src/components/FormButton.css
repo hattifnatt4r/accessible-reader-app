@@ -1,0 +1,30 @@
+.form-group {
+  margin-bottom: 2rem;
+  max-width: 32rem;
+}
+.form-group__title {
+  font-size: 1.2rem;
+  margin-bottom: 0.7rem;
+  font-weight: 600;
+  color: rgba(0,0,0,0.75);
+}
+
+.form-button {
+  display: inline-block;
+  cursor: pointer;
+  padding: 1rem;
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 0.15rem;
+  text-align: center;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  min-width: 6rem;
+  background-color: rgba(0,0,0,0.04);
+
+}
+.form-button_selected {
+  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid #b3bccdab;
+
+  background-color: var(--color_b2);
+}

@@ -18,6 +18,7 @@ declare global {
 }
 window.app = new AppStore();
 
+
 export default function App() {
   return (
     <BrowserRouter>

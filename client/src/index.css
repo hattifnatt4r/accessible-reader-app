@@ -2,47 +2,35 @@ html {
   font-size: 18px;
   line-height: 25px;
   
+  --u: 18px;
+  --s: 1; /* UI scale */
   --color_b1: #A6CC6B;
   --color_b1d: #93bc56;
   --color_b1l: #CAE0A6;
+  --color_b1l2: #c3e0a6e8;
   --color_b2: #E4E9F3;
   --color_b3: #fee2b3;
-  --color_b3l: #FCECD4;
-  --color_b3t: #fee2b3;
+  --color_b3l: #fee2b3;
+  --color_b3l2: #FCECD4;
   --color_b4: #96ca96;
+  --color_b5: #EDEEF0;
   --color_f1: #2D4E66;
   --color_f2: #333929;
 }
-/*
+
 @media (orientation: landscape) {
   html {
-    font-size: 2vh;
-    font-size: 2svh;
-    line-height: 3vh;
-    line-height: 3svh;
+    --u: 2vh;
+    --u: 2svh;
   }
 }
 @media (orientation: portrait) {
   html {
-    font-size: 2vw;
-    font-size: 2svw;
-    line-height: 3vw;
-    line-height: 3svw;
+    --u: 2vw;
+    --u: 2svw;
   }
 }
-*/
-@media (orientation: portrait) and (max-width: 600px) {
-  html {
-    font-size: 16px;
-    line-height: 20px;
-    /*
-    font-size: 3vw;
-    font-size: 3svw;
-    line-height: 4.5vw;
-    line-height: 4.5svw;
-    */
-  }
-}
+
 
 body {
   margin: 0;

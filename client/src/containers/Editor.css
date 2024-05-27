@@ -17,32 +17,37 @@
   height: 50%;
   padding: 2rem;
   font-size: 1.3rem;
+  line-height: 2rem;
   overflow-y: scroll;
   white-space-collapse: preserve;
 }
-.fedit__text_12 {
+.fedit__text_125 {
   font-size: calc(1.3rem * 1.25);
   line-height: calc(2rem * 1.25);
 }
-.fedit__text_15 {
+.fedit__text_150 {
   font-size: calc(1.3rem * 1.5);
   line-height: calc(2rem * 1.5);
 }
-.fedit__text_20 {
+.fedit__text_200 {
   font-size: calc(1.3rem * 2);
   line-height: calc(2rem * 2);
 }
-.fedit__text_25 {
+.fedit__text_250 {
   font-size: calc(1.3rem * 2.5);
   line-height: calc(2rem * 2.5);
 }
-.fedit__text_30 {
+.fedit__text_300 {
   font-size: calc(1.3rem * 3);
   line-height: calc(2rem * 3);
 }
-.fedit__text_40 {
+.fedit__text_400 {
   font-size: calc(1.3rem * 4);
   line-height: calc(2rem * 4);
+}
+.fedit__text_600 {
+  font-size: calc(1.3rem * 6);
+  line-height: calc(2rem * 6);
 }
 
 .fedit__cursor {
@@ -54,6 +59,11 @@
   margin-right: -1rem;
   text-align: center;
   color: rgb(86, 183, 86);
+}
+.fedit__text_600 .fedit__cursor{
+  width: 4rem;
+  margin-left: -2rem;
+  margin-right: -2rem;
 }
 .fedit__cursor-word {
   white-space: nowrap;
@@ -69,6 +79,7 @@
   width: 100%;
   height: 50%;
   background-color: rgba(0,0,0,0.05);
+  background-color: var(--color_b5);
 }
 
 .fedit__controls-top {
@@ -81,57 +92,101 @@
 
 .fedit__btn {
   display: inline-block;
-  padding: 1rem;
   cursor: pointer;
   text-align: center;
   background-color: rgb(86, 183, 86, 0.3);
+  background-color: white;
   font-size: 1.8rem;
   font-weight: 500;
   color: rgba(0,0,0,0.55);
+  border-radius: 0.7rem;
+  vertical-align: top;
+}
+.fedit__btn_func {
+  background-color: #2d4e662e;
+  background-color: var(--color_b1l2);
+  background-color: #2d4e6612;
+}
+.fedit__btn_top {
+  background-color: var(--color_b5); 
+}
+.fedit__btn_colored {
+  background-color: var(--color_b1l2);
 }
 .fedit__btn_empty {
-  opacity: 0.3;
+  opacity: 0;
   pointer-events: none;
+}
+.fedit__btn .material-symbols-rounded {
+  font-size: inherit;
 }
 
 
 /* layout 1 */
 .fedit_l1 {
-  --btn-my: 0.7rem; /* button margin y */
-  --btn-mx: 0.7rem; /* button margin x */
-  --btn-h: 4.5rem; /* button height */
+  --btn-my: min(0.7rem, 1dvh); /* button margin y */
+  --btn-mx: min(0.7rem, 1dvw); /* button margin x */
+  --btn-h: min(4.5rem, 10dvh, 13dvw); /* button height */
 
-  --controls-h: calc(5*(var(--btn-h) + 2*var(--btn-my)) + var(--btn-my));
+  --controls-h: calc(5*(var(--btn-h) + 2*var(--btn-my)) + 2*var(--btn-my));
   --btn-w: calc((100% - 18*var(--btn-mx)) / 9);
+  --btn-fs: calc(0.5*var(--btn-h));
 }
-.fedit_l1 .fedit__controls {
+.fedit_l2 {
+  --btn-my: min(0.7rem, 1dvh); /* button margin y */
+  --btn-mx: min(0.7rem, 1dvw); /* button margin x */
+  --btn-h: min(4.5rem, 10dvh, 13dvw); /* button height */
+
+  --controls-h: calc(4*(var(--btn-h) + 2*var(--btn-my)) + 2*var(--btn-my));
+  --btn-w: calc((100% - 18*var(--btn-mx)) / 9);
+  --btn-fs: calc(0.5*var(--btn-h));
+}
+.fedit_l3 {
+  --btn-my: min(0.7rem, 1dvh); /* button margin y */
+  --btn-mx: min(0.7rem, 1dvw); /* button margin x */
+  --btn-h: min(4.5rem, 10dvh, 13dvw); /* button height */
+
+  --controls-h: calc(4*(var(--btn-h) + 2*var(--btn-my)) + 2*var(--btn-my));
+  --btn-w: calc((100% - 16*var(--btn-mx)) / 8);
+  --btn-fs: calc(0.5*var(--btn-h));
+}
+
+.fedit__controls {
   height: var(--controls-h);
+  padding-top: calc(0.5*var(--btn-my));
 }
-.fedit_l1 .fedit__text {
+.fedit__text {
   height: calc(100% - var(--controls-h));
   width: calc(100% - var(--btn-w) - 2*var(--btn-mx));
 }
-.fedit_l1 .fedit__controls-top {
+.fedit__controls-top {
   top: calc(1.5 * var(--btn-my));
   width: calc(var(--btn-w) + 2*var(--btn-mx));
   height: calc(100% - var(--controls-h));
 }
-.fedit_l1 .fedit__btn{
+.fedit__btn{
   min-width: var(--btn-w);
   max-width: var(--btn-w);
   min-height: var(--btn-h);
   max-height: var(--btn-h);
+  height: var(--btn-h);
   margin: var(--btn-my) var(--btn-mx);
+  font-size: var(--btn-fs);
+  line-height: var(--btn-fs);
+  text-align: center;
+  padding-top: calc((var(--btn-h) - var(--btn-fs))*0.5);
 }
-.fedit_l1 .fedit__btn_double {
+.fedit__btn-wrap {
+}
+.fedit__btn_double {
   min-width: calc(2*var(--btn-w) + 2*var(--btn-mx));
 }
-.fedit_l1 .fedit__btn_triple {
+.fedit__btn_triple {
   min-width: calc(3*var(--btn-w) + 4*var(--btn-mx));
 }
-.fedit_l1 .fedit__btn_top{
+.fedit__btn_top{
   min-width: calc(100% - 2*var(--btn-mx));
 }
-.fedit_l1 .fedit__btn_top.fedit__btn_double {
+.fedit__btn_top.fedit__btn_double {
   min-height: calc(2*var(--btn-h) + 2*var(--btn-my));
 }

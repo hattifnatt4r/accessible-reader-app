@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { Icon } from '../components/Icon';
-import { PageButton } from '../components/PageButton';
+import { PageButton, PageControls } from '../components/PageControls';
 import { FileviewStore } from './FileviewStore';
 import { useParams } from 'react-router-dom';
 import { NavBackButton, NavModal } from '../components/Nav';
@@ -33,11 +32,11 @@ export const Fileview = observer(() => {
   const paragraphs = store.paragraphs;
   const sentences = store.sentences;
 
+  const fontSize = appStore.userSettings.readerFontSize || '100';
   const cl = {
     'fview': 1,
-    'fview-12': appStore.userSettings.readerFontSize == 1.25,
-    'fview-15': appStore.userSettings.readerFontSize == 1.5,
-    'fview-20': appStore.userSettings.readerFontSize == 2,
+    ['fview_' + fontSize]: 1,
+    'page-w-controls': 1,
   };
 
   const pcl = (pID: number) => ({
@@ -54,7 +53,6 @@ export const Fileview = observer(() => {
     'fview__w_selected': wID === store.textVar.wID && sID === store.textVar.sID && pID === store.textVar.pID && store.selectionType === 'w',
   });
 
-  // console.log('p:', toJS(store.textVar));
   return (
     <div className={classNames(cl)}>
       <div className="fview__file">
@@ -65,7 +63,7 @@ export const Fileview = observer(() => {
           {paragraphs.map((p, pID) => (
             <div key={pID} id={'p' + pID} className={classNames(pcl(pID))}>
               {store.textVar.pID !== pID && p}
-              {store.textVar.pID == pID && sentences.map((s, sID) => (
+              {store.textVar.pID === pID && sentences.map((s, sID) => (
                 <span key={sID} id={'p' + pID + 's' + sID} className={classNames(scl(pID, sID))}>
                   {s.map((w, wID) => <span key={wID} id={'p' + pID + 's' + pID + 'w' + wID} className={classNames(wcl(pID, sID, wID))}>{w} </span>)}
                 </span>
@@ -76,39 +74,36 @@ export const Fileview = observer(() => {
         </div>
       </div>
 
-      <div className="fview__controls">
-        <div className="fview__controls-flex">
-          <FileviewSettings />
-          <NavBackButton />
-          <PageButton empty />
-          <NavModal />
+      <PageControls>
+        <FileviewSettings />
+        <NavBackButton />
+        <PageButton empty />
+        <NavModal />
 
-          <PageButton onClick={store.toggleEdit} iconSvgname="edit-button" />
+        <PageButton onClick={store.toggleEdit} iconSvgname="edit-button" />
 
-          {store.isSpeaking && <PageButton onClick={store.narratePause} iconSvgname="pause" />}
-          {!store.isSpeaking && <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconSvgname="play" />}
+        {store.isSpeaking && <PageButton onClick={store.narratePause} iconSvgname="pause" />}
+        {!store.isSpeaking && <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconSvgname="play" />}
 
-          <PageButton onClick={store.changeSelectionType}>
-            Select <br />
-            <div>
-              {store.selectionType === 'w' && <>&bull;</>}
-              {store.selectionType === 's' && <>&bull; &bull;</>}
-              {store.selectionType === 'p' && <>&bull; &bull; &bull;</>}
-            </div>
-          </PageButton>
+        <PageButton onClick={store.changeSelectionType}>
+          Select <br />
+          <div>
+            {store.selectionType === 'w' && <>&bull;</>}
+            {store.selectionType === 's' && <>&bull; &bull;</>}
+            {store.selectionType === 'p' && <>&bull; &bull; &bull;</>}
+          </div>
+        </PageButton>
 
-          {store.isSpeaking && (
-            <PageButton onClick={store.narratePause} iconSvgname="pause" />
-          )}
-          {!store.isSpeaking && (
-            <PageButton onClick={store.narrateResume} iconSvgname="marketing" />
-          )}
-          <br />
+        {store.isSpeaking && (
+          <PageButton onClick={store.narratePause} iconSvgname="pause" />
+        )}
+        {!store.isSpeaking && (
+          <PageButton onClick={store.narrateResume} iconSvgname="marketing" />
+        )}
 
-          <PageButton iconSvgname="arrow-back" onClick={() => store.changeSelection(-1)} />
-          <PageButton iconSvgname="arrow-forward" onClick={() => store.changeSelection(1)} />
-        </div>
-      </div>
+        <PageButton iconSvgname="arrow-back" onClick={() => store.changeSelection(-1)} />
+        <PageButton iconSvgname="arrow-forward" onClick={() => store.changeSelection(1)} />
+      </PageControls>
 
       {store.isEditing && <Editor open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} save={store.save} />}
     </div>

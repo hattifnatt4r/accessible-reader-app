@@ -1,32 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
-import { Button } from '../components/Button';
+import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
-import { Icon } from '../components/Icon';
-import { PageButton } from '../components/PageButton';
+import { PageButton } from '../components/PageControls';
+import { FormFieldOptions } from '../components/FormButton';
 import './FileviewSettings.css';
 
 
 export const FileviewSettings = observer((props : { className?: string }) => {
   const [open, setOpen] = useState(false);
   const appStore = window.app;
-  const currentFontSize = appStore.userSettings.readerFontSize;
-  const currentVolume = appStore.userSettings.globalVolume;
-  const currentNarrate = appStore.userSettings.readerNarrateSelection;
+  const form = appStore.userSettings;
 
   function toggle() {
     setOpen(!open);
   }
 
-  function setFontSize(value: number) {
-    appStore.updateSettings({ readerFontSize: value });
-  }
-  function setVolume(value: number) {
-    appStore.updateSettings({ globalVolume: value });
-  }
-  function setNarrateSelection(value: number) {
-    appStore.updateSettings({ readerNarrateSelection: value });
+  function setValue(name: string, value: string) {
+    appStore.updateSettings({ [name]: value });
   }
 
 
@@ -36,31 +26,43 @@ export const FileviewSettings = observer((props : { className?: string }) => {
 
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>
-          File viewer settings
+          Viewer viewer settings
         </ModalHeader>
         <ModalBody>
-          <div className="modal-settings__group">
-            Viewer Font Size <br/>
-            <Button onClick={() => setFontSize(1)} selected={currentFontSize == 1}>100% </Button>
-            <Button onClick={() => setFontSize(1.25)} selected={currentFontSize == 1.25}>125% </Button>
-            <Button onClick={() => setFontSize(1.5)} selected={currentFontSize == 1.5}>150% </Button>
-            <Button onClick={() => setFontSize(2)} selected={currentFontSize == 2}>200%</Button>
-          </div>
-
-          <div className="modal-settings__group">
-            Narrate when selecting text <br/>
-            <Button onClick={() => setNarrateSelection(0)} selected={currentNarrate == 0}>Off </Button>
-            <Button onClick={() => setNarrateSelection(1)} selected={currentNarrate == 1}>On </Button>
-          </div>
-
-          <div className="modal-settings__group">
-            Sound Volume (global)<br/>
-            <Button onClick={() => setVolume(0.25)} selected={currentVolume == 0.25}>25% </Button>
-            <Button onClick={() => setVolume(0.5)} selected={currentVolume == 0.5}>50% </Button>
-            <Button onClick={() => setVolume(0.75)} selected={currentVolume == 0.75}>75% </Button>
-            <Button onClick={() => setVolume(1)} selected={currentVolume == 1}>100% </Button>
-          </div>
-
+          <FormFieldOptions
+            form={form}
+            name="readerFontSize"
+            title="Viewer Font Size"
+            onChange={setValue}
+            options={[
+              { v: '100', l: '100%' },
+              { v: '125', l: '125%' },
+              { v: '150', l: '150%' },
+              { v: '200', l: '200%' },
+            ]}
+          />
+          <FormFieldOptions
+            form={form}
+            name="readerNarrateSelection"
+            title="Narrate when selecting text"
+            onChange={setValue}
+            options={[
+              { v: '0', l: 'Off' },
+              { v: '1', l: 'On' },
+            ]}
+          />
+          <FormFieldOptions
+            form={form}
+            name="globalVolume"
+            title="Sound Volume (global)"
+            onChange={setValue}
+            options={[
+              { v: '25', l: '25%' },
+              { v: '50', l: '50%' },
+              { v: '75', l: '75%' },
+              { v: '100', l: '100%' },
+            ]}
+          />
         </ModalBody>
       </Modal>
     </>

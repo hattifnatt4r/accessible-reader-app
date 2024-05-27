@@ -4,48 +4,24 @@
   width: 100vw;
   height: 100vh;
   height: 100dvh;
-  --rwidth: 19rem; /* controls width */
-  --ptop: 1rem; /* padding top */
-  --hunit: calc((100vh - 2*var(--ptop)) / (5 * (3 + 1) - 1));
-}
-@media (orientation: portrait) and (max-width: 600px) {
-  .fview {
-    --rwidth: 8rem;
-    --hunit: calc((100vh - 2rem) / (10 * (3 + 1) - 1));
-  }
+  --ptop: 1.5rem; /* padding top */
 }
 
 .fview__file {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
+  
   width: calc(100vw - var(--rwidth));
-  height: calc(100% - 2*var(--ptop));
+  height: calc(100%);
   background-color: white;
-  padding: 1rem 2rem 2rem 2rem;
+  padding: 1rem 2rem;
   overflow-y: auto;
 }
-
-
-.fview__controls {
-  position: absolute;
-  top: var(--ptop);
-  right: 0;
-  max-width: var(--rwidth);
-  min-width: var(--rwidth);
-  text-align: center;
-  height: calc(100% - 2*var(--ptop));
+@media screen and (min-width: 700px) {
+  .fview__file {
+    padding: calc(2* var(--u)) calc(4* var(--u));
+    padding: 2rem 3rem 2rem 4rem;
+  }
 }
-.fview__controls-flex {
-  margin: calc(-0.5 * var(--hunit)) 0;
-  height: calc(100%);
-}
-.fview__controls .page-button {
-  height: calc(var(--hunit) * 3);
-  margin: calc(var(--hunit) * 0.5) 1.3rem;
-}
-
-
 
 
 /* file text */
@@ -67,15 +43,19 @@
   color: rgba(0,0,0,0.8);
   /* white-space-collapse: preserve; */ 
 }
-.fview-20 .fview__body {
+.fview_100 .fview__body {
+  font-size: calc(1rem * 1);
+  line-height: calc(1.8rem * 1);
+}
+.fview_200 .fview__body {
   font-size: calc(1rem * 2);
   line-height: calc(1.8rem * 2);
 }
-.fview-15 .fview__body {
+.fview_150 .fview__body {
   font-size: calc(1rem * 1.5);
   line-height: calc(1.8rem * 1.5);
 }
-.fview-12 .fview__body {
+.fview_125 .fview__body {
   font-size: calc(1rem * 1.25);
   line-height: calc(1.8rem * 1.25);
 }

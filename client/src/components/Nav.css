@@ -32,7 +32,7 @@
   opacity: 0.85;
 }
 .nav-link_colored .icon-mask::before {
-  background-color: var(--color_b3t);
+  background-color: var(--color_b3l);
 }
 .nav-link .icon-mask__svg {
   background-color: rgba(0,0,0,0.9);

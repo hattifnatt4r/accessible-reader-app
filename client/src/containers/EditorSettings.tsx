@@ -1,36 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from '../components/Button';
+import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
+import { FormFieldOptions } from '../components/FormButton';
 import './EditorSettings.css';
 
 export const EditorSettings = observer((props : { children: React.ReactNode, className: string }) => {
   const { children, className } = props;
   const [open, setOpen] = useState(false);
   const appStore = window.app;
-  const currentFontSize = appStore.userSettings.editorFontSize;
-  const currentVolume = appStore.userSettings.globalVolume;
-  const currentNarrate = appStore.userSettings.editorNarrateSelection;
-  const currentEditorLayout = appStore.userSettings.editorLayout;
+  const form = appStore.userSettings;
 
   function toggle() {
     setOpen(!open);
   }
 
-  function setFontSize(value: number) {
-    appStore.updateSettings({ editorFontSize: value });
-  }
-  function setVolume(value: number) {
-    appStore.updateSettings({ globalVolume: value });
-  }
-  function setNarrateSelection(value: number) {
-    appStore.updateSettings({ editorNarrateSelection: value });
-  }
-  function setEditorLayout(value: number) {
-    appStore.updateSettings({ editorLayout: value });
+  function setValue(name: string, value: string) {
+    appStore.updateSettings({ [name]: value });
   }
   
-  console.log('e:', currentEditorLayout);
   return (
     <>
       <div onClick={toggle} className={className}>
@@ -38,39 +25,62 @@ export const EditorSettings = observer((props : { children: React.ReactNode, cla
       </div>
       <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle} className="fileedit-modal">
         <ModalHeader toggle={toggle}>
-
+          Editor settings
         </ModalHeader>
         <ModalBody>
-          <div className="modal-settings__group">
-            Editor Font Size <br/>
-            <Button onClick={() => setFontSize(1)} selected={currentFontSize == 1}>100% </Button>
-            <Button onClick={() => setFontSize(1.25)} selected={currentFontSize == 1.25}>125% </Button>
-            <Button onClick={() => setFontSize(1.5)} selected={currentFontSize == 1.5}>150% </Button>
-            <Button onClick={() => setFontSize(2)} selected={currentFontSize == 2}>200%</Button>
-            <Button onClick={() => setFontSize(2.5)} selected={currentFontSize == 2.5}>250%</Button>
-            <Button onClick={() => setFontSize(3)} selected={currentFontSize == 3}>300%</Button>
-            <Button onClick={() => setFontSize(4)} selected={currentFontSize == 4}>400%</Button>
-          </div>
+          <FormFieldOptions
+            form={form}
+            name="editorFontSize"
+            title="Editor Font Size"
+            onChange={setValue}
+            options={[
+              { v: '100', l: '100%' },
+              { v: '125', l: '125%' },
+              { v: '150', l: '150%' },
+              { v: '200', l: '200%' },
+              { v: '250', l: '250%' },
+              { v: '300', l: '300%' },
+              { v: '400', l: '400%' },
+              { v: '600', l: '600%' },
+            ]}
+          />
 
-          <div className="modal-settings__group">
-            Narrate when cursor moves <br/>
-            <Button onClick={() => setNarrateSelection(0)} selected={currentNarrate == 0}>Off </Button>
-            <Button onClick={() => setNarrateSelection(1)} selected={currentNarrate == 1}>On </Button>
-          </div>
+          <FormFieldOptions
+            form={form}
+            name="editorNarrateSelection"
+            title="Narrate when cursor moves"
+            onChange={setValue}
+            options={[
+              { v: '0', l: 'Off' },
+              { v: '1', l: 'On' },
+            ]}
+          />
 
-          <div className="modal-settings__group">
-            Sound Volume (global)<br/>
-            <Button onClick={() => setVolume(0.25)} selected={currentVolume == 0.25}>25% </Button>
-            <Button onClick={() => setVolume(0.5)} selected={currentVolume == 0.5}>50% </Button>
-            <Button onClick={() => setVolume(0.75)} selected={currentVolume == 0.75}>75% </Button>
-            <Button onClick={() => setVolume(1)} selected={currentVolume == 1}>100% </Button>
-          </div>
+          <FormFieldOptions
+            form={form}
+            name="globalVolume"
+            title="Sound Volume (global)"
+            onChange={setValue}
+            options={[
+              { v: '25', l: '25%' },
+              { v: '50', l: '50%' },
+              { v: '75', l: '75%' },
+              { v: '100', l: '100%' },
+            ]}
+          />
 
-          <div className="modal-settings__group">
-            Buttons layout <br/>
-            <Button onClick={() => setEditorLayout(1)} selected={currentEditorLayout == 1}>#1 </Button>
-            <Button onClick={() => setEditorLayout(2)} selected={currentEditorLayout == 2}>#2 </Button>
-          </div>
+          <FormFieldOptions
+            form={form}
+            name="editorLayout"
+            title="Buttons Layout"
+            onChange={setValue}
+            options={[
+              { v: '1', l: '#1' },
+              { v: '2', l: '#2' },
+              { v: '3', l: '#3' },
+            ]}
+          />
+
         </ModalBody>
       </Modal>
     </>

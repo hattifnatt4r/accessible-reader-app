@@ -3,13 +3,13 @@ import { UserSettingsType } from "./consts/dataTypes";
 
 export class AppStore {
   @observable userSettings : UserSettingsType = {
-    globalVolume: 1,
-    filesNarrateSelection: 1,
-    readerFontSize: 1,
-    readerNarrateSelection: 1,
-    editorFontSize: 1,
-    editorNarrateSelection: 1,
-    editorLayout: 1,
+    globalVolume: '100',
+    filesNarrateSelection: '1',
+    readerFontSize: '100',
+    readerNarrateSelection: '1',
+    editorFontSize: '125',
+    editorNarrateSelection: '1',
+    editorLayout: '2',
   };
   @observable userID : number | null = null;
 

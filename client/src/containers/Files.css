@@ -3,51 +3,27 @@
   width: 100vw;
   height: 100vh;
   height: 100dvh;
-  --hbot: 6rem;
-  --ptop: 1.5rem; /* padding top */
-  --rwidth: 20rem; /* controls width */
-  --hunit: calc((100vh - 2*var(--ptop)) / (5 * (3 + 1) - 1));
   overflow: hidden;
-}
-@media (orientation: portrait) and (max-width: 600px) {
-  .fhome {
-    --rwidth: 8rem;
-    --hunit: calc((100vh - 2rem) / (10 * (3 + 1) - 1));
-  }
+
+  --hbot: min(6rem, 10dvh);
 }
 
 .fhome__files {
   position: absolute;
   top: var(--ptop);
-  left: var(--ptop);
-  width: calc(100vw - var(--rwidth));
-  height: calc(100% - 2*var(--ptop));
+  left: calc(var(--ptop) + 1rem);
+  width: calc(100vw - var(--rwidth) - var(--ptop) - 2rem);
+  height: calc(100dvh - 2*var(--ptop));
   overflow-y: auto;
 }
 .fhome__fileicons {
   position: relative;
-  height: calc(100% - var(--hbot) - var(--ptop));
+  height: calc(100% - var(--hbot));
   overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem 0;
 }
 
-.fhome__controls {
-  position: absolute;
-  top: var(--ptop);
-  right: 0;
-  max-width: var(--rwidth);
-  min-width: var(--rwidth);
-  text-align: center;
-  height: calc(100% - 2*var(--ptop));
-}
-.fhome__controls-flex {
-  height: calc(100%);
-  margin: calc(-0.5 * var(--hunit)) 0;
-  padding-left: 1.5rem;
-}
-.fhome__controls .page-button {
-  height: calc(var(--hunit) * 3);
-  margin: calc(var(--hunit) * 0.5) 1.3rem;
-}
 
 
 
@@ -58,7 +34,7 @@
   left: 0;
   height: var(--hbot);
   width: 100%;
-  padding: 0 2rem;
+  padding: 0 1rem;
   font-family: "Montserrat", sans-serif;
   font-size: 2.5rem;
   font-weight: 600;

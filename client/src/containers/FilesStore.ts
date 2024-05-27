@@ -17,7 +17,7 @@ export class FilesStore {
   @action setFileID = (id : FileIDType) => {
     this.selectedFileID = id;
     const appStore = window.app;
-    if (appStore.userSettings.filesNarrateSelection) {
+    if (appStore.userSettings.filesNarrateSelection === '1') {
       speakAll([this.getFile(id)?.name || '']);
     }
   }

@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from './Modal';
 import { AppLink } from './AppLink';
 import { Icon, SvgIcon } from './Icon';
-import { PageButton } from './PageButton';
+import { PageButton } from './PageControls';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Nav.css';
 
