@@ -80,6 +80,7 @@
   height: 50%;
   background-color: rgba(0,0,0,0.05);
   background-color: var(--color_b5);
+  align-items: stretch;
 }
 
 .fedit__controls-top {
@@ -127,42 +128,65 @@
   --btn-my: min(0.7rem, 1dvh); /* button margin y */
   --btn-mx: min(0.7rem, 1dvw); /* button margin x */
   --btn-h: min(4.5rem, 10dvh, 13dvw); /* button height */
+  --controls-p: min(0.5rem, 3dvw);
 
   --controls-h: calc(5*(var(--btn-h) + 2*var(--btn-my)) + 2*var(--btn-my));
-  --btn-w: calc((100% - 18*var(--btn-mx)) / 9);
-  --btn-fs: calc(0.5*var(--btn-h));
+  --btn-w: calc((100% - 18*var(--btn-mx) - 1*var(--controls-p)) / 9);
+  --btn-fs: min(calc(0.5*var(--btn-h)), 2.5rem);
+  --btns-right-w: calc(var(--btn-w) + 2*var(--btn-mx) + 1*var(--controls-p));
+}
+.fedit_l4 {
+  --btn-my: min(0.7rem, 1dvh); /* button margin y */
+  --btn-mx: min(0.7rem, 1dvw); /* button margin x */
+  --btn-h: min(4.5rem, 10dvh, 13dvw); /* button height */
+  --controls-p: min(0.5rem, 3dvw);
+
+  --controls-h: calc(5*(var(--btn-h) + 2*var(--btn-my)) + 2*var(--btn-my));
+  --btn-w: calc((100% - 18*var(--btn-mx) - 1*var(--controls-p)) / 9);
+  --btn-fs: min(calc(0.5*var(--btn-h)), 2.5rem);
+  --btns-right-w: calc(var(--btn-w) + 2*var(--btn-mx) + 1*var(--controls-p));
 }
 .fedit_l2 {
   --btn-my: min(0.7rem, 1dvh); /* button margin y */
   --btn-mx: min(0.7rem, 1dvw); /* button margin x */
   --btn-h: min(4.5rem, 10dvh, 13dvw); /* button height */
+  --controls-p: min(0.5rem, 3dvw);
 
   --controls-h: calc(4*(var(--btn-h) + 2*var(--btn-my)) + 2*var(--btn-my));
   --btn-w: calc((100% - 18*var(--btn-mx)) / 9);
-  --btn-fs: calc(0.5*var(--btn-h));
+  --btn-fs:  min(calc(0.5*var(--btn-h)), 2.5rem);
+  --btns-right-w: calc(var(--btn-w) + 2*var(--btn-mx) + 1*var(--controls-p));
 }
 .fedit_l3 {
   --btn-my: min(0.7rem, 1dvh); /* button margin y */
   --btn-mx: min(0.7rem, 1dvw); /* button margin x */
   --btn-h: min(4.5rem, 10dvh, 13dvw); /* button height */
+  --controls-p: min(0.5rem, 3dvw);
 
   --controls-h: calc(4*(var(--btn-h) + 2*var(--btn-my)) + 2*var(--btn-my));
   --btn-w: calc((100% - 16*var(--btn-mx)) / 8);
-  --btn-fs: calc(0.5*var(--btn-h));
+  --btn-fs: min(calc(0.5*var(--btn-h)), 2.5rem);
+  --btns-right-w: calc(var(--btn-w) + 2*var(--btn-mx) + 1*var(--controls-p));
 }
 
+.fedit_l4 .fedit__btn {
+  font-weight: 400;
+}
 .fedit__controls {
   height: var(--controls-h);
   padding-top: calc(0.5*var(--btn-my));
+  padding-left: calc(var(--controls-p) + 0*var(--btn-mx));
+  padding-right: calc(var(--controls-p) + 0*var(--btn-mx));
 }
 .fedit__text {
   height: calc(100% - var(--controls-h));
-  width: calc(100% - var(--btn-w) - 2*var(--btn-mx));
+  width: calc(100% - var(--btns-right-w));
 }
 .fedit__controls-top {
   top: calc(1.5 * var(--btn-my));
-  width: calc(var(--btn-w) + 2*var(--btn-mx));
+  width: var(--btns-right-w);
   height: calc(100% - var(--controls-h));
+  padding-right: calc(var(--controls-p));
 }
 .fedit__btn{
   min-width: var(--btn-w);

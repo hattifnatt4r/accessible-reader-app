@@ -7,7 +7,7 @@ import { getTextAroundCursor } from './EditorUtils';
 import './Editor.css';
 
 type CharType = { id: string, val: string, label: string };
-const simpleChars: string[] = 'abcdefghijklmnopqrstuvwxyz.,1234567890+-=()*@":!?_'.split('');
+const simpleChars: string[] = 'abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщьъыэюя.,1234567890+-=()*@":!?_'.split('');
 let otherChars : CharType[] = [
   { id: 'space', val: ' ', label: ' ' },
   { id: 'more', val: ' ', label: '...' },
@@ -63,20 +63,42 @@ const layouts : LayoutType[] = [
     cols: 8,
     rows: 4,
     m1: [//'reset', ',', '.'
-      'q', 'w', 'e', 'r', 't', 'y', 'u', 'i',
+      'w', 'e', 'r', 't', 'y', 'u', 'i', 'o',
       'a', 's', 'd', 'f', 'g', 'h', 'j', 'k',
       'z', 'x', 'c', 'v', 'b', 'n', 'm', 'l',
-      'more', 'o','p', 'space', 'read', 'prev', 'next',
+      'more', 'q','p', 'space', 'read', 'prev', 'next',
     ],
     m2: [//'reset', ',', '.'
       '1', '2', '3', '4', '5', '6', '7', '8',
       '@', '+', '=', '(', ')', '*', '9', '0',
       '', '.', ',', '!', '?', '-', '"', ':',
-      'more', '','', 'space', 'read', 'prev', 'next',
+      'more', '', '', 'space', 'read',  'prev', 'next',
     ],
     keysTop: ['exit','settings', 'save', 'erase'],
     doubleWidth: ['space'],
     tripleWidth: [],
+  },
+
+  { id: '4',
+    label: '#4 Ru',
+    cols: 9,
+    rows: 5,
+    m1: ['reset', 'й','ж', 'э', 'х', 'read', 'erase',
+      'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з',
+      'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д',
+      'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю',
+      'more', '.', 'space', 'prev', 'next',
+    ],
+    m2: [
+      'reset', '', '', '', '', 'read', 'erase',
+      '1', '2', '3', '4', '5', '6', '7', '8', '9',
+      '@', '+', '=', '(', ')', '*', '_', '', '0',
+      '', '.', ',', '!', '?', '"', ':', '-', '',
+      'more', '', 'space', 'prev', 'next',
+    ],
+    keysTop: ['exit', 'settings', 'save'],
+    doubleWidth: ['prev', 'next', 'read', 'erase'],
+    tripleWidth: ['space'],
   },
 ];
 

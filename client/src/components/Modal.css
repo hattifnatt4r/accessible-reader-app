@@ -13,9 +13,9 @@
 
 .modal {
   margin: auto;
-  width: 60vw;
-  max-width: 1000px;
   min-height: 50vh;
+  width: 50rem;
+  max-width: min(50rem, 94vw);
   height: auto;
   background-color: white;
   text-align: left;
@@ -25,9 +25,10 @@
   max-height: 100dvh;
 
   box-shadow: 0 16px 32px 0 rgba(10, 16, 34, .2), 0 0 0 transparent;
+  --modal-p: min(4rem, 10dvw);
 }
 .modal-header {
-  padding: 2rem 4rem 0rem 4rem;
+  padding: calc(var(--modal-p) * 0.5) var(--modal-p) 0rem var(--modal-p);
   font-size: 1.3rem;
   font-weight: 600;
   border-bottom: 1px solid rgba(0,0,0,0);
@@ -43,7 +44,7 @@
 }
 
 .modal-body {
-  padding: 3rem 4rem;
+  padding: calc(var(--modal-p)*0.7) var(--modal-p);
 }
 .modal-toggle {
   cursor: pointer;

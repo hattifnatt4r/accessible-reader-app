@@ -75,9 +75,10 @@ export const EditorSettings = observer((props : { children: React.ReactNode, cla
             title="Buttons Layout"
             onChange={setValue}
             options={[
-              { v: '1', l: '#1' },
-              { v: '2', l: '#2' },
-              { v: '3', l: '#3' },
+              { v: '1', l: '#1 En' },
+              { v: '2', l: '#2 En' },
+              { v: '3', l: '#3 En' },
+              { v: '4', l: '#4 Ru' },
             ]}
           />
 
