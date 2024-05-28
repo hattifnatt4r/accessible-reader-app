@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import { useParams } from 'react-router-dom';
 import { PageButton, PageControls } from '../components/PageControls';
 import { FileviewStore } from './FileviewStore';
-import { useParams } from 'react-router-dom';
 import { NavBackButton, NavModal } from '../components/Nav';
 import { FileviewSettings } from './FileviewSettings';
 import { Editor } from './Editor';

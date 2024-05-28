@@ -24,7 +24,7 @@ export const FileviewSettings = observer((props : { className?: string }) => {
     <>
       <PageButton onClick={toggle} iconSvgname="settings" className="page-button_outline" />
 
-      <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
+      <Modal isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>
           Viewer viewer settings
         </ModalHeader>

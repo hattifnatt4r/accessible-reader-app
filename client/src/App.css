@@ -67,6 +67,7 @@
 .page-simple__topbar {
   position: absolute;
   width: 100%;
+  min-height: 3rem;
   padding: 0.8rem calc(var(--pleft) / 2) 0.8rem var(--pleft);
   vertical-align: middle;
   border-bottom: 1px solid rgba(0,0,0,0.07);

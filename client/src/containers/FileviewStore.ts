@@ -63,8 +63,8 @@ export class FileviewStore {
 
   @action
   changeSelectionType = () => {
-    if (this.selectionType == 'w') { this.selectionType = 's'; } 
-    else if (this.selectionType == 's') { this.selectionType = 'p'; }  
+    if (this.selectionType === 'w') { this.selectionType = 's'; } 
+    else if (this.selectionType === 's') { this.selectionType = 'p'; }  
     else { this.selectionType = 'w'; }
     localStorage.setItem('readerSelectionType', this.selectionType);
     this.textVar= setTextParams(this.textVar, this.paragraphs);

@@ -23,7 +23,7 @@ export const FilesSettings = observer((props : { className?: string }) => {
     <>
       <PageButton onClick={toggle} iconSvgname="settings" />
 
-      <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
+      <Modal isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>
           Files settings
         </ModalHeader>

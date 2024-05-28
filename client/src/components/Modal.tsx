@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import './Modal.css';
-import { useEffect, useState } from 'react';
 import { Icon } from './Icon';
+import './Modal.css';
 
-export function Modal(props : { isOpen?: boolean, className?: string, children: React.ReactNode, toggle: () => void, toggleButton: React.ReactNode }) {
-  const { className, children, isOpen, toggleButton, toggle, ...rest } = props;
+
+export function Modal(props : { isOpen?: boolean, className?: string, children: React.ReactNode, toggle: () => void }) {
+  const { className, children, isOpen, toggle } = props;
 
   const cl = {
     'modal': 1,
@@ -21,7 +21,7 @@ export function Modal(props : { isOpen?: boolean, className?: string, children: 
 };
 
 export function ModalBody(props : { className?: string, children: React.ReactNode }) {
-  const { className, children, ...rest } = props;
+  const { className, children } = props;
   const cl = {
     'modal-body': 1,
     [className || '']: !!className,
@@ -34,7 +34,7 @@ export function ModalBody(props : { className?: string, children: React.ReactNod
 }
 
 export function ModalHeader(props : { className?: string, children: React.ReactNode, toggle: () => void }) {
-  const { className, children, toggle, ...rest } = props;
+  const { className, children, toggle } = props;
   const cl = {
     'modal-header': 1,
     [className || '']: !!className,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import { FilesStore } from './FilesStore';
 import { FilesFile, FilesEdit, FilesAdd } from './FilesMisc';
-import { observer, useObserver } from 'mobx-react-lite';
 import { NavBackButton, NavModal } from '../components/Nav';
 import { PageButton, PageControls } from '../components/PageControls';
 import { useNavigate } from 'react-router-dom';
@@ -29,7 +29,7 @@ export const Files = observer((props) => {
     <div className="fhome page-w-controls">
       <div className="fhome__files">
         <div className="fhome__fileicons">
-          {store?.readerFiles.map(f => f && <FilesFile file={f} setFileID={store.setFileID} key={f.id} selected={f.id == selectedFile?.id} />)}
+          {store?.readerFiles.map(f => f && <FilesFile file={f} setFileID={store.setFileID} key={f.id} selected={f.id === selectedFile?.id} />)}
         </div>
 
         <div className="fhome__magnify">

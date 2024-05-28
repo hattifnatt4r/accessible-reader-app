@@ -8,7 +8,7 @@ import { Icon } from '../components/Icon';
 import './FilesMisc.css';
 
 export function FilesFile(props : { file: ReaderFileType, className?: string, selected: boolean, setFileID: (id: FileIDType) => void }) {
-  const { file, className, setFileID, selected, ...rest } = props;
+  const { file, className, setFileID, selected } = props;
   const cl = {
     'fhome-file': 1,
     'fhome-file_selected': selected,
@@ -48,7 +48,7 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null }) => {
     <>
       <PageButton onClick={toggle} iconSvgname="menu-dots" />
 
-      <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
+      <Modal isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>
           Delete / copy file
         </ModalHeader>
@@ -76,7 +76,7 @@ export const FilesAdd = observer((props : { className?: string }) => {
     <>
       <PageButton onClick={toggle} iconSvgname="plus" />
 
-      <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
+      <Modal isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>
           Create new file
         </ModalHeader>

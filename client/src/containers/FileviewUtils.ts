@@ -1,5 +1,3 @@
-import { toJS } from "mobx";
-
 export type TextVarType = { maxP: number, maxS: number, maxW: number, pID: number, sID: number, wID: number };
 export type TextParagraphsType = string[];
 export type SelectionTypeType = 'w' | 's' | 'p';
@@ -55,7 +53,7 @@ export function changeSelectionS(diff: number, textVar: TextVarType, paragraphs:
   let newVar = { ...textVar };
 
   let sID = newVar.sID + diff;
-  if (sID < 0 && newVar.pID <= 0 || sID > newVar.maxS && newVar.pID >= newVar.maxP) {
+  if ((sID < 0 && newVar.pID <= 0) || (sID > newVar.maxS && newVar.pID >= newVar.maxP)) {
     return newVar;
   }
   if (sID < 0) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, SvgIcon } from '../components/Icon';
+import { SvgIcon } from '../components/Icon';
 import { AppLink } from '../components/AppLink';
 import { ModalLogin } from './ModalLogin';
 import { Button } from '../components/Button';
@@ -11,7 +11,7 @@ export function Home() {
     <div className="home">
       <div className="page-simple__topbar">
         <div className="about-link">
-          <a href="https://github.com/hattifnatt4r/accessible-reader-app" target="_blank">
+          <a href="https://github.com/hattifnatt4r/accessible-reader-app" target="_blank" rel="noreferrer">
             <i className="fab fa-github"></i> GitHub
           </a>
         </div>
@@ -32,7 +32,7 @@ export function Home() {
         </div>
 
         <div className="home__right">
-          <img src="/images/home_polygon_11.svg" className="home__polygon" />
+          <img src="/images/home_polygon_11.svg" className="home__polygon" alt="polygon" />
           <div className="home__links">
             <AppLink to="/files" className="home-links__link hover-move home-links__link_colored">
               <SvgIcon iconName="paper" className="home-links__svg"/>

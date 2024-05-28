@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from './Modal';
 import { AppLink } from './AppLink';
-import { Icon, SvgIcon } from './Icon';
+import { SvgIcon } from './Icon';
 import { PageButton } from './PageControls';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Nav.css';
@@ -29,9 +29,8 @@ export const NavModal = observer((props : { className?: string }) => {
         onClick={toggle}
         className={classNames(cl)}
         iconSvgname="menu2"
-        // iconName="menu"
       />
-      <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle} className="nav-modal">
+      <Modal isOpen={open} toggle={toggle} className="nav-modal">
         <ModalHeader toggle={toggle}>
           Menu
         </ModalHeader>

@@ -24,9 +24,8 @@ export function PageControls(props: { className?: string, children?: React.React
 }
 
 
-export function PageButton(props: { iconName?: string | null, iconSvgname?: string, onClick?: () => void, children?: React.ReactNode | null, className?: string, empty?: boolean, disabled?: boolean }) {
+export function PageButton(props: { iconSvgname?: string, onClick?: () => void, children?: React.ReactNode | null, className?: string, empty?: boolean, disabled?: boolean }) {
   const {
-    iconName = '',
     iconSvgname = '',
     onClick, children,
     className = '',

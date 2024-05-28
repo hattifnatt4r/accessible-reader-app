@@ -6,7 +6,7 @@ export function About() {
     <div className="page-simple">
       <div className="page-simple__topbar">
         <div className="about-link">
-          <a href="https://github.com/hattifnatt4r/accessible-reader-app" target="_blank">
+          <a href="https://github.com/hattifnatt4r/accessible-reader-app" target="_blank" rel="noreferrer">
             <i className="fab fa-github"></i> GitHub
           </a>
         </div>

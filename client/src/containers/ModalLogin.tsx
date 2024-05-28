@@ -1,4 +1,4 @@
-import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { Icon } from '../components/Icon';
@@ -38,7 +38,7 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
       <div onClick={toggle} className='modal-toggle'>
         {children}
       </div>
-      <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle}>
+      <Modal isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>
 
         </ModalHeader>

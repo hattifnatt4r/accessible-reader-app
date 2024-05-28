@@ -23,7 +23,7 @@ export const EditorSettings = observer((props : { children: React.ReactNode, cla
       <div onClick={toggle} className={className}>
         {children}
       </div>
-      <Modal toggleButton={'Nav'} isOpen={open} toggle={toggle} className="fileedit-modal">
+      <Modal isOpen={open} toggle={toggle} className="fileedit-modal">
         <ModalHeader toggle={toggle}>
           Editor settings
         </ModalHeader>
