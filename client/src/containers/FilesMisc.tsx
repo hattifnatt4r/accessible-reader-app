@@ -53,9 +53,9 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null }) => {
           Delete / copy file
         </ModalHeader>
         <ModalBody>
-          {!appStore.userID && <div>Log in to delete/copy files</div>}
-          {file && appStore.userID && <div>* In development</div>}          
-          {!file && appStore.userID && <div>File not selected</div>}          
+          {!appStore.userId && <div>Log in to delete/copy files</div>}
+          {file && appStore.userId && <div>* In development</div>}          
+          {!file && appStore.userId && <div>File not selected</div>}          
 
         </ModalBody>
       </Modal>
@@ -81,8 +81,8 @@ export const FilesAdd = observer((props : { className?: string }) => {
           Create new file
         </ModalHeader>
         <ModalBody>
-          {!appStore.userID && <div>Log in to create new files</div>}
-          {appStore.userID && <div>* In development</div>}          
+          {!appStore.userId && <div>Log in to create new files</div>}
+          {appStore.userId && <div>* In development</div>}          
 
         </ModalBody>
       </Modal>

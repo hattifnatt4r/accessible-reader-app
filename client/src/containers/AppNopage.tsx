@@ -1,26 +1,12 @@
 import React from 'react';
-import { NavBackButton, NavModal } from '../components/Nav';
+import { PageSimple } from '../components/PageSimple';
 
 export function AppNopage() {
   return (
-    <div className="page-simple">
-      <div className="page-simple__topbar">
-        <div className="about-link">
-          {' '}
-        </div>
+    <PageSimple controls>
+      <div className="page-simple__text">
+        Page not found
       </div>
-
-      <div className="page-simple__left">
-        <div className="page-simple__content">
-          Page not found
-        </div>
-
-      </div>
-      
-      <div className="page-simple__controls">
-        <NavBackButton />
-        <NavModal />
-      </div>
-    </div>
+    </PageSimple>
   );
 }

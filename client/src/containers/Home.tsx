@@ -1,21 +1,26 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
+import { useNavigate } from 'react-router-dom';
 import { SvgIcon } from '../components/Icon';
 import { AppLink } from '../components/AppLink';
-import { ModalLogin } from './ModalLogin';
 import { Button } from '../components/Button';
+import { PageSimple } from '../components/PageSimple';
+import { ModalLogin } from './ModalLogin';
 import './Home.css';
 
 
-export function Home() {
+export const Home: React.FC = observer(() =>  {
+  const navigate = useNavigate();
+
+  const appStore = window.app;
+  const isLoggedIn = appStore.getIsLoggedIn();
+
+  function handleNavFiles() {
+    navigate('/files');
+  }
+
   return (
-    <div className="home">
-      <div className="page-simple__topbar">
-        <div className="about-link">
-          <a href="https://github.com/hattifnatt4r/accessible-reader-app" target="_blank" rel="noreferrer">
-            <i className="fab fa-github"></i> GitHub
-          </a>
-        </div>
-      </div>
+    <PageSimple>
       
       <div className="home__flex">
         <div className="home__left">
@@ -26,9 +31,16 @@ export function Home() {
             An app to help kids with visual and motor skills limitations to improve reading/writing abilities.
           </div>
 
-          <ModalLogin>
-            <Button className="home__login-btn">Log In</Button>
-          </ModalLogin>
+          {!isLoggedIn && !appStore.isLoadingSession && (
+            <ModalLogin>
+              <Button className="home__btn-login">Sign In</Button>
+            </ModalLogin>
+          )}
+          {isLoggedIn && (
+            <div>
+              <Button className="home__btn-view" onClick={handleNavFiles}>Go to Files</Button>
+            </div>
+          )}
         </div>
 
         <div className="home__right">
@@ -58,6 +70,6 @@ export function Home() {
         </div>
       </div>
       
-    </div>
+    </PageSimple>
   );
-}
+});

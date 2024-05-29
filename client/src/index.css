@@ -16,6 +16,7 @@ html {
   --color_b5: #EDEEF0;
   --color_f1: #2D4E66;
   --color_f2: #333929;
+  --color-link-hover: rgb(65, 114, 173);
 }
 
 @media (orientation: landscape) {

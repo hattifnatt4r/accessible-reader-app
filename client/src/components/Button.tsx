@@ -1,15 +1,16 @@
 import classNames from 'classnames';
 import './Button.css';
 
-export function Button(props : { className?: string, children: React.ReactNode, onClick?: () => void, selected?: boolean }) {
-  const { children, className, onClick, selected, ...rest } = props;
+export function Button(props : { className?: string, disabled?: boolean, children: React.ReactNode, onClick?: () => void, linkButton?: boolean }) {
+  const { children, className, onClick, linkButton, disabled } = props;
   const cl = {
-    'button': 1,
-    'button_selected': selected,
+    'button': !linkButton,
+    'button_link': linkButton,
+    'button_disabled': disabled,
     [className || '']: !!className,
   };
   return (
-    <div className={classNames(cl)} onClick={onClick} {...rest}>
+    <div className={classNames(cl)} onClick={onClick}>
       {children}
     </div>
   );

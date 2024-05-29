@@ -6,6 +6,7 @@ export function Icon(props : { name: string | null, className?: string, filled?:
   const cl = {
     'material-symbols-rounded': 1,
     'icon_filled': filled,
+    'icon': 1,
     [className || '']: !!className,
   };
   return (

@@ -1,0 +1,110 @@
+
+.page-simple {
+  --rwidth: 0px;
+  --pleft: min(4rem, 10dvw);
+  --ptop: min(8rem, 9dvh);
+  overflow-x: hidden;
+  height: 100vh;
+}
+.page-simple_w-controls {
+  --rwidth: min(10rem, 25vw);
+}
+.page-simple__main {
+  position: relative;
+  max-width: 60rem;
+  margin: 0 auto;
+  display: flex;
+}
+
+.page-simple__left {
+  width: calc(100% - var(--rwidth));
+}
+.page-simple__content {
+  padding: var(--ptop) var(--pleft) 6rem var(--pleft);
+  min-height: 50dvh;
+}
+.page-simple_w-controls .page-simple__content {
+  padding-right: 0;
+}
+.page-simple__title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: rgba(0,0,0,0.75);
+}
+.page-simple__title-text {
+  display: inline-block;
+  position: relative;
+  opacity: 0.9;
+}
+.page-simple__title-text span {
+  display: inline-block;
+  opacity: 0.99;
+}
+.page-simple__title-text:before {
+  display: inline-block;
+  width: 110%;
+  height: 1.9rem;
+  background-color: var(--color_b1l);
+  content: '';
+  position: absolute;
+  display: inline-block;
+  margin-left: -1rem;
+  margin-top: -0.2rem;
+  opacity: 0.9;
+}
+.page-simple__text {
+  max-width: 35rem;
+  color: rgba(0,0,0,0.8);
+  font-size: 0.95rem;
+  line-height: 1.55rem;
+}
+
+.page-simple__controls {
+  width: 10rem;
+  width: var(--rwidth);
+  padding: 6rem 0;
+  height: 100%;
+  text-align: center;
+  --btn-h-in: 4rem;
+}
+
+.page-simple__controls .page-button-wrap {
+  width: 100%;
+  margin-bottom: min(3rem, 10dvh);
+}
+
+
+
+
+.page-simple__topbar {
+  position: relative;
+  width: 100%;
+  min-height: 3rem;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.page-simple__topbar-in {
+  position: relative;
+  max-width: min(60rem, 100%);
+  margin: 0 auto;
+  padding: 0.8rem var(--pleft);
+}
+.about-link a {
+  text-decoration: none;
+  color: rgba(0,0,0,0.95);
+  font-size: 0.95rem;
+}
+.about-link:hover a {
+  text-decoration: none;
+  text-decoration: underline;
+  color: var(--color-link-hover);
+}
+
+.page-simple__logout {
+  position: absolute;
+  right: 3rem;
+  top: 0.8rem;
+  color: rgba(0,0,0,0.9);
+}

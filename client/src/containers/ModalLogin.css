@@ -1,22 +1,83 @@
-.login-input {
+.modal-login .modal-body {
+  padding-bottom: 1rem;
+  min-height: 37rem;
+  padding-top: 1rem;
+}
+.login {
+  position: relative;
+  width: 20rem;
+  max-width: 100%;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+}
+
+.login__title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 3rem;
+  color: rgba(0,0,0,0.65);
+}
+
+.field-label {
+  color: rgba(0,0,0,0.95);
+}
+.field-input {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
   outline: none;
   width: 100%;
-  font-size: 1rem;
-  font-weight: 500;
-  color: rgb(54, 54, 54);
-  border: none;
-  z-index: 1;
-  border-radius: 2rem;
-  padding: 0.4rem 1rem;
-  line-height: 1.8rem;
-  margin-bottom: 0.8rem;
-  box-shadow: 0 0 0 1px rgba(54, 54, 54, 0.18);
-  max-width: 200px;
+  margin-bottom: 1.5rem;
+  margin-top: 0.3rem;
+  padding: 0.8rem 1rem;
+  border-radius: 0.2rem;
+  border: 1px solid rgba(118, 151, 185, 0.6);
+  color: rgba(0,0,0,0.9);
 }
-.login-input:focus {
+.field-input:focus {
   box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
-  box-shadow: 0 0 0 0.2rem rgba(6, 195, 154, 0.513);
 }
-.login-input.input_empty {
-  color: rgba(127, 127, 127, 0.2) !important;
+.form-field {
+  position: relative;
+}
+.form-field__visibility {
+  position: absolute;
+  top: 2.6rem;
+  right: 0.8rem;
+  cursor: pointer;
+  color: rgb(117, 147, 177);
+  font-size: 1.5rem;
+}
+.form-field__visibility .icon {
+  font-size: inherit;
+}
+
+
+.login__error {
+  margin-bottom: 0.7rem;
+  color: rgb(255, 0, 0);
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+.login__message {
+  margin-bottom: 0.7rem;
+  color: rgb(55, 159, 47);
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+
+.login__login-btn {
+  margin-bottom: 2rem;
+  margin-top: 0.8rem;
+  width: 100%;
+}
+
+.login__mode-btn {
+  color: var(--color-link-hover);
+}
+.login__mode-btn:hover {
+  text-decoration: underline;
 }

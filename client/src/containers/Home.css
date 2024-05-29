@@ -7,18 +7,18 @@
 
 .home__flex {
   display: flex;
-  padding: 6rem 3rem;
   flex-wrap: wrap;
-  max-width: 60rem;
-  margin: 3rem auto 4rem auto;
-  min-height: 75vh;
-  min-height: 75dvh;
+  width: 100%;
+  padding-top: min(10rem, 6vh, 5dvw);
+  padding-bottom: 10rem;
 }
 
 .home__left {
   display: inline-block;
   max-width: 100%;
   width: 30rem;
+  min-height: 25rem;
+  padding-bottom: 7rem;
 }
 .home__right {
   display: none;
@@ -28,16 +28,15 @@
   margin-right: -8rem;
   position: relative;
 }
-
 .home__polygon {
   position: absolute;
-  margin: -19% 0 0 -30%;
+  margin: -20% 0 0 -30%;
   width: 145%;
 }
 
 
 
-/* left text */
+/* Description */
 .home__title {
   font-family: "Montserrat", sans-serif;
   font-size: 2.5rem;
@@ -57,22 +56,20 @@
   max-width: 21rem;
 }
 
-.button.home__login-btn {
-  font-family: "Montserrat", sans-serif;
-  border-radius: 3px;
+.button.home__btn-login {
   background-color: var(--color_b1);
   color: var(--color_f2);
-  font-size: 1.1rem;
-  line-height: 1.2rem;
-  font-weight: 600;
-  border: 0;
   padding: 0.9rem 3.5rem;
-  margin-bottom: 8rem;
 }
-.button.home__login-btn:hover {
+.button.home__btn-login:hover {
   background-color: var(--color_b1d);
+  background-color: var(--color_b1l);
   color: rgba(0,0,0,0.9); 
 }
+.home__btn-view {
+  min-width: 10rem;
+}
+
 
 
 
@@ -108,8 +105,8 @@
 
 
 .home-links__svg {
-  width: 4.4rem;
-  height: 4.4rem;
+  width: 4.2rem;
+  height: 4.2rem;
   display: inline-block;
   margin-bottom: 0.3rem;
 }
@@ -143,5 +140,5 @@
 
 
 .home .page-simple__topbar {
-  padding: 0.8rem 6rem;
+  
 }

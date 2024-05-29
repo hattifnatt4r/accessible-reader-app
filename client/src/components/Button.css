@@ -1,9 +1,32 @@
 .button {
   display: inline-block;
   cursor: pointer;
-  padding: 1rem;
-  border: 1px solid rgba(0,0,0,0.1);
+  text-align: center;
+
+  font-family: "Montserrat", sans-serif;
+  border-radius: 3px;
+  background-color: var(--color_b1l);
+  color: var(--color_f2);
+  font-size: 1.1rem;
+  line-height: 1.2rem;
+  font-weight: 600;
+  padding: 0.9rem 2rem;
 }
-.button_selected {
-  border: 1px solid rgba(0,0,0,0.3);
+.button:hover {
+  background-color: var(--color_b1);
 }
+
+.button_link {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  vertical-align: top;
+  display: inline-block;
+  cursor: pointer;
+}
+.button_link span {
+  vertical-align: top;
+}
+.button_link:hover {
+  color: var(--color-link-hover);
+}
+
