@@ -1,5 +1,6 @@
 import { makeObservable, observable, action } from "mobx";
-import { UserSettingsType } from "./consts/dataTypes";
+import { UserInfoType, UserSettingsType } from "./consts/dataTypes";
+import { post } from "./utils/query";
 
 export class AppStore {
   @observable userSettings : UserSettingsType = {
@@ -11,8 +12,11 @@ export class AppStore {
     editorNarrateSelection: '1',
     editorLayout: '2',
   };
-  @observable userID : number | null = null;
-
+  @observable userInfo: UserInfoType | null = null;
+  @observable userId: string = '';
+  @observable token: string  = '';
+  @observable isLoadingSession: boolean = true;
+  
   constructor() {
     makeObservable(this);
 
@@ -24,6 +28,28 @@ export class AppStore {
       this.userSettings = s;
     }
 
+    this.loadUser();
+
+  }
+
+  loadUser = async () => {
+    const token = localStorage.getItem('token');
+    if (token) { 
+      const res = await post('session', {}, { token: token || '' });
+      console.log('user:', token, res);
+      if (res.token && res.value?.id) {
+        this.setSession(token, res.value);
+      }
+    }
+    this.isLoadingSession = false;
+  }
+
+  @action
+  setSession = (token: string, userInfo: UserInfoType) => {
+    this.token = token;
+    this.userInfo = userInfo || {};
+    this.userId = userInfo?.login_name || '';
+    localStorage.setItem('token', token);
   }
 
   @action
@@ -31,5 +57,9 @@ export class AppStore {
     this.userSettings = { ...this.userSettings, ...newSettings };
 
     localStorage.setItem('userSettings', JSON.stringify(this.userSettings));
+  }
+
+  getIsLoggedIn = () => {
+    return !!this.userId;
   }
 }

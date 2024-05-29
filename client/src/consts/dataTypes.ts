@@ -32,3 +32,14 @@ export type ChatMessage = {
   message: string | null,
   from: string | null,
 };
+
+export type ApiConfigType = {
+  apiUrl: string;
+};
+
+export type UserInfoType = {
+  login_name: string,
+  id: number,
+  email: string,
+  fullname: string,
+}
