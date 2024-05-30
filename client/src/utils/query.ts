@@ -27,7 +27,6 @@ export async function post(apiName : string, body : {[key:string] : any}, option
     body: JSON.stringify(body),
   });
   const result = await response.json();
-  console.log('post:', result);
 
   return result;
 }
@@ -42,22 +41,20 @@ export async function upload(apiName : string, formData: FormData, filename: str
     method: 'POST',
     body: formData,
     headers: {
-      'Authorization': `Bearer ${window.app.token}`,
+      'Authorization': `Bearer ${token}`,
       'Filename': filename,
     }
   });
   const result = await response.json();
-  console.log('upload:', result);
+  if (result.message === 'Invalid token' && window.app) {
+    window.app.setSession(null, null);
+  }
 
   return result;
 }
 
 function getURL(apiName : string) {
-  // console.log('url:', apiName, root.app);
-  const { apiUrl } = window.apiConfig;
+  const { apiUrl } = window.apiConfig || {};
 
   return apiUrl + apiName;
 }
-
-
-// const res = await post('login', { login_name: '', login_password: '' });

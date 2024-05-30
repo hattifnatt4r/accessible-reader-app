@@ -1,25 +1,38 @@
 import { makeObservable, observable, action } from 'mobx';
 import { FileIDType, ReaderFileType } from "../consts/dataTypes";
-import { dataExampleFiles } from "../consts/dataExamples";
 import { speakAll } from '../utils/narrate';
+import { post } from '../utils/query';
 
 export class FilesStore {
-  readerFiles: ReaderFileType[] = [];
+  @observable readerFiles: ReaderFileType[] = [];
   @observable selectedFileID: FileIDType = null;
 
   constructor() {
     makeObservable(this);
-    this.readerFiles = dataExampleFiles;
-    this.readerFiles.sort((a, b) => a?.name > b?.name ? 1 : (a?.name < b?.name ? -1 : 0))
+
+    this.loadFiles();
+  }
+
+  loadFiles = async() => {
+    const res = await post('file_all', {});
+    this.readerFiles = res.value || [];
+    this.readerFiles.sort((a, b) => a?.filename > b?.filename ? 1 : (a?.filename < b?.filename ? -1 : 0))
     if (this.readerFiles.length) this.selectedFileID = this.readerFiles[0].id;
+
+    const fileId = Number(localStorage.getItem('filesSelectedId'));
+    if (this.readerFiles.find(f => f.id === fileId)) {
+      this.selectedFileID = fileId;
+    }
+
   }
 
   @action setFileID = (id : FileIDType) => {
     this.selectedFileID = id;
     const appStore = window.app;
     if (appStore.userSettings.filesNarrateSelection === '1') {
-      speakAll([this.getFile(id)?.name || '']);
+      speakAll([this.getFile(id)?.filename || '']);
     }
+    localStorage.setItem('filesSelectedId', (id || '').toString());
   }
 
   getFile = (id:FileIDType) => {

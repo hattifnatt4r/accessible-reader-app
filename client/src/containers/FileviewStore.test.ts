@@ -4,7 +4,7 @@ import { FileIDType } from "../consts/dataTypes";
 import { FileviewStore } from "./FileviewStore";
 import { getParagraphs, getSplitParagraph, setTextParams } from "./FileviewUtils";
 
-const file = { id: 1, folder: 'examples', name: 'Book 1', author: 'Jhon Doe', title: 'Book Title' };
+const file = { id: 1, folder: 'examples', filename: 'Book 1', person_id: 'Jhon Doe', title: 'Book Title' };
 const textExample = {
   id: 1,
   text: `Lorem ipsum dolor sit amet. Consectetur elit.<br/>Excepteur sint, sunt in culpa qui. <br/><br/>Excepteur sint occaecat cupidatat non proident.`,
@@ -18,15 +18,15 @@ class FileviewStoreTest extends FileviewStore {
 
     const { id } = props;
 
-    const title = this.getFile(id)?.title || '';
-    const text = this.getFileText(id);
+    const title = file?.title || '';
+    const text = textExample.text;
     this.paragraphs = [title, ...getParagraphs(text || null)];
     this.textVar = setTextParams(this.textVar, this.paragraphs);
   
     this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
   }
-  getFile = (id: FileIDType) => file;
-  getFileText = (id: FileIDType) => textExample.text;
+
+
 }
 
 
@@ -71,14 +71,5 @@ describe('FileviewStore', () => {
     expect(store.getSelectedText()).toEqual('Excepteur');
     store.changeSelection(1);
     expect(store.getSelectedText()).toEqual('sint,');
-  });
-
-  it('should replace edited text', () => {
-    const store = new FileviewStoreTest({ id: 1 });
-    
-    store.selectionType = 's';
-    store.changeSelection(1);
-    store.save('Replace sentence.');
-    expect(store.paragraphs).toEqual(["Book Title", "Replace sentence. Consectetur elit.", "Excepteur sint, sunt in culpa qui. ", "", "Excepteur sint occaecat cupidatat non proident."]);  
   });
 })

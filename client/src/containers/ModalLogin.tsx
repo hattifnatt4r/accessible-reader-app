@@ -34,7 +34,6 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
   const appStore = window.app;
 
   function toggle() {
-    console.log('open:', open);
     setOpen(!open);
     setError('');
     setForm({ person_id: '', person_pw: '', email: '' });

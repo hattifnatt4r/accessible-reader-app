@@ -33,18 +33,18 @@ export const Files = observer((props) => {
         </div>
 
         <div className="fhome__magnify">
-          {!selectedFile ? <span className="fhome__magnify_empty">Select a file</span> : selectedFile?.name}
+          {!selectedFile ? <span className="fhome__magnify_empty">Select a file</span> : selectedFile?.filename}
         </div>
       </div>
 
       <PageControls>
         <FilesSettings />
         <NavBackButton />
-        <FilesEdit file={selectedFile} />
+        <FilesEdit file={selectedFile} onUpdated={store.loadFiles} />
         <NavModal />
 
-        <FilesAdd />
-        <PageButton iconSvgname="right2" /* iconName="subdirectory_arrow_right"*/ onClick={openFile} disabled={!selectedFile} />
+        <FilesAdd onUpdated={store.loadFiles} />
+        <PageButton iconSvgname="right2" onClick={openFile} disabled={!selectedFile} />
         <PageButton empty />
         <PageButton empty />
         <PageButton iconSvgname="arrow-back" onClick={() => store.nextPrevFile(-1)} />

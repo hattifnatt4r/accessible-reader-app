@@ -148,7 +148,6 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
 
   function onKeydown(event: KeyboardEvent) {
     // support keyboard input
-    console.log('code:', event.key);
     const key = event.key;
     if (key === 'Backspace') { document.getElementById('fedit-erase')?.click(); }
     if (key === 'ArrowRight') { document.getElementById('fedit-next')?.click(); }

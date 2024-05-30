@@ -23,10 +23,8 @@ export const Fileview = observer(() => {
 
 
   if (!store) return null;
-  const file = store?.getFile(Number(fileID));
-  if (!file) {
-    return <div>File not found</div>;
-  }
+  const file = store?.file;
+  
 
   const paragraphs = store.paragraphs;
   const sentences = store.sentences;
@@ -56,7 +54,7 @@ export const Fileview = observer(() => {
     <div className={classNames(cl)}>
       <div className="fview__file">
         <div className="fview__filename">
-          {file.folder}/{file.name}
+          {file?.folder}/{file?.filename}
         </div>
         <div className="fview__body">
           {paragraphs.map((p, pID) => (

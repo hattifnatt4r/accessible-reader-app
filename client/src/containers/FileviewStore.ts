@@ -1,13 +1,13 @@
 import { makeObservable, observable, action, runInAction, toJS } from "mobx";
 import { FileIDType, ReaderFileType } from "../consts/dataTypes";
-import { dataExampleFiles, dataExampleText } from "../consts/dataExamples";
 import { SelectionTypeType, TextVarType, changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSplitParagraph, replaceText, setTextParams } from "./FileviewUtils";
 import { speakAll } from "../utils/narrate";
+import { post } from "../utils/query";
 
 
 
 export class FileviewStore {
-  file: ReaderFileType | null = null;
+  @observable file: ReaderFileType | null = null;
   @observable paragraphs: string[] = [];
   @observable sentences: string[][] = [];
   @observable textVar: TextVarType = { maxP: 0, maxS: 0, maxW: 0, pID: 0, sID: 0, wID: 0 };
@@ -23,29 +23,33 @@ export class FileviewStore {
     const selectionType = localStorage.getItem('readerSelectionType') as SelectionTypeType;
     if (selectionType) this.selectionType = selectionType;
 
-    const title = this.getFile(id)?.title || '';
-    const text = this.getFileText(id);
-    this.paragraphs = [title, ...getParagraphs(text || null)];
+    this.loadFile(id);
+  }
+
+  loadFile = async(id: FileIDType) => {
+    const res = await post('file', { id: id });
+
+    if (!res.value.length) {
+      return;
+    }
+
+    const { content, ...rest } = res.value[0];
+    this.file = rest;
+
+    const title = rest.title || '';
+    this.paragraphs = [title, ...getParagraphs(content || null)];
     this.textVar = setTextParams(this.textVar, this.paragraphs);
     this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
-  }
 
-  getFileText = (id:FileIDType) => {
-    // todo: retrive from server
-    const text = dataExampleText.find(t => t?.id === id);
-    return text?.text || null;
-  }
-
-  getFile = (id:FileIDType) => {
-    // todo: retrive from config
-    const file = dataExampleFiles.find(t => t?.id === id);
-    return file || null;
   }
 
   @action
-  save = (textEdited: string) => {
+  save = async (textEdited: string) => {
     const [title, text] = replaceText(textEdited, this.selectionType, this.textVar, this.paragraphs);
-    // todo: save to server
+    const res = await post('file_upd', { id: this.file?.id, title: title, content: text });
+    if (res?.status === 'success') {
+      this.loadFile(this.file?.id || 0);
+    }
 
     this.paragraphs = [title, ...getParagraphs(text || null)];
     this.textVar = setTextParams(this.textVar, this.paragraphs);

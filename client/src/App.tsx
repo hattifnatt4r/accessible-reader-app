@@ -1,5 +1,7 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Loader } from './components/Loader';
 import { Home } from './containers/Home';
 import { Files } from './containers/Files';
 import { Fileview } from './containers/Fileview';
@@ -23,7 +25,12 @@ window.apiConfig = apiConfig;
 window.app = new AppStore();
 
 
-export default function App() {
+export const App: React.FC = observer(() =>   {
+  const appStore = window.app;
+
+  if (appStore.isLoadingSession &&  window.location.pathname !== '/') {
+    return <Loader />
+  }
   return (
     <BrowserRouter>
       <div className="app" data-testid="app">
@@ -40,4 +47,4 @@ export default function App() {
       </div>
     </BrowserRouter>
   );
-}
+});

@@ -36,7 +36,6 @@ export class AppStore {
     const token = localStorage.getItem('token');
     if (token) { 
       const res = await post('session', {}, { token: token || '' });
-      console.log('user:', token, res);
       if (res.token && res.value?.id) {
         this.setSession(token, res.value);
       }

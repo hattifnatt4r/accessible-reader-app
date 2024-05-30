@@ -3,14 +3,14 @@ export type FileIDType = number | null;
 export type ReaderFileType = {
   id: FileIDType,
   folder: string | '',
-  name: string | '',
+  filename: string | '',
   title: string | '',
-  author: string | '',
+  person_id: string | '',
 };
 
 export type ReaderTextType = {
   id: FileIDType,
-  text: string | null,
+  content: string | null,
 } | null;
 
 export type UserProfile = {

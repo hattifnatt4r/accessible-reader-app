@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
 import { post, upload } from '../utils/query';
@@ -29,7 +29,7 @@ export function FilesFile(props : { file: ReaderFileType, className?: string, se
         <Icon name="draft" filled className="fhome-file__icon" />
         
         <div className="fhome-file__name">
-          {file?.name} - {file?.title}
+          {file?.filename} - {file?.title}
         </div>
       </div>
     </div>
@@ -39,13 +39,17 @@ export function FilesFile(props : { file: ReaderFileType, className?: string, se
 
 
 
-export const FilesEdit = observer((props : { file: ReaderFileType | null }) => {
-  const { file } = props;
+export const FilesEdit = observer((props : { file: ReaderFileType | null, onUpdated: () => void }) => {
+  const { file, onUpdated } = props;
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  const [form, setForm] = useState({ filename: file?.name, title: file?.title });
+  const [form, setForm] = useState({ filename: "", title: "" });
   const appStore = window.app;
+
+  useEffect(() => {
+    setForm({ filename: file?.filename || '', title: file?.title || '' });
+  }, [file])
 
   function toggle() {
     setOpen(!open);
@@ -56,6 +60,7 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null }) => {
     if (response.status === 'success') {
       setError('');
       setMessage("File updated: " + form.filename);
+      onUpdated();
     } else {
       setError("Failed to update file");
       setMessage("");
@@ -67,6 +72,8 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null }) => {
     if (response.status === 'success') {
       setError('');
       setMessage("File deleted: " + form.filename);
+      onUpdated();
+      toggle();
     } else {
       setError("Failed to delete file");
       setMessage("");
@@ -85,7 +92,7 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null }) => {
 
       <Modal isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>
-          Rename / delete file
+          Rename / delete file #{file?.id}
         </ModalHeader>
         <ModalBody>
           <div style={{ marginBottom: '1rem' }}>
@@ -123,7 +130,8 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null }) => {
 
 
 
-export const FilesAdd = observer(() => {
+export const FilesAdd = observer((props : { onUpdated: () => void }) => {
+  const { onUpdated } = props;
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -148,6 +156,7 @@ export const FilesAdd = observer(() => {
     if (response.status === 'success') {
       setError('');
       setMessage("File created: " + form.filename);
+      onUpdated();
     } else {
       setError("Failed to create file");
       setMessage("");
