@@ -30,3 +30,19 @@
   color: var(--color-link-hover);
 }
 
+
+.button_link2 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  vertical-align: top;
+  display: inline-block;
+  cursor: pointer;
+  color: var(--color-link-hover);
+  text-decoration: none;
+}
+.button_link2 span {
+  vertical-align: top;
+}
+.button_link2:hover {
+  text-decoration: underline;
+}

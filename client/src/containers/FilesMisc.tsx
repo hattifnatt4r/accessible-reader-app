@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
+import { post, upload } from '../utils/query';
 import { FileIDType, ReaderFileType } from '../consts/dataTypes';
-import { Modal, ModalBody, ModalHeader } from '../components/Modal';
-import { PageButton } from '../components/PageControls';
 import { Icon } from '../components/Icon';
+import { Modal, ModalBody, ModalHeader } from '../components/Modal';
+import { AppLink } from '../components/AppLink';
+import { PageButton } from '../components/PageControls';
+import { Button } from '../components/Button';
 import './FilesMisc.css';
+
 
 export function FilesFile(props : { file: ReaderFileType, className?: string, selected: boolean, setFileID: (id: FileIDType) => void }) {
   const { file, className, setFileID, selected } = props;
@@ -28,20 +32,51 @@ export function FilesFile(props : { file: ReaderFileType, className?: string, se
           {file?.name} - {file?.title}
         </div>
       </div>
-      {/* <AppLink to={`/files/${file?.id}`}> Open </AppLink> */}
     </div>
   );
 };
 
 
 
+
 export const FilesEdit = observer((props : { file: ReaderFileType | null }) => {
   const { file } = props;
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [form, setForm] = useState({ filename: file?.name, title: file?.title });
   const appStore = window.app;
 
   function toggle() {
     setOpen(!open);
+  }
+
+  const handleFileRename = async() => {
+    const response = await post('file_upd', { id: file?.id, filename: form.filename, title: form.title });
+    if (response.status === 'success') {
+      setError('');
+      setMessage("File updated: " + form.filename);
+    } else {
+      setError("Failed to update file");
+      setMessage("");
+    }
+  }
+
+  const handleFileDelete = async() => {
+    const response = await post('file_del', { id: file?.id });
+    if (response.status === 'success') {
+      setError('');
+      setMessage("File deleted: " + form.filename);
+    } else {
+      setError("Failed to delete file");
+      setMessage("");
+    }
+  }
+
+  function handleChange(ev : React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
+    const { name, value } = ev?.target;
+    if (!name) return;
+    setForm({ ...form, [name]: value });
   }
 
   return (
@@ -50,12 +85,35 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null }) => {
 
       <Modal isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>
-          Delete / copy file
+          Rename / delete file
         </ModalHeader>
         <ModalBody>
-          {!appStore.userId && <div>Log in to delete/copy files</div>}
-          {file && appStore.userId && <div>* In development</div>}          
-          {!file && appStore.userId && <div>File not selected</div>}          
+          <div style={{ marginBottom: '1rem' }}>
+            <div className="note_message">{message}</div>
+            <div className="note_error">{error}</div>
+          </div>
+
+          {!appStore.userId && (
+            <div><AppLink to="/home" className="button_link2">Sign In</AppLink> to edit files.</div>
+          )}
+          {appStore.userId && !file && <div>File not selected</div>}          
+
+
+          {appStore.userId && file && (
+            <>
+              <div style={{ marginBottom: '3rem' }}>
+                <div className="field-label">File Name</div>
+                <input name="filename" value={form.filename} onChange={handleChange} className="field-input" /><br/>
+                <div className="field-label">Title</div>
+                <input name="title" value={form.title} onChange={handleChange} className="field-input" /><br/>
+                <Button onClick={handleFileRename}>Update</Button>
+              </div>
+
+              <div>
+                <Button linkButton2 onClick={handleFileDelete}>Delete file</Button>
+              </div>
+            </>
+          )}          
 
         </ModalBody>
       </Modal>
@@ -64,12 +122,61 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null }) => {
 });
 
 
-export const FilesAdd = observer((props : { className?: string }) => {
+
+export const FilesAdd = observer(() => {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [form, setForm] = useState({ filename: 'New file', filecontent: '', title: '' });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const appStore = window.app;
 
   function toggle() {
     setOpen(!open);
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setSelectedFile(event.target.files[0]);
+      setError("");
+      setMessage("");
+    }
+  };
+
+  const handleFileCreate = async() => {
+    const response = await post('file_add', { filename: form.filename, title: form.title, content: form.filecontent });
+    if (response.status === 'success') {
+      setError('');
+      setMessage("File created: " + form.filename);
+    } else {
+      setError("Failed to create file");
+      setMessage("");
+    }
+  }
+
+  const handleFileUpload = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!selectedFile) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('myFile', selectedFile);
+
+    const response = await upload('file_upload', formData, form.filename);
+    if (response.status === 'success') {
+      setError('');
+      setMessage("File created: " + form.filename);
+    } else {
+      setError("Failed to upload file");
+      setMessage("");
+    }
+  };
+
+  function handleChange(ev : React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
+    const { name, value } = ev?.target;
+    if (!name) return;
+    setForm({ ...form, [name]: value });
   }
 
   return (
@@ -81,8 +188,39 @@ export const FilesAdd = observer((props : { className?: string }) => {
           Create new file
         </ModalHeader>
         <ModalBody>
-          {!appStore.userId && <div>Log in to create new files</div>}
-          {appStore.userId && <div>* In development</div>}          
+          <div style={{ marginBottom: '1rem' }}>
+            <div className="note_message">{message}</div>
+            <div className="note_error">{error}</div>
+          </div>
+
+          {!appStore.userId && (
+            <div><AppLink to="/home" className="button_link2">Sign In</AppLink> to create new files.</div>
+          )}
+
+          {appStore.userId && (
+            <>
+              <div>
+                <div className="field-label">File Name</div>
+                <input name="filename" value={form.filename} onChange={handleChange} className="field-input" /><br/>
+                <div className="field-label">Title</div>
+                <input name="title" value={form.title} onChange={handleChange} className="field-input" /><br/>
+              </div>
+
+              <div style={{ marginBottom: '3rem' }}>
+                <div className="field-label">Paste Text</div>
+                <textarea name="filecontent" value={form.filecontent} onChange={handleChange} className="field-input" rows={10} /><br/>
+                <Button onClick={handleFileCreate}>Create</Button>
+              </div>
+
+              <div style={{ marginBottom: '3rem' }}>
+                <div className="field-label">Or upload text file</div>
+                <form onSubmit={handleFileUpload}>
+                    <input type="file" name="myFile" onChange={handleFileChange} />
+                    <button type="submit">Upload</button>
+                </form>
+              </div>
+            </>
+          )}          
 
         </ModalBody>
       </Modal>

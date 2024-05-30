@@ -1,3 +1,31 @@
+.note_error {
+  color: rgb(255, 0, 0);
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+.note_message {
+  color: rgb(55, 159, 47);
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+
+.title1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: rgba(0,0,0,0.8);
+}
+
+.title2 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: rgba(0,0,0,0.75);
+}
+
+
 .hover-move {
   -webkit-transition: -webkit-transform .2s ease,-webkit-box-shadow .2s ease;
   transition: -webkit-transform .2s ease,-webkit-box-shadow .2s ease;
@@ -9,4 +37,40 @@
   transform: translateY(-5px) translateZ(0);
   filter: drop-shadow(0.5rem 0.7rem 1rem #9a9fa34a);
   opacity: 1;
+}
+
+
+/* forms */
+.field-label {
+  color: rgba(0,0,0,0.95);
+}
+.field-input {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  outline: none;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  margin-top: 0.3rem;
+  padding: 0.8rem 1rem;
+  border-radius: 0.2rem;
+  border: 1px solid rgba(118, 151, 185, 0.6);
+  color: rgba(0,0,0,0.9);
+}
+.field-input:focus {
+  box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+}
+.form-field {
+  position: relative;
+}
+.form-field__visibility {
+  position: absolute;
+  top: 2.6rem;
+  right: 0.8rem;
+  cursor: pointer;
+  color: rgb(117, 147, 177);
+  font-size: 1.5rem;
+}
+.form-field__visibility .icon {
+  font-size: inherit;
 }

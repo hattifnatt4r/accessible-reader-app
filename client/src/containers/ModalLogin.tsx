@@ -106,8 +106,8 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
               <Icon name=""/>
               EazyReadApp.com
             </div>
-            <div className="login__message">{message}</div>
-            <div className="login__error">{error}</div>
+            <div className="login__response note_message">{message}</div>
+            <div className="login__response note_error">{error}</div>
 
             {mode === 'forgot' && (
               <>

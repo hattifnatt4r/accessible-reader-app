@@ -5,9 +5,13 @@ export function get() {
 
 let getFetch = () => global.fetch;
 
-export type PostDataType = { success: boolean, message: boolean, value?: {[key:string] : any}[] };
+export type PostDataType = {
+  success: boolean,
+  message: boolean,
+  value?: {[key:string] : any}[],
+};
 
-export async function post(apiName : string, body : {[key:string] : any}, options? : { token: string }) {
+export async function post(apiName : string, body : {[key:string] : any}, options? : { token?: string }) {
   const url = getURL(apiName);
   const fetch = getFetch();
 
@@ -24,6 +28,26 @@ export async function post(apiName : string, body : {[key:string] : any}, option
   });
   const result = await response.json();
   console.log('post:', result);
+
+  return result;
+}
+
+export async function upload(apiName : string, formData: FormData, filename: string) {
+  const url = getURL(apiName);
+  const fetch = getFetch();
+
+  const token = window.app?.token;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Authorization': `Bearer ${window.app.token}`,
+      'Filename': filename,
+    }
+  });
+  const result = await response.json();
+  console.log('upload:', result);
 
   return result;
 }
