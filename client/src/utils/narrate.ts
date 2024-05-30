@@ -1,4 +1,3 @@
-
 export function speakAll(text: string[], cb?: () => void,) {
   speechSynthesis.cancel();
   const volume = (window.app.userSettings.globalVolume ?? 100) / 100;

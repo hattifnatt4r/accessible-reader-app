@@ -2,6 +2,7 @@ import { makeObservable, observable, action } from 'mobx';
 import { FileIDType, ReaderFileType } from "../consts/dataTypes";
 import { speakAll } from '../utils/narrate';
 import { post } from '../utils/query';
+import { getNarrateSupported } from '../utils/misc';
 
 export class FilesStore {
   @observable readerFiles: ReaderFileType[] = [];
@@ -29,7 +30,7 @@ export class FilesStore {
   @action setFileID = (id : FileIDType) => {
     this.selectedFileID = id;
     const appStore = window.app;
-    if (appStore.userSettings.filesNarrateSelection === '1') {
+    if (appStore.userSettings.filesNarrateSelection === '1' && getNarrateSupported()) {
       speakAll([this.getFile(id)?.filename || '']);
     }
     localStorage.setItem('filesSelectedId', (id || '').toString());

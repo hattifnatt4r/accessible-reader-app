@@ -11,10 +11,10 @@
 
 .nav-link {
   display: inline-block;
-  min-width: 8rem;
+  min-width: 7.5rem;
   min-height: 7rem;
   text-align: center;
-  padding: 1rem;
+  padding: min(1rem, 2dvw);
   margin: 1rem;
   text-decoration: none;
   color: rgba(0,0,0,1);
@@ -23,9 +23,13 @@
 
 
 .nav-link__svg {
-  max-width: 3rem;
   display: inline-block;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.4rem;
+  --nav-btn-w: max(4rem, 4dvw);
+  min-width: var(--nav-btn-w);
+  min-height: var(--nav-btn-w);
+  max-width: var(--nav-btn-w);
+  max-height: var(--nav-btn-w);
 }
 .nav-link .icon-mask::before {
   background-color: var(--color_b4);

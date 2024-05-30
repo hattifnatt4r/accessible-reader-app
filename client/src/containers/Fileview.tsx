@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
+import { getNarrateSupported } from '../utils/misc';
 import { PageButton, PageControls } from '../components/PageControls';
 import { FileviewStore } from './FileviewStore';
 import { NavBackButton, NavModal } from '../components/Nav';
@@ -15,6 +16,7 @@ export const Fileview = observer(() => {
   const [store, setStore] = useState<FileviewStore | null>(null);
   const { fileID } = useParams();
   const appStore = window.app;
+  const narrateSupported = getNarrateSupported();
 
   useEffect(() => {
     const s = new FileviewStore({ id: Number(fileID) });
@@ -57,6 +59,8 @@ export const Fileview = observer(() => {
           {file?.folder}/{file?.filename}
         </div>
         <div className="fview__body">
+          {!narrateSupported && <div className="note_error">Narrate feature is not supported in your browser.</div>}
+
           {paragraphs.map((p, pID) => (
             <div key={pID} id={'p' + pID} className={classNames(pcl(pID))}>
               {store.textVar.pID !== pID && p}
@@ -80,7 +84,7 @@ export const Fileview = observer(() => {
         <PageButton onClick={store.toggleEdit} iconSvgname="edit-button" />
 
         {store.isSpeaking && <PageButton onClick={store.narratePause} iconSvgname="pause" />}
-        {!store.isSpeaking && <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconSvgname="play" />}
+        {!store.isSpeaking && <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconSvgname="play" disabled={!narrateSupported} />}
 
         <PageButton onClick={store.changeSelectionType}>
           Select <br />
@@ -95,7 +99,7 @@ export const Fileview = observer(() => {
           <PageButton onClick={store.narratePause} iconSvgname="pause" />
         )}
         {!store.isSpeaking && (
-          <PageButton onClick={store.narrateResume} iconSvgname="marketing" />
+          <PageButton onClick={store.narrateResume} iconSvgname="marketing" disabled={!narrateSupported} />
         )}
 
         <PageButton iconSvgname="arrow-back" onClick={() => store.changeSelection(-1)} />

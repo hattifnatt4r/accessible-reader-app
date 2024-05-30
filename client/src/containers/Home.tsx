@@ -41,6 +41,8 @@ export const Home: React.FC = observer(() =>  {
               <Button className="home__btn-view" onClick={handleNavFiles}>Go to Files</Button>
             </div>
           )}
+
+          <div style={{ marginTop: '2rem' }}>* ALPHA VERSION</div>
         </div>
 
         <div className="home__right">

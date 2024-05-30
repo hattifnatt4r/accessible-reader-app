@@ -3,6 +3,7 @@ import { FileIDType, ReaderFileType } from "../consts/dataTypes";
 import { SelectionTypeType, TextVarType, changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSplitParagraph, replaceText, setTextParams } from "./FileviewUtils";
 import { speakAll } from "../utils/narrate";
 import { post } from "../utils/query";
+import { getNarrateSupported } from "../utils/misc";
 
 
 
@@ -113,6 +114,9 @@ export class FileviewStore {
 
   @action
   narrate = () => {
+    if (!getNarrateSupported()) {
+      return;
+    }
     this.isSpeaking = true;
     const text = this.getSelectedText();
     // api cannot read the whole paragraph - split by sentence
