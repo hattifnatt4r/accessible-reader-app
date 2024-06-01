@@ -1,6 +1,6 @@
 import React from 'react';
 import { PageSimple } from '../components/PageSimple';
-import { getBrowserName, getNarrateSupported } from '../utils/misc';
+import { getNarrateSupported } from '../utils/misc';
 
 export function About() {
   return (
@@ -9,7 +9,7 @@ export function About() {
         <div className="page-simple__title-text"><span>About EazyReadApp</span></div>
       </div>
       <div className="page-simple__text">
-        A small web app for <b>tablets</b> to help people with with vision and motor skills limitations improve their reading and writing skills. 
+        A small app to help people with vision and motor skills limitations improve their reading and writing skills. 
         Features:
         <ul>
           <li>upload text files,</li>
@@ -27,6 +27,9 @@ export function About() {
         Narrate feature is available in browsers: Chrome
         <br/>
         Supported browsers: Chrome
+        <br/>
+        Supported devices: tablets and other touch devices with large screen
+
 
         <div style={{ marginTop: '2rem' }}>
           {!getNarrateSupported() && <div className="note_error">Narrate feature is not supported in your browser.</div>} 

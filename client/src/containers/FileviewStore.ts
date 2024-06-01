@@ -30,7 +30,7 @@ export class FileviewStore {
   loadFile = async(id: FileIDType) => {
     const res = await post('file', { id: id });
 
-    if (!res.value.length) {
+    if (!res.value?.length) {
       return;
     }
 

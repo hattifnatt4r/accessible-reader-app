@@ -5,7 +5,7 @@ export type ReaderFileType = {
   folder: string | '',
   filename: string | '',
   title: string | '',
-  person_id: string | '',
+  person_id: number | null,
 };
 
 export type ReaderTextType = {

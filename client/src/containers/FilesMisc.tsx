@@ -22,11 +22,13 @@ export function FilesFile(props : { file: ReaderFileType, className?: string, se
   function selectFile() {
     setFileID(file?.id || null);
   }
+
+  const isSharedFile = file.person_id == 0;
   
   return (
     <div className={classNames(cl)} onClick={selectFile}>
       <div className="fhome-file__flex">
-        <Icon name="draft" filled className="fhome-file__icon" />
+        <Icon name={isSharedFile ? 'lock' : 'draft'} filled className="fhome-file__icon" />
         
         <div className="fhome-file__name">
           {file?.filename} - {file?.title}
@@ -37,7 +39,14 @@ export function FilesFile(props : { file: ReaderFileType, className?: string, se
 };
 
 
-
+function validateFileInfo(file: { filename: string, title: string, filecontent: string }) {
+  const { filename, title, filecontent } = file;
+  if (!filename) return 'Filename is required';
+  if (filename.length > 20) return 'Filename maximum length is 20'
+  if (title.length > 100) return 'Title maximum length is 100'
+  if (filecontent.length > 65535) return 'Content maximum length is 64KB'
+  return '';
+}
 
 export const FilesEdit = observer((props : { file: ReaderFileType | null, onUpdated: () => void }) => {
   const { file, onUpdated } = props;
@@ -46,6 +55,7 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null, onUpda
   const [message, setMessage] = useState('');
   const [form, setForm] = useState({ filename: "", title: "" });
   const appStore = window.app;
+  const isSharedFile = file?.person_id == 0;
 
   useEffect(() => {
     setForm({ filename: file?.filename || '', title: file?.title || '' });
@@ -53,9 +63,16 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null, onUpda
 
   function toggle() {
     setOpen(!open);
+    setError('');
+    setMessage('');
   }
 
   const handleFileRename = async() => {
+    const errors = validateFileInfo({ filename: form.filename, title: form.title, filecontent: '' });
+    if (errors) {
+      setError(errors);
+      return;
+    }
     const response = await post('file_upd', { id: file?.id, filename: form.filename, title: form.title });
     if (response.status === 'success') {
       setError('');
@@ -103,16 +120,17 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null, onUpda
           {!appStore.userId && (
             <div><AppLink to="/home" className="button_link2">Sign In</AppLink> to edit files.</div>
           )}
-          {appStore.userId && !file && <div>File not selected</div>}          
+          {appStore.userId && isSharedFile && <div>Cannot edit shared files.</div>}          
 
+          {appStore.userId && !file && <div>File not selected.</div>}          
 
-          {appStore.userId && file && (
+          {appStore.userId && file && !isSharedFile && (
             <>
               <div style={{ marginBottom: '3rem' }}>
                 <div className="field-label">File Name</div>
-                <input name="filename" value={form.filename} onChange={handleChange} className="field-input" /><br/>
+                <input name="filename" value={form.filename} onChange={handleChange} className="field-input" maxLength={20} /><br/>
                 <div className="field-label">Title</div>
-                <input name="title" value={form.title} onChange={handleChange} className="field-input" /><br/>
+                <input name="title" value={form.title} onChange={handleChange} className="field-input" maxLength={100} /><br/>
                 <Button onClick={handleFileRename}>Update</Button>
               </div>
 
@@ -130,8 +148,8 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null, onUpda
 
 
 
-export const FilesAdd = observer((props : { onUpdated: () => void }) => {
-  const { onUpdated } = props;
+export const FilesAdd = observer((props : { onUpdated: () => void, selectFile: (id: FileIDType) => void }) => {
+  const { onUpdated, selectFile } = props;
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -152,11 +170,20 @@ export const FilesAdd = observer((props : { onUpdated: () => void }) => {
   };
 
   const handleFileCreate = async() => {
+    const errors = validateFileInfo(form);
+    if (errors) {
+      setError(errors);
+      return;
+    }
+
     const response = await post('file_add', { filename: form.filename, title: form.title, content: form.filecontent });
-    if (response.status === 'success') {
+    if (response.status === 'success' && response.value?.length) {
       setError('');
       setMessage("File created: " + form.filename);
       onUpdated();
+      setForm({ filename: 'New file', filecontent: '', title: '' });
+      toggle();
+      selectFile(response.value[0]?.id);
     } else {
       setError("Failed to create file");
       setMessage("");
@@ -210,14 +237,14 @@ export const FilesAdd = observer((props : { onUpdated: () => void }) => {
             <>
               <div>
                 <div className="field-label">File Name</div>
-                <input name="filename" value={form.filename} onChange={handleChange} className="field-input" /><br/>
+                <input name="filename" value={form.filename} onChange={handleChange} className="field-input" maxLength={20}/><br/>
                 <div className="field-label">Title</div>
-                <input name="title" value={form.title} onChange={handleChange} className="field-input" /><br/>
+                <input name="title" value={form.title} onChange={handleChange} className="field-input" maxLength={100} /><br/>
               </div>
 
               <div style={{ marginBottom: '3rem' }}>
                 <div className="field-label">Paste Text</div>
-                <textarea name="filecontent" value={form.filecontent} onChange={handleChange} className="field-input" rows={10} /><br/>
+                <textarea name="filecontent" value={form.filecontent} onChange={handleChange} className="field-input" rows={10} maxLength={65535} /><br/>
                 <Button onClick={handleFileCreate}>Create</Button>
               </div>
 

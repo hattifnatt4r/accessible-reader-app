@@ -31,10 +31,11 @@
 }
 
 .fview__title {
+  font-family: "Montserrat", sans-serif;
   font-size: 1.7rem;
+  line-height: 3rem;
   margin-bottom: 1rem;
-  font-weight: 500;
-  font-family:   'Ubuntu';
+  font-weight: 600;
   color: rgba(0,0,0,0.7);
 }
 .fview__body {
@@ -58,6 +59,23 @@
 .fview_125 .fview__body {
   font-size: calc(1rem * 1.25);
   line-height: calc(1.8rem * 1.25);
+}
+
+.fview_100 .fview__title {
+  font-size: calc(1.7rem * 1);
+  line-height: calc(2.5rem * 1);
+}
+.fview_200 .fview__title {
+  font-size: calc(1.7rem * 2);
+  line-height: calc(2.5rem * 2);
+}
+.fview_150 .fview__title {
+  font-size: calc(1.7rem * 1.5);
+  line-height: calc(2.5rem * 1.5);
+}
+.fview_125 .fview__title {
+  font-size: calc(1.7rem * 1.25);
+  line-height: calc(2.5rem * 1.25);
 }
 
 

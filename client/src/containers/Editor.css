@@ -121,6 +121,10 @@
 .fedit__btn .material-symbols-rounded {
   font-size: inherit;
 }
+.fedit__btn_disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
 
 
 /* layout 1 */

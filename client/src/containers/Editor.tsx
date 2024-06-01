@@ -103,8 +103,8 @@ const layouts : LayoutType[] = [
 ];
 
 
-export const Editor = observer((props: { open: boolean, text: string, toggle: () => void, save: (textEdited: string) => void }) => {
-  const { open, text, toggle, save } = props;
+export const Editor = observer((props: { open: boolean, text: string, toggle: () => void, save: (textEdited: string) => void, readonly?: boolean }) => {
+  const { open, text, toggle, save, readonly } = props;
   const [textvalue, setTextvalue] = useState<string>('');
   const [cursor, setCursor] = useState<number>(0);
   const [mode, setMode] = useState<string>('m1');
@@ -191,6 +191,7 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
     'fedit__btn_top': layout.keysTop.includes(id),
     'fedit__btn_func': idFunc,
     'fedit__btn_colored': ['save', 'read'].includes(id),
+    'fedit__btn_disabled': ['save'].includes(id) && readonly,
   });
   const buttons = [
     { id: 'prev', comp: <div onClick={handlePrev} className={classNames(clButton('prev', true))} id="fedit-prev" key="prev"><div className="fedit__btn-wrap"><Icon name="keyboard_arrow_left" /></div></div> },

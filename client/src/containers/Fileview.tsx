@@ -26,7 +26,7 @@ export const Fileview = observer(() => {
 
   if (!store) return null;
   const file = store?.file;
-  
+  const isShared = file?.person_id == 0;  
 
   const paragraphs = store.paragraphs;
   const sentences = store.sentences;
@@ -56,11 +56,9 @@ export const Fileview = observer(() => {
     <div className={classNames(cl)}>
       <div className="fview__file">
         <div className="fview__filename">
-          {file?.folder}/{file?.filename}
+          {file?.folder}/{file?.filename} {isShared && "(View-only)"}
         </div>
         <div className="fview__body">
-          {!narrateSupported && <div className="note_error">Narrate feature is not supported in your browser.</div>}
-
           {paragraphs.map((p, pID) => (
             <div key={pID} id={'p' + pID} className={classNames(pcl(pID))}>
               {store.textVar.pID !== pID && p}
@@ -106,7 +104,7 @@ export const Fileview = observer(() => {
         <PageButton iconSvgname="arrow-forward" onClick={() => store.changeSelection(1)} />
       </PageControls>
 
-      {store.isEditing && <Editor open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} save={store.save} />}
+      {store.isEditing && <Editor open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} save={store.save} readonly={isShared} />}
     </div>
   );
 });

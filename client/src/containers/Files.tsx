@@ -43,7 +43,7 @@ export const Files = observer((props) => {
         <FilesEdit file={selectedFile} onUpdated={store.loadFiles} />
         <NavModal />
 
-        <FilesAdd onUpdated={store.loadFiles} />
+        <FilesAdd onUpdated={store.loadFiles} selectFile={store.setFileID} />
         <PageButton iconSvgname="right2" onClick={openFile} disabled={!selectedFile} />
         <PageButton empty />
         <PageButton empty />
