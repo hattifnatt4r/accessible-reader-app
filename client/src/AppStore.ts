@@ -39,14 +39,16 @@ export class AppStore {
       if (res.token && res.value?.id) {
         this.setSession(token, res.value);
       }
+    } else {
+      this.setSession('', null);
     }
     this.isLoadingSession = false;
   }
 
   @action
-  setSession = (token: string, userInfo: UserInfoType) => {
+  setSession = (token: string, userInfo: UserInfoType | null) => {
     this.token = token;
-    this.userInfo = userInfo || {};
+    this.userInfo = userInfo ?? null;
     this.userId = userInfo?.login_name || '';
     localStorage.setItem('token', token);
   }

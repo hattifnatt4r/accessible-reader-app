@@ -79,6 +79,11 @@
 }
 
 
+.fview__p {
+  position: relative;
+  padding: 0 0.4rem;
+  border-radius: 1px;
+}
 .fview__p_selected {
   background-color: rgb(166, 204, 107, 0.4);
   color: rgb(24, 30, 13);
@@ -90,4 +95,44 @@
 .fview__w_selected {
   background-color: rgb(166, 204, 107, 0.8);
   color: rgb(24, 30, 13);
+}
+
+
+/* select paragraph button */
+/*
+.fview__p::before {
+  display: inline-block;
+  height: 100%;
+  width: 1px;
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  border-left: 1px solid #97b0c1;
+}
+*/
+.fview__select-p-btn {
+  position: absolute;
+  --p-left: min(2rem, 3vw);
+  left: calc(-1 * min(1.9rem, 6vw));
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-top: -0.3rem;
+  margin-left: -0.5rem;
+  border-radius: 1rem;
+}
+.fview__select-p-btn_selected {
+
+}
+.fview__select-p-btn .icon{
+  display: inline-block;
+  position: relative;
+  font-size: 1.3rem;
+  color: var(--color_b2);
+  border-radius: 100%;
+}
+.fview__select-p-btn_selected .icon {
+  color: var(--color_b1l);
+}
+.fview__select-p-btn:hover .icon {
+  color: var(--color_b1l);
 }

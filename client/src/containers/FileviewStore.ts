@@ -99,6 +99,17 @@ export class FileviewStore {
     }
   }
 
+  selectParagraph = (pID: number) => {
+    this.textVar.pID = pID - 1;
+    this.textVar = changeSelectionP(1, this.textVar, this.paragraphs);
+    this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
+  
+    const appStore = window.app;
+    if (appStore.userSettings.readerNarrateSelection !== 0) {
+      this.narrate();
+    }
+  }
+
   @action
   toggleEdit = () => {
     this.isEditing = !this.isEditing;

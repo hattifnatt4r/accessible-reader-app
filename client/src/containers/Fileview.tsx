@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
 import { getNarrateSupported } from '../utils/misc';
+import { Icon } from '../components/Icon';
 import { PageButton, PageControls } from '../components/PageControls';
 import { FileviewStore } from './FileviewStore';
 import { NavBackButton, NavModal } from '../components/Nav';
@@ -61,6 +62,7 @@ export const Fileview = observer(() => {
         <div className="fview__body">
           {paragraphs.map((p, pID) => (
             <div key={pID} id={'p' + pID} className={classNames(pcl(pID))}>
+              <SelectParagraphButton pID={pID} pIDSelected={store.textVar.pID} onClick={store.selectParagraph} paragraph={p} />
               {store.textVar.pID !== pID && p}
               {store.textVar.pID === pID && sentences.map((s, sID) => (
                 <span key={sID} id={'p' + pID + 's' + sID} className={classNames(scl(pID, sID))}>
@@ -108,3 +110,21 @@ export const Fileview = observer(() => {
     </div>
   );
 });
+
+function SelectParagraphButton(props: { pID: number, pIDSelected: number, onClick: (pID: number) => void, paragraph: string }) {
+  const { onClick, pID, pIDSelected, paragraph } = props;
+  const selected = pID === pIDSelected;
+
+  if (!paragraph) return null;
+
+  const cl = {
+    'fview__select-p-btn': 1,
+    'fview__select-p-btn_selected': selected,
+  };
+
+  return (
+    <div className={classNames(cl)} onClick={() => onClick(pID)}>
+      <Icon name="radio_button_unchecked" filled />
+    </div>
+  );
+}

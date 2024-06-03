@@ -39,9 +39,8 @@
   position: absolute;
   right: 0;
   top: var(--ptop);
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
+  height: calc(100vh - 2*var(--ptop));
+  height: calc(100dvh - 2*var(--ptop));
   overflow: hidden;
 }
 
