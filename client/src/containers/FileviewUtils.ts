@@ -1,11 +1,13 @@
+import { ReaderParagraphType } from "../consts/dataTypes";
+
 export type TextVarType = { maxP: number, maxS: number, maxW: number, pID: number, sID: number, wID: number };
 export type TextParagraphsType = string[];
 export type SelectionTypeType = 'w' | 's' | 'p';
 
-export function getParagraphs(text: string | null): string[] {
+export function getParagraphs(text: string | null): ReaderParagraphType[] {
   if (!text) return [];
   const paragraphs = text.split(/<br>|\n|\rn|<br\/>|<br \/>/);
-  return paragraphs;
+  return paragraphs.map((p: string) => ({ type: '', content: p }));
 }
 
 export function getSentences(text: string | null): string[] {
@@ -17,13 +19,15 @@ export function getSentences(text: string | null): string[] {
   return sentences;
 }
 
-export function getSplitParagraph(text: string | null): string[][] {
+export function getSplitParagraph(paragraph: ReaderParagraphType | null): string[][] {
+  if (!paragraph) return [[' ']];
+  const text = paragraph.content;
   const sentences = getSentences(text);
   const words = sentences.map(s => (s > ' ' ? s.split(' ').filter(word => word) : [' ']));
   return words;
 }
 
-export function setTextParams(textVar: TextVarType, paragraphs: TextParagraphsType) : TextVarType {
+export function setTextParams(textVar: TextVarType, paragraphs: ReaderParagraphType[]) : TextVarType {
   const newVar = { ...textVar };
 
   newVar.maxP = paragraphs.length - 1;
@@ -38,7 +42,7 @@ export function setTextParams(textVar: TextVarType, paragraphs: TextParagraphsTy
   return newVar;
 }
 
-export function changeSelectionP(diff: number, textVar: TextVarType, paragraphs: TextParagraphsType ) : TextVarType {
+export function changeSelectionP(diff: number, textVar: TextVarType, paragraphs: ReaderParagraphType[] ) : TextVarType {
   let newVar = { ...textVar };
 
   let pID = newVar.pID + diff;
@@ -49,7 +53,7 @@ export function changeSelectionP(diff: number, textVar: TextVarType, paragraphs:
   return newVar;
 }
 
-export function changeSelectionS(diff: number, textVar: TextVarType, paragraphs: TextParagraphsType) : TextVarType {
+export function changeSelectionS(diff: number, textVar: TextVarType, paragraphs: ReaderParagraphType[]) : TextVarType {
   let newVar = { ...textVar };
 
   let sID = newVar.sID + diff;
@@ -70,7 +74,7 @@ export function changeSelectionS(diff: number, textVar: TextVarType, paragraphs:
   return newVar;
 }
 
-export function changeSelectionW(diff: number, textVar: TextVarType, paragraphs: TextParagraphsType) : TextVarType {
+export function changeSelectionW(diff: number, textVar: TextVarType, paragraphs: ReaderParagraphType[]) : TextVarType {
   let newVar = { ...textVar };
 
   let wID = newVar.wID + diff;
@@ -93,7 +97,7 @@ export function changeSelectionW(diff: number, textVar: TextVarType, paragraphs:
 }
 
 
-export function replaceText(textEdited: string, selectionType: SelectionTypeType, textVar: TextVarType, paragraphsOld: TextParagraphsType) : [string, string] {
+export function replaceText(textEdited: string, selectionType: SelectionTypeType, textVar: TextVarType, paragraphsOld: ReaderParagraphType[]) : [string, string] {
 
   const sentencesOld = getSplitParagraph(paragraphsOld[textVar.pID]);
 
@@ -112,9 +116,9 @@ export function replaceText(textEdited: string, selectionType: SelectionTypeType
   }
 
   const paragraphs = [...paragraphsOld];
-  paragraphs[textVar.pID] = paragraphText;
-  const titleToSave = paragraphs[0];
-  const textToSave = paragraphs.slice(1).join('<br>');
+  paragraphs[textVar.pID].content = paragraphText;
+  const titleToSave = paragraphs[0].content;
+  const textToSave = paragraphs.slice(1).map((p:ReaderParagraphType) => p.content).join('<br>');
   
   return [titleToSave, textToSave];
 }

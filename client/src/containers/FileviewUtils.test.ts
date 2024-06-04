@@ -6,11 +6,11 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 `;
 
 const paragraphs = [
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ",
-  "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ",
-  "",
-  "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-  "",
+  { type: '', content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. " },
+  { type: '', content: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. " },
+  { type: '', content: "" },
+  { type: '', content: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." },
+  { type: '', content: "" },
 ]
 
 describe('getParagraphs', () => {
@@ -31,10 +31,10 @@ describe('getSentences', () => {
 
 describe('getSplitParagraph', () => {
   it('should split into sentences/words', () => {
-    const p1 = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor.';
+    const p1 = { type: '', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor.' };
     const w1 = [["Lorem","ipsum","dolor","sit","amet,","consectetur","adipiscing","elit."], ["Duis","aute","irure","dolor."]];
     expect(getSplitParagraph(p1)).toEqual(w1);
-    expect(getSplitParagraph('')).toEqual([[' ']]);
+    expect(getSplitParagraph({ type: '', content: ''})).toEqual([[' ']]);
     expect(getSplitParagraph(null)).toEqual([[' ']]);
   });
 })
@@ -113,7 +113,13 @@ describe('changeSelection', () => {
 
   describe('replaceText', () => {
     it('should replace edited text', () => {      
-      const paragraphs = ['Book Title','Lorem ipsum dolor sit amet. Consectetur elit.', 'Excepteur sint, sunt in culpa qui. ', '', 'Excepteur sint occaecat cupidatat non proident.'];
+      const paragraphs = [
+        { type: '', content: 'Book Title' },
+        { type: '', content: 'Lorem ipsum dolor sit amet. Consectetur elit.' }, 
+        { type: '', content: 'Excepteur sint, sunt in culpa qui. ' }, 
+        { type: '', content: '' }, 
+        { type: '', content: 'Excepteur sint occaecat cupidatat non proident.' }
+      ];
 
       const r1 = replaceText('L', 'w', { pID: 1, sID: 0, wID: 0, maxP: 4, maxS: 1, maxW: 4 }, paragraphs);
       expect(r1).toEqual(["Book Title", "L ipsum dolor sit amet. Consectetur elit.<br>Excepteur sint, sunt in culpa qui. <br><br>Excepteur sint occaecat cupidatat non proident."]);

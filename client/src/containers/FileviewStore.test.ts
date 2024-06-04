@@ -18,7 +18,7 @@ class FileviewStoreTest extends FileviewStore {
 
     const { id } = props;
 
-    const title = file?.title || '';
+    const title = { type: '', content: file?.title || '' };
     const text = textExample.text;
     this.paragraphs = [title, ...getParagraphs(text || null)];
     this.textVar = setTextParams(this.textVar, this.paragraphs);

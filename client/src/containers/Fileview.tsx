@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
 import { getNarrateSupported } from '../utils/misc';
+import { ReaderParagraphType } from '../consts/dataTypes';
 import { Icon } from '../components/Icon';
 import { PageButton, PageControls } from '../components/PageControls';
 import { FileviewStore } from './FileviewStore';
@@ -60,18 +61,21 @@ export const Fileview = observer(() => {
           {file?.folder}/{file?.filename} {isShared && "(View-only)"}
         </div>
         <div className="fview__body">
-          {paragraphs.map((p, pID) => (
-            <div key={pID} id={'p' + pID} className={classNames(pcl(pID))}>
-              <SelectParagraphButton pID={pID} pIDSelected={store.textVar.pID} onClick={store.selectParagraph} paragraph={p} />
-              {store.textVar.pID !== pID && p}
-              {store.textVar.pID === pID && sentences.map((s, sID) => (
-                <span key={sID} id={'p' + pID + 's' + sID} className={classNames(scl(pID, sID))}>
-                  {s.map((w, wID) => <span key={wID} id={'p' + pID + 's' + pID + 'w' + wID} className={classNames(wcl(pID, sID, wID))}>{w} </span>)}
-                </span>
-              ))}
-              &nbsp;
-            </div>
-          ))}
+          {paragraphs.map((p: ReaderParagraphType, pID: number) => {
+            const pcontent = p.content;
+            return (
+              <div key={pID} id={'p' + pID} className={classNames(pcl(pID))}>
+                <SelectParagraphButton pID={pID} pIDSelected={store.textVar.pID} onClick={store.selectParagraph} paragraph={pcontent} />
+                {store.textVar.pID !== pID && pcontent}
+                {store.textVar.pID === pID && sentences.map((s, sID: number) => (
+                  <span key={sID} id={'p' + pID + 's' + sID} className={classNames(scl(pID, sID))}>
+                    {s.map((w, wID) => <span key={wID} id={'p' + pID + 's' + pID + 'w' + wID} className={classNames(wcl(pID, sID, wID))}>{w} </span>)}
+                  </span>
+                ))}
+                &nbsp;
+              </div>
+            );
+          })}
         </div>
       </div>
 

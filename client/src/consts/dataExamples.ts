@@ -1,12 +1,12 @@
 import { ReaderFileType, ReaderTextType } from "./dataTypes";
 
 export const dataExampleFiles: ReaderFileType[] = [
-  { id: 1, folder: 'examples', filename: 'Book 1', person_id: 1, title: 'Book Title' },
-  { id: 2, folder: 'examples', filename: 'Book 2 long title long title long title', person_id: 1, title: 'Book Title' },
-  { id: 3, folder: 'examples', filename: 'Moomins', person_id: 1, title: 'Moomins' },
-  { id: 4, folder: 'examples', filename: 'Book 4', person_id: 1, title: 'Moomins' },
-  { id: 5, folder: 'examples', filename: 'Book 5', person_id: 1, title: 'Moomins' },
-  { id: 6, folder: 'examples', filename: 'Book 6', person_id: 1, title: 'Moomins' },
+  { id: 1, folder: 'examples', filename: 'Book 1', person_id: 1, author_id: 1, title: 'Book Title', filetype: '', config: '' },
+  { id: 2, folder: 'examples', filename: 'Book 2 long title long title long title', person_id: 1, author_id: 1, title: 'Book Title', filetype: '', config: '' },
+  { id: 3, folder: 'examples', filename: 'Moomins', person_id: 1, author_id: 1, title: 'Moomins', filetype: '', config: '' },
+  { id: 4, folder: 'examples', filename: 'Book 4', person_id: 1, author_id: 1, title: 'Moomins', filetype: '', config: '' },
+  { id: 5, folder: 'examples', filename: 'Book 5', person_id: 1, author_id: 1, title: 'Moomins', filetype: '', config: '' },
+  { id: 6, folder: 'examples', filename: 'Book 6', person_id: 1, author_id: 1, title: 'Moomins', filetype: '', config: '' },
 ];
 
 export const dataExampleText: ReaderTextType[] = [

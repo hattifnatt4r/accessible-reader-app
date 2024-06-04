@@ -1,5 +1,5 @@
 import { makeObservable, observable, action, runInAction, toJS } from "mobx";
-import { FileIDType, ReaderFileType } from "../consts/dataTypes";
+import { FileIDType, ReaderFileType, ReaderParagraphType } from "../consts/dataTypes";
 import { SelectionTypeType, TextVarType, changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSplitParagraph, replaceText, setTextParams } from "./FileviewUtils";
 import { speakAll } from "../utils/narrate";
 import { post } from "../utils/query";
@@ -9,7 +9,7 @@ import { getNarrateSupported } from "../utils/misc";
 
 export class FileviewStore {
   @observable file: ReaderFileType | null = null;
-  @observable paragraphs: string[] = [];
+  @observable paragraphs: ReaderParagraphType[] = [];
   @observable sentences: string[][] = [];
   @observable textVar: TextVarType = { maxP: 0, maxS: 0, maxW: 0, pID: 0, sID: 0, wID: 0 };
   @observable selectionType: SelectionTypeType = 's';
@@ -37,11 +37,12 @@ export class FileviewStore {
     const { content, ...rest } = res.value[0];
     this.file = rest;
 
-    const title = rest.title || '';
-    this.paragraphs = [title, ...getParagraphs(content || null)];
+    const paragraphs = getParagraphs(content || null);
+
+    const title: ReaderParagraphType = { type: '', content: rest.title || '' };
+    this.paragraphs = [title, ...paragraphs];
     this.textVar = setTextParams(this.textVar, this.paragraphs);
     this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
-
   }
 
   @action
@@ -51,16 +52,12 @@ export class FileviewStore {
     if (res?.status === 'success') {
       this.loadFile(this.file?.id || 0);
     }
-
-    this.paragraphs = [title, ...getParagraphs(text || null)];
-    this.textVar = setTextParams(this.textVar, this.paragraphs);
-    this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
     this.isEditing = false;
   }
 
   getSelectedText = () => {
     let selectedText = '';
-    if (this.selectionType === 'p') { selectedText = this.paragraphs[this.textVar.pID]; }
+    if (this.selectionType === 'p') { selectedText = this.paragraphs[this.textVar.pID].content; }
     if (this.selectionType === 's') { selectedText = this.sentences[this.textVar.sID].join(' '); }
     if (this.selectionType === 'w') { selectedText = this.sentences[this.textVar.sID][this.textVar.wID]; }
     return selectedText;

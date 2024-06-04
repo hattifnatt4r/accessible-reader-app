@@ -6,7 +6,17 @@ export type ReaderFileType = {
   filename: string | '',
   title: string | '',
   person_id: number | null,
+  author_id: number | null,
+  filetype: string,
+  config: string,
 };
+
+export type ReaderParagraphType = {
+  content: string,
+  type: string | '',
+  // id: string,
+  // className: string,
+}
 
 export type ReaderTextType = {
   id: FileIDType,
