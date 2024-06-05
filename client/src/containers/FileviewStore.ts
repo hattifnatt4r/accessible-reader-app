@@ -1,9 +1,23 @@
 import { makeObservable, observable, action, runInAction, toJS } from "mobx";
-import { FileIDType, ReaderFileType, ReaderParagraphType } from "../consts/dataTypes";
-import { SelectionTypeType, TextVarType, changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSplitParagraph, replaceText, setTextParams } from "./FileviewUtils";
+import { ApiResponseType, FileIDType, ReaderFileType, ReaderParagraphType } from "../consts/dataTypes";
+import {
+  SelectionTypeType,
+  TextVarType,
+  changeSelectionP,
+  changeSelectionS,
+  changeSelectionW,
+  getParagraphs,
+  getParagraphsFromJSON,
+  getSplitParagraph,
+  getTitleParagraph,
+  replaceText,
+  replaceTextJson,
+  setTextParams
+} from "./FileviewUtils";
 import { speakAll } from "../utils/narrate";
 import { post } from "../utils/query";
 import { getNarrateSupported } from "../utils/misc";
+import { dataExampleJsonfile } from "../consts/dataExamples";
 
 
 
@@ -37,9 +51,8 @@ export class FileviewStore {
     const { content, ...rest } = res.value[0];
     this.file = rest;
 
-    const paragraphs = getParagraphs(content || null);
-
-    const title: ReaderParagraphType = { type: '', content: rest.title || '' };
+    const paragraphs = rest.filetype === 'json' ? getParagraphsFromJSON(content || '') : getParagraphs(content || null);
+    const title = getTitleParagraph(rest.title || '');
     this.paragraphs = [title, ...paragraphs];
     this.textVar = setTextParams(this.textVar, this.paragraphs);
     this.sentences = getSplitParagraph(this.paragraphs[this.textVar.pID]);
@@ -47,8 +60,17 @@ export class FileviewStore {
 
   @action
   save = async (textEdited: string) => {
-    const [title, text] = replaceText(textEdited, this.selectionType, this.textVar, this.paragraphs);
-    const res = await post('file_upd', { id: this.file?.id, title: title, content: text });
+    const filetype = this.file?.filetype;
+    let res: ApiResponseType = {};
+  
+    if (filetype === 'json') {
+      const [title, text] = replaceTextJson(textEdited, this.selectionType, this.textVar, this.paragraphs);
+      res = await post('file_upd', { id: this.file?.id, title: title, content: text });
+    } else {
+      const [title, text] = replaceText(textEdited, this.selectionType, this.textVar, this.paragraphs);
+      res = await post('file_upd', { id: this.file?.id, title: title, content: text });
+    }
+
     if (res?.status === 'success') {
       this.loadFile(this.file?.id || 0);
     }
@@ -96,6 +118,7 @@ export class FileviewStore {
     }
   }
 
+  @action
   selectParagraph = (pID: number) => {
     this.textVar.pID = pID - 1;
     this.textVar = changeSelectionP(1, this.textVar, this.paragraphs);

@@ -1,3 +1,9 @@
+export type ApiResponseType = {
+  status?: string | '',
+  message?: string | '',
+  value?: any[],
+};
+
 export type FileIDType = number | null;
 
 export type ReaderFileType = {
@@ -14,9 +20,15 @@ export type ReaderFileType = {
 export type ReaderParagraphType = {
   content: string,
   type: string | '',
-  // id: string,
+  id: number,
   // className: string,
 }
+
+export type ReaderContentItemType = {
+  type: string | '',
+  content: string | '',
+  answer?: string | '',
+};
 
 export type ReaderTextType = {
   id: FileIDType,

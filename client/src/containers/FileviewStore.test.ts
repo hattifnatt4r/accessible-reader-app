@@ -2,7 +2,7 @@
 
 import { FileIDType } from "../consts/dataTypes";
 import { FileviewStore } from "./FileviewStore";
-import { getParagraphs, getSplitParagraph, setTextParams } from "./FileviewUtils";
+import { getParagraphs, getSplitParagraph, getTitleParagraph, setTextParams } from "./FileviewUtils";
 
 const file = { id: 1, folder: 'examples', filename: 'Book 1', person_id: 'Jhon Doe', title: 'Book Title' };
 const textExample = {
@@ -18,7 +18,8 @@ class FileviewStoreTest extends FileviewStore {
 
     const { id } = props;
 
-    const title = { type: '', content: file?.title || '' };
+    const title = getTitleParagraph(file?.title || '');
+
     const text = textExample.text;
     this.paragraphs = [title, ...getParagraphs(text || null)];
     this.textVar = setTextParams(this.textVar, this.paragraphs);

@@ -13,7 +13,6 @@ import { Editor } from './Editor';
 import './Fileview.css';
 
 
-
 export const Fileview = observer(() => {
   const [store, setStore] = useState<FileviewStore | null>(null);
   const { fileID } = useParams();
@@ -28,7 +27,7 @@ export const Fileview = observer(() => {
 
   if (!store) return null;
   const file = store?.file;
-  const isShared = file?.person_id == 0;  
+  const isShared = file?.person_id === 0;  
 
   const paragraphs = store.paragraphs;
   const sentences = store.sentences;
@@ -40,11 +39,6 @@ export const Fileview = observer(() => {
     'page-w-controls': 1,
   };
 
-  const pcl = (pID: number) => ({
-    'fview__p': 1,
-    'fview__p_selected': pID === store.textVar.pID && store.selectionType === 'p',
-    'fview__title': pID === 0,
-  });
   const scl = (pID: number, sID: number) => ({
     'fview__s': 1,
     'fview__s_selected': sID === store.textVar.sID && pID === store.textVar.pID && store.selectionType === 's',
@@ -61,11 +55,12 @@ export const Fileview = observer(() => {
           {file?.folder}/{file?.filename} {isShared && "(View-only)"}
         </div>
         <div className="fview__body">
-          {paragraphs.map((p: ReaderParagraphType, pID: number) => {
+          {paragraphs.map((p: ReaderParagraphType) => {
             const pcontent = p.content;
+            const pID = p.id;
             return (
-              <div key={pID} id={'p' + pID} className={classNames(pcl(pID))}>
-                <SelectParagraphButton pID={pID} pIDSelected={store.textVar.pID} onClick={store.selectParagraph} paragraph={pcontent} />
+              <ParagraphWrap key={pID} paragraph={p} id={pID} idSelected={store.textVar.pID} selectionType={store.selectionType}>
+                <SelectParagraphButton pIDSelected={store.textVar.pID} onClick={store.selectParagraph} paragraph={p} />
                 {store.textVar.pID !== pID && pcontent}
                 {store.textVar.pID === pID && sentences.map((s, sID: number) => (
                   <span key={sID} id={'p' + pID + 's' + sID} className={classNames(scl(pID, sID))}>
@@ -73,7 +68,7 @@ export const Fileview = observer(() => {
                   </span>
                 ))}
                 &nbsp;
-              </div>
+              </ParagraphWrap>
             );
           })}
         </div>
@@ -115,11 +110,13 @@ export const Fileview = observer(() => {
   );
 });
 
-function SelectParagraphButton(props: { pID: number, pIDSelected: number, onClick: (pID: number) => void, paragraph: string }) {
-  const { onClick, pID, pIDSelected, paragraph } = props;
+
+function SelectParagraphButton(props: { pIDSelected: number, onClick: (pID: number) => void, paragraph: ReaderParagraphType }) {
+  const { onClick, pIDSelected, paragraph } = props;
+  const pID = paragraph.id;
   const selected = pID === pIDSelected;
 
-  if (!paragraph) return null;
+  if (!paragraph.content && paragraph.type !== 'answer') return null;
 
   const cl = {
     'fview__select-p-btn': 1,
@@ -129,6 +126,46 @@ function SelectParagraphButton(props: { pID: number, pIDSelected: number, onClic
   return (
     <div className={classNames(cl)} onClick={() => onClick(pID)}>
       <Icon name="radio_button_unchecked" filled />
+    </div>
+  );
+}
+
+
+function ParagraphWrap(props: { paragraph: ReaderParagraphType, children: React.ReactNode, id: number, idSelected: number, selectionType: string }) {
+  const { paragraph, children, id, idSelected, selectionType } = props;
+
+  const highlightParagraph = (paragraph.type === 'answer' && !paragraph.content) || selectionType === 'p';
+  const pcl = {
+    'fview__p': 1,
+    'fview__p_selected': paragraph.id === idSelected && highlightParagraph,
+    'fview__p_title': paragraph.id === 0,
+    'fview__p_question': paragraph.type === 'question',
+    'fview__p_answer': paragraph.type === 'answer',
+    'fview__p_check': paragraph.type === 'check',
+  };
+
+  if (paragraph.type === 'answer') {
+    return (
+      <div className={classNames(pcl)} id={'p' + id}>
+        <div className="fview__p__answer">
+          {children}
+        </div>
+      </div>
+    );
+  }
+
+  if (paragraph.type === 'check') {
+    // todo
+    return (
+      <div className={classNames(pcl)} id={'p' + id}>
+        {children}
+      </div>
+    );
+  }
+
+  return (
+    <div className={classNames(pcl)} id={'p' + id}>
+      {children}
     </div>
   );
 }

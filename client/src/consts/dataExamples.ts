@@ -1,4 +1,4 @@
-import { ReaderFileType, ReaderTextType } from "./dataTypes";
+import { ReaderContentItemType, ReaderFileType, ReaderTextType } from "./dataTypes";
 
 export const dataExampleFiles: ReaderFileType[] = [
   { id: 1, folder: 'examples', filename: 'Book 1', person_id: 1, author_id: 1, title: 'Book Title', filetype: '', config: '' },
@@ -22,3 +22,12 @@ export const dataExampleText: ReaderTextType[] = [
     ` 
   },
 ];
+
+export const dataExampleJsonfile: { items: ReaderContentItemType[] } = {
+  items: [
+    { type: "", content: "Translate sentences:" },
+    { type: "question", content: "1. Dorothy lived in the midst of the great Kansas prairies. ", answer: '' },
+    { type: "question", content: "2. Their house was small, for the lumber to build it had to be carried by wagon many miles.", answer: '' },
+    // { type: "check", content: "Translated all sentences. " },
+  ],
+};

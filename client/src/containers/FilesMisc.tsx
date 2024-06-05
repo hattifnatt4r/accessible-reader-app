@@ -55,7 +55,7 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null, onUpda
   const [message, setMessage] = useState('');
   const [form, setForm] = useState({ filename: "", title: "" });
   const appStore = window.app;
-  const isSharedFile = file?.person_id == 0;
+  const isSharedFile = file?.person_id === 0;
 
   useEffect(() => {
     setForm({ filename: file?.filename || '', title: file?.title || '' });

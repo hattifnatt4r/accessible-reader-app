@@ -5,11 +5,24 @@
   height: 100vh;
   height: 100dvh;
   --ptop: 1.5rem; /* padding top */
+  --fontsize: 1rem;
 }
+.fview_100 {
+  --fontsize: 1rem;
+}
+.fview_125 {
+  --fontsize: 1.25rem;
+}
+.fview_150 {
+  --fontsize: 1.5rem;
+}
+.fview_200 {
+  --fontsize: 2rem;
+}
+
 
 .fview__file {
   position: absolute;
-  
   width: calc(100vw - var(--rwidth));
   height: calc(100%);
   background-color: white;
@@ -29,55 +42,21 @@
   font-size: 1rem;
   margin-bottom: 1rem;
 }
-
-.fview__title {
+.fview__p_title {
   font-family: "Montserrat", sans-serif;
-  font-size: 1.7rem;
-  line-height: 3rem;
   margin-bottom: 1rem;
   font-weight: 600;
   color: rgba(0,0,0,0.7);
+  font-size: calc(var(--fontsize) * 1.7);
+  line-height: calc(var(--fontsize) * 1.7 * 1.5);
 }
 .fview__body {
-  font-size: 1rem;
-  line-height: 1.8rem;
+  padding-bottom: 30vh;
   color: rgba(0,0,0,0.8);
+  font-size: calc(var(--fontsize));
+  line-height: calc(var(--fontsize) * 1.8);
   /* white-space-collapse: preserve; */ 
 }
-.fview_100 .fview__body {
-  font-size: calc(1rem * 1);
-  line-height: calc(1.8rem * 1);
-}
-.fview_200 .fview__body {
-  font-size: calc(1rem * 2);
-  line-height: calc(1.8rem * 2);
-}
-.fview_150 .fview__body {
-  font-size: calc(1rem * 1.5);
-  line-height: calc(1.8rem * 1.5);
-}
-.fview_125 .fview__body {
-  font-size: calc(1rem * 1.25);
-  line-height: calc(1.8rem * 1.25);
-}
-
-.fview_100 .fview__title {
-  font-size: calc(1.7rem * 1);
-  line-height: calc(2.5rem * 1);
-}
-.fview_200 .fview__title {
-  font-size: calc(1.7rem * 2);
-  line-height: calc(2.5rem * 2);
-}
-.fview_150 .fview__title {
-  font-size: calc(1.7rem * 1.5);
-  line-height: calc(2.5rem * 1.5);
-}
-.fview_125 .fview__title {
-  font-size: calc(1.7rem * 1.25);
-  line-height: calc(2.5rem * 1.25);
-}
-
 
 .fview__p {
   position: relative;
@@ -99,17 +78,6 @@
 
 
 /* select paragraph button */
-/*
-.fview__p::before {
-  display: inline-block;
-  height: 100%;
-  width: 1px;
-  content: '';
-  position: absolute;
-  left: -1.5rem;
-  border-left: 1px solid #97b0c1;
-}
-*/
 .fview__select-p-btn {
   position: absolute;
   --p-left: min(2rem, 3vw);
@@ -139,7 +107,9 @@
 
 
 /* textbook */
-.fview__comment {
+.fview__p__answer {
   border: 1px solid rgba(0,0,0,0.1);
-  margin-left: min(2rem, 2vw);
+  padding: 0.1rem 1rem;
+  margin: 0.3rem 0 2rem min(4rem, 4vw);
+  border-radius: 0.2rem;
 }
