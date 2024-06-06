@@ -15,7 +15,9 @@ export const UserSettings: React.FC = observer(() => {
       <div className="page-simple__text">
         {isLoggedIn && (
           <>
-            Username: {appStore.userId}
+            User ID: {appStore.userInfo.id}
+            <br/>
+            User Name: {appStore.userId}
             <br/>
             Email: {appStore.userInfo.email}
             <br/>

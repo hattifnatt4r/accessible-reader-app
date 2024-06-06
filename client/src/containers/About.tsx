@@ -14,13 +14,13 @@ export function About() {
         <ul>
           <li>upload text files,</li>
           <li>highlight and narrate text by word/sentence/paragraph,</li>
-          <li>edit selected text with special keyboard, </li>
+          <li>edit selected text with a special keyboard, </li>
           <li>change font size and keyboard design,</li>
-          <li>send messages between registered app users, * in development</li>
-          <li>create interactive notebooks for learning, * in development</li>
+          <li>create interactive taskbooks for learning, * in development</li>
+          <li>send messages between registered users, * in development</li>
         </ul>
         
-        The app has large easy-to-click buttons, and large adjustable font size.
+        The app has large easy-to-click buttons, adjustable font size.
 
         <br/>
         <br/>
