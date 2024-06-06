@@ -52,7 +52,7 @@ export const Fileview = observer(() => {
     <div className={classNames(cl)}>
       <div className="fview__file">
         <div className="fview__filename">
-          {file?.folder}/{file?.filename} {isShared && "(View-only)"}
+          {file?.folder}/&thinsp;{file?.filename} {isShared && "(View-only)"}
         </div>
         <div className="fview__body">
           {paragraphs.map((p: ReaderParagraphType) => {
@@ -85,12 +85,16 @@ export const Fileview = observer(() => {
         {store.isSpeaking && <PageButton onClick={store.narratePause} iconSvgname="pause" />}
         {!store.isSpeaking && <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconSvgname="play" disabled={!narrateSupported} />}
 
-        <PageButton onClick={store.changeSelectionType}>
-          Select <br />
-          <div>
-            {store.selectionType === 'w' && <>&bull;</>}
-            {store.selectionType === 's' && <>&bull; &bull;</>}
-            {store.selectionType === 'p' && <>&bull; &bull; &bull;</>}
+        <PageButton onClick={store.changeSelectionType} className="fview__btn-select">
+          <div className="icon-mask page-button__svg">
+            <div className="fview__btn-select__text">
+              Select <br />
+              <div>
+                {store.selectionType === 'w' && <>&bull;</>}
+                {store.selectionType === 's' && <>&bull; &bull;</>}
+                {store.selectionType === 'p' && <>&bull; &bull; &bull;</>}
+              </div>
+            </div>
           </div>
         </PageButton>
 
@@ -134,7 +138,7 @@ function SelectParagraphButton(props: { pIDSelected: number, onClick: (pID: numb
 function ParagraphWrap(props: { paragraph: ReaderParagraphType, children: React.ReactNode, id: number, idSelected: number, selectionType: string }) {
   const { paragraph, children, id, idSelected, selectionType } = props;
 
-  const highlightParagraph = (paragraph.type === 'answer' && !paragraph.content) || selectionType === 'p';
+  const highlightParagraph = selectionType === 'p' || !paragraph.content;
   const pcl = {
     'fview__p': 1,
     'fview__p_selected': paragraph.id === idSelected && highlightParagraph,

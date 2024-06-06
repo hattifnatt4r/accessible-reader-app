@@ -30,8 +30,9 @@ export class FilesStore {
   @action setFileID = (id : FileIDType) => {
     this.selectedFileID = id;
     const appStore = window.app;
-    if (appStore.userSettings.filesNarrateSelection === '1' && getNarrateSupported()) {
-      speakAll([this.getFile(id)?.filename || '']);
+    const file = this.getFile(id);
+    if (appStore.userSettings.filesNarrateSelection === '1' && getNarrateSupported() && file) {
+      speakAll([file.filename || '', file.title || '']);
     }
     localStorage.setItem('filesSelectedId', (id || '').toString());
   }

@@ -5,7 +5,7 @@
   height: 100dvh;
   overflow: hidden;
 
-  --hbot: min(6rem, 10dvh);
+  --hbot: min(10rem, 16dvh);
 }
 
 .fhome__files {
@@ -16,12 +16,16 @@
   height: calc(100dvh - 2*var(--ptop));
   overflow-y: auto;
 }
+.fhome__path {
+  padding-left: 1rem;
+  padding-top: 0.5rem;
+}
 .fhome__fileicons {
   position: relative;
   height: calc(100% - var(--hbot));
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 1rem 0;
+  padding: 0rem 0 1rem 0;
 }
 
 
@@ -34,20 +38,25 @@
   left: 0;
   height: var(--hbot);
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 1rem 0 1rem;
+}
+.fhome__magnify_empty {
+  opacity: 0.4;
+}
+.fhome__magnify__text {
   font-family: "Montserrat", sans-serif;
   font-size: 2.5rem;
   font-weight: 600;
   line-height: calc(var(--hbot) - 1px);
   color: rgba(0,0,0,0.7);
-  white-space: nowrap;
-  overflow-x: auto;
-  background-color: white;
   border-top: solid 1px #E9EEF0;
-  overflow-y: hidden;
-}
-.fhome__magnify_empty {
-  opacity: 0.4;
-}
 
+  white-space: nowrap;
+  background-color: white;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+.fhome__magnify__title {
+}
 

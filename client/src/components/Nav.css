@@ -31,6 +31,14 @@
   max-width: var(--nav-btn-w);
   max-height: var(--nav-btn-w);
 }
+@media (max-width: 400px) {
+  .nav-link {
+    min-width: 6.5rem;
+  }
+  .nav-link__svg {
+    --nav-btn-w: min(4rem, 27dvw);
+  }
+}
 .nav-link .icon-mask::before {
   background-color: var(--color_b4);
   opacity: 0.85;

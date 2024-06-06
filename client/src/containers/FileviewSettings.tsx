@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { PageButton } from '../components/PageControls';
 import { FormFieldOptions } from '../components/FormButton';
+import { getNarrateSupported } from '../utils/misc';
 import './FileviewSettings.css';
 
 
@@ -63,6 +64,9 @@ export const FileviewSettings = observer((props : { className?: string }) => {
               { v: '100', l: '100%' },
             ]}
           />
+          <div style={{ marginTop: '2rem' }}>
+            {!getNarrateSupported() && <div className="note_error">Narrate feature is not supported in your browser.</div>} 
+          </div>
         </ModalBody>
       </Modal>
     </>

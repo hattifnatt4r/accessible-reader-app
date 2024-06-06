@@ -31,7 +31,7 @@ export function FilesFile(props : { file: ReaderFileType, className?: string, se
         <Icon name={isSharedFile ? 'lock' : 'draft'} filled className="fhome-file__icon" />
         
         <div className="fhome-file__name">
-          {file?.filename} - {file?.title}
+          {file?.filename} <span className="fhome-file__title">- {file?.title}</span>
         </div>
       </div>
     </div>

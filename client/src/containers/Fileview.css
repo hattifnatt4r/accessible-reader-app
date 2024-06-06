@@ -113,3 +113,12 @@
   margin: 0.3rem 0 2rem min(4rem, 4vw);
   border-radius: 0.2rem;
 }
+
+.fview__btn-select__text {
+  position: relative;
+  font-size: min(1rem, 3dvh, 4dvw);
+  line-height: min(1.2rem, 3.5dvh, 4dvw);
+  color: var(--color_f1);
+  font-weight: 600;
+  padding-top: min(0.8rem, 2dvh);
+}
