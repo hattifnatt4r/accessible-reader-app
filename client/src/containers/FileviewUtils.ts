@@ -1,5 +1,3 @@
-import { toJS } from "mobx";
-import { dataExampleJsonfile } from "../consts/dataExamples";
 import { ReaderContentItemType, ReaderParagraphType } from "../consts/dataTypes";
 
 export type TextVarType = { maxP: number, maxS: number, maxW: number, pID: number, sID: number, wID: number };
@@ -104,7 +102,7 @@ export function changeSelectionW(diff: number, textVar: TextVarType, paragraphs:
 
 
 
-function getReplaceParagraphs(textEdited: string, selectionType: SelectionTypeType, textVar: TextVarType, paragraphsOld: ReaderParagraphType[]): ReaderParagraphType[] { 
+export function getReplaceParagraphs(textEdited: string, selectionType: SelectionTypeType, textVar: TextVarType, paragraphsOld: ReaderParagraphType[]): ReaderParagraphType[] { 
   const sentencesOld = getSplitParagraph(paragraphsOld[textVar.pID]);
 
   if (selectionType === 'w') {
@@ -127,17 +125,14 @@ function getReplaceParagraphs(textEdited: string, selectionType: SelectionTypeTy
   return paragraphs;
 }
 
-export function replaceText(textEdited: string, selectionType: SelectionTypeType, textVar: TextVarType, paragraphsOld: ReaderParagraphType[]) : [string, string] {
-  const paragraphs = getReplaceParagraphs(textEdited, selectionType, textVar, paragraphsOld);
+export function getTexttosave(paragraphs: ReaderParagraphType[]) : [string, string] {
   const titleToSave = paragraphs[0].content;
   const textToSave = paragraphs.slice(1).map((p:ReaderParagraphType) => p.content).join('<br>');
   
   return [titleToSave, textToSave];
 }
 
-export function replaceTextJson(textEdited: string, selectionType: SelectionTypeType, textVar: TextVarType, paragraphsOld: ReaderParagraphType[]): [string, string] {
-  let paragraphs = getReplaceParagraphs(textEdited, selectionType, textVar, paragraphsOld);
-
+export function getTexttosaveJson(paragraphs: ReaderParagraphType[]): [string, string] {
   // combine question+answer into one item
   let paragraphsNew = paragraphs.map(p => ({ type: p.type, answer: '', content: p.content }));
   paragraphsNew.forEach((p, ii: number) => {
@@ -152,7 +147,19 @@ export function replaceTextJson(textEdited: string, selectionType: SelectionType
   return [titleToSave, textToSave]
 }
 
-export function getParagraphsFromJSON(content: string): ReaderParagraphType[] {
+export function getParagraphsFromContent(content: string, title: string): ReaderParagraphType[] {
+  let newString = content.replace('</div><div>', '<br>');
+  newString = newString.replace('<br/>', '<br>');
+  newString = newString.replace('<br />', '<br>');
+  newString = newString.replace('</div><br><div>', '<br>');
+  newString = newString.replace('</div>', '');
+  newString = newString.replace('<div>', '');
+  const paragraphs = getParagraphs(newString || null);
+  paragraphs.unshift(getTitleParagraph(title));
+  return paragraphs;
+}
+
+export function getParagraphsFromJson(content: string): ReaderParagraphType[] {
 
   const contentJson = content ? JSON.parse(content) : {};
   const items = contentJson.items || [];

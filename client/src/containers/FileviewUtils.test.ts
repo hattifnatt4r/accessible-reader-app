@@ -1,4 +1,4 @@
-import { changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getSentences, getSplitParagraph, replaceText, setTextParams } from "./FileviewUtils"; 
+import { changeSelectionP, changeSelectionS, changeSelectionW, getParagraphs, getParagraphsFromContent, getReplaceParagraphs, getSentences, getSplitParagraph, getTexttosave, setTextParams } from "./FileviewUtils"; 
 
 
 const textAll = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
@@ -110,29 +110,87 @@ describe('changeSelection', () => {
     expect(changeSelectionW(-1, { maxP: 4, maxS: 2, maxW: 7, pID: 0, sID: 0, wID: 0 }, paragraphs)).toEqual({ maxP: 4, maxS: 2, maxW: 7, pID: 0, sID: 0, wID: 0 });
 
   });
+})
 
-  describe('replaceText', () => {
-    it('should replace edited text', () => {      
-      const paragraphs = [
-        { id: 0, type: '', content: 'Book Title' },
-        { id: 1, type: '', content: 'Lorem ipsum dolor sit amet. Consectetur elit.' }, 
-        { id: 2, type: '', content: 'Excepteur sint, sunt in culpa qui. ' }, 
-        { id: 3, type: '', content: '' }, 
-        { id: 4, type: '', content: 'Excepteur sint occaecat cupidatat non proident.' }
-      ];
+describe('getReplaceParagraphs', () => {
+  it('should replace edited text', () => {      
+    const paragraphs = [
+      { id: 0, type: '', content: 'Book Title' },
+      { id: 1, type: '', content: 'Lorem ipsum dolor sit amet. Consectetur elit.' }, 
+      { id: 2, type: '', content: 'Excepteur sint, sunt in culpa qui. ' }, 
+      { id: 3, type: '', content: '' }, 
+      { id: 4, type: '', content: 'Excepteur sint occaecat cupidatat non proident.' }
+    ];
 
-      const r1 = replaceText('L', 'w', { pID: 1, sID: 0, wID: 0, maxP: 4, maxS: 1, maxW: 4 }, paragraphs);
-      expect(r1).toEqual(["Book Title", "L ipsum dolor sit amet. Consectetur elit.<br>Excepteur sint, sunt in culpa qui. <br><br>Excepteur sint occaecat cupidatat non proident."]);
-      
-      const r2 = replaceText('L.', 's', { pID: 1, sID: 0, wID: 0, maxP: 4, maxS: 1, maxW: 4 }, paragraphs);
-      expect(r2).toEqual(["Book Title", "L. Consectetur elit.<br>Excepteur sint, sunt in culpa qui. <br><br>Excepteur sint occaecat cupidatat non proident."]);
-      
-      const r3 = replaceText('L.', 'p', { pID: 1, sID: 0, wID: 0, maxP: 4, maxS: 1, maxW: 4 }, paragraphs);
-      expect(r3).toEqual(["Book Title", "L.<br>Excepteur sint, sunt in culpa qui. <br><br>Excepteur sint occaecat cupidatat non proident."]);
-      
-      const r4 = replaceText('L.', 's', { pID: 1, sID: 1, wID: 0, maxP: 4, maxS: 1, maxW: 1 }, paragraphs);
-      expect(r4).toEqual(["Book Title", "Lorem ipsum dolor sit amet. L.<br>Excepteur sint, sunt in culpa qui. <br><br>Excepteur sint occaecat cupidatat non proident."]);
-      
-    });
-  })
+    
+    const r1 = getReplaceParagraphs('L', 'w', { pID: 1, sID: 0, wID: 0, maxP: 4, maxS: 1, maxW: 4 }, paragraphs);
+    expect(r1).toEqual([
+      { id: 0, type: '', content: 'Book Title' },
+      { id: 1, type: '', content: 'L ipsum dolor sit amet. Consectetur elit.' }, 
+      { id: 2, type: '', content: 'Excepteur sint, sunt in culpa qui. ' }, 
+      { id: 3, type: '', content: '' }, 
+      { id: 4, type: '', content: 'Excepteur sint occaecat cupidatat non proident.' }
+    ]);
+    
+    const r2 = getReplaceParagraphs('L.', 's', { pID: 1, sID: 0, wID: 0, maxP: 4, maxS: 1, maxW: 4 }, paragraphs);
+    expect(r2).toEqual([
+      { id: 0, type: '', content: 'Book Title' },
+      { id: 1, type: '', content: 'L. Consectetur elit.' }, 
+      { id: 2, type: '', content: 'Excepteur sint, sunt in culpa qui. ' }, 
+      { id: 3, type: '', content: '' }, 
+      { id: 4, type: '', content: 'Excepteur sint occaecat cupidatat non proident.' }
+    ]);
+    
+    const r3 = getReplaceParagraphs('L.', 'p', { pID: 1, sID: 0, wID: 0, maxP: 4, maxS: 1, maxW: 4 }, paragraphs);
+    expect(r3).toEqual([
+      { id: 0, type: '', content: 'Book Title' },
+      { id: 1, type: '', content: 'L.' }, 
+      { id: 2, type: '', content: 'Excepteur sint, sunt in culpa qui. ' }, 
+      { id: 3, type: '', content: '' }, 
+      { id: 4, type: '', content: 'Excepteur sint occaecat cupidatat non proident.' }
+    ]);
+    
+    const r4 = getReplaceParagraphs('L.', 's', { pID: 1, sID: 1, wID: 0, maxP: 4, maxS: 1, maxW: 1 }, paragraphs);
+    expect(r4).toEqual([
+      { id: 0, type: '', content: 'Book Title' },
+      { id: 1, type: '', content: 'Lorem ipsum dolor sit amet. L.' }, 
+      { id: 2, type: '', content: 'Excepteur sint, sunt in culpa qui. ' }, 
+      { id: 3, type: '', content: '' }, 
+      { id: 4, type: '', content: 'Excepteur sint occaecat cupidatat non proident.' }
+    ]);
+    
+  });
+})
+
+describe('getParagraphsFromContent', () => {
+  it('should convert editor text to paragraphs', () => {
+    expect(getParagraphsFromContent('line1<br><div><br></div><div>line2</div><br>Next line 3<br><br>', 'title')).toEqual(
+      [
+        {"content": "title", "id": 0, "type": ""},
+        {"content": "line1", "id": 1, "type": ""},
+        {"content": "", "id": 2, "type": ""},
+        {"content": "", "id": 3, "type": ""},
+        {"content": "line2", "id": 4, "type": ""},
+        {"content": "Next line 3", "id": 5, "type": ""},
+        {"content": "", "id": 6, "type": ""},
+        {"content": "", "id": 7, "type": ""}
+      ]);
+  });
+})
+
+// todo
+describe('getTexttosave', () => {
+  it('should convert paragraphs to plain text', () => {
+    
+  });
+})
+describe('getTexttosaveJson', () => {
+  it('should convert paragraphs to stringified json', () => {
+    
+  });
+})
+describe('getParagraphsFromJson', () => {
+  it('should convert stringified json to paragraphs', () => {
+    
+  });
 })

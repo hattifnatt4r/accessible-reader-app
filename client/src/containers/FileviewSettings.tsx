@@ -4,10 +4,10 @@ import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { PageButton } from '../components/PageControls';
 import { FormFieldOptions } from '../components/FormButton';
 import { getNarrateSupported } from '../utils/misc';
-import './FileviewSettings.css';
 
 
-export const FileviewSettings = observer((props : { className?: string }) => {
+export const FileviewSettings = observer((props: { viewerMode: string, onModeChange: (val: string) => void, canEdit: boolean }) => {
+  const { onModeChange, viewerMode, canEdit } = props;
   const [open, setOpen] = useState(false);
   const appStore = window.app;
   const form = appStore.userSettings;
@@ -23,11 +23,11 @@ export const FileviewSettings = observer((props : { className?: string }) => {
 
   return (
     <>
-      <PageButton onClick={toggle} iconSvgname="settings" className="page-button_outline" />
+      <PageButton onClick={toggle} iconSvgname="settings" />
 
       <Modal isOpen={open} toggle={toggle}>
         <ModalHeader toggle={toggle}>
-          Viewer viewer settings
+          Viewer settings
         </ModalHeader>
         <ModalBody>
           <FormFieldOptions
@@ -64,9 +64,22 @@ export const FileviewSettings = observer((props : { className?: string }) => {
               { v: '100', l: '100%' },
             ]}
           />
-          <div style={{ marginTop: '2rem' }}>
+          <div style={{ marginTop: '-1.5rem', marginBottom: '3rem' }}>
             {!getNarrateSupported() && <div className="note_error">Narrate feature is not supported in your browser.</div>} 
           </div>
+
+          {canEdit && (
+            <FormFieldOptions
+              form={{ mode: viewerMode }}
+              name="mode"
+              title="View mode"
+              onChange={(name, val) => onModeChange(val)}
+              options={[
+                { v: 'view', l: 'View' },
+                { v: 'edit', l: 'Edit' },
+              ]}
+            />
+          )}
         </ModalBody>
       </Modal>
     </>

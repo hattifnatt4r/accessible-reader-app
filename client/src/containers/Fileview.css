@@ -106,6 +106,12 @@
 }
 
 
+.fview__editcontent {
+  border: 1px solid #ccc;
+  min-height: 10rem;
+  padding: 1rem;
+}
+
 /* textbook */
 .fview__p__answer {
   border: 1px solid rgba(0,0,0,0.1);

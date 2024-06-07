@@ -7,11 +7,13 @@ import {
   changeSelectionS,
   changeSelectionW,
   getParagraphs,
-  getParagraphsFromJSON,
+  getParagraphsFromContent,
+  getParagraphsFromJson,
+  getReplaceParagraphs,
   getSplitParagraph,
   getTitleParagraph,
-  replaceText,
-  replaceTextJson,
+  getTexttosave,
+  getTexttosaveJson,
   setTextParams
 } from "./FileviewUtils";
 import { speakAll } from "../utils/narrate";
@@ -30,6 +32,8 @@ export class FileviewStore {
   @observable isSpeaking: boolean = false;
   @observable isPaused: boolean = false;
   @observable isEditing: boolean = false;
+  @observable viewerMode: string = 'view';
+  editContent: string = '';
 
   constructor(props : { id:FileIDType }) {
     makeObservable(this);
@@ -51,7 +55,7 @@ export class FileviewStore {
     const { content, ...rest } = res.value[0];
     this.file = rest;
 
-    const paragraphs = rest.filetype === 'json' ? getParagraphsFromJSON(content || '') : getParagraphs(content || null);
+    const paragraphs = rest.filetype === 'json' ? getParagraphsFromJson(content || '') : getParagraphs(content || null);
     const title = getTitleParagraph(rest.title || '');
     this.paragraphs = [title, ...paragraphs];
     this.textVar = setTextParams(this.textVar, this.paragraphs);
@@ -59,15 +63,16 @@ export class FileviewStore {
   }
 
   @action
-  save = async (textEdited: string) => {
+  save = async () => {
     const filetype = this.file?.filetype;
     let res: ApiResponseType = {};
   
     if (filetype === 'json') {
-      const [title, text] = replaceTextJson(textEdited, this.selectionType, this.textVar, this.paragraphs);
+      // const text2 = JSON.stringify(dataExampleJsonfile);
+      const [title, text] = getTexttosaveJson(this.paragraphs);
       res = await post('file_upd', { id: this.file?.id, title: title, content: text });
     } else {
-      const [title, text] = replaceText(textEdited, this.selectionType, this.textVar, this.paragraphs);
+      const [title, text] = getTexttosave(this.paragraphs);
       res = await post('file_upd', { id: this.file?.id, title: title, content: text });
     }
 
@@ -77,6 +82,32 @@ export class FileviewStore {
     this.isEditing = false;
   }
 
+  @action
+  replaceParagraphs = (textEdited: string) => {
+    const paragraphs = getReplaceParagraphs(textEdited, this.selectionType, this.textVar, this.paragraphs);
+    this.paragraphs = paragraphs;
+    this.isEditing = false;
+  }
+
+  // inline edit
+  getContentFromParagraphs = () => {
+    const textToSave = this.paragraphs.slice(1).map((p:ReaderParagraphType) => p.content).join('<br>');
+    return textToSave;
+  }
+  @action
+  onContentChange = (val: string) => {
+    this.editContent = val;
+  }
+  @action
+  onModeChange = (mode: string) => {
+    this.viewerMode = mode;
+    if (mode === 'view') {
+      this.paragraphs = getParagraphsFromContent(this.editContent, this.file?.title || '');
+    }
+  }
+
+
+  // view mode
   getSelectedText = () => {
     let selectedText = '';
     if (this.selectionType === 'p') { selectedText = this.paragraphs[this.textVar.pID].content; }

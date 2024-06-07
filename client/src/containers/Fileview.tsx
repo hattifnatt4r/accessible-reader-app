@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
 import { getNarrateSupported } from '../utils/misc';
 import { ReaderParagraphType } from '../consts/dataTypes';
 import { Icon } from '../components/Icon';
+import { Button } from '../components/Button';
 import { PageButton, PageControls } from '../components/PageControls';
 import { FileviewStore } from './FileviewStore';
 import { NavBackButton, NavModal } from '../components/Nav';
@@ -26,8 +27,12 @@ export const Fileview = observer(() => {
 
 
   if (!store) return null;
+
   const file = store?.file;
-  const isShared = file?.person_id === 0;  
+  const isShared = file?.person_id === 0;
+  const selectedParagraph = store.paragraphs[store.textVar.pID] || {};
+  const canEditFile = file?.author_id === appStore.userInfo.id;
+  const canEditLine = file?.author_id === appStore.userInfo.id || selectedParagraph.type === 'answer';
 
   const paragraphs = store.paragraphs;
   const sentences = store.sentences;
@@ -55,7 +60,16 @@ export const Fileview = observer(() => {
           {file?.folder}/&thinsp;{file?.filename} {isShared && "(View-only)"}
         </div>
         <div className="fview__body">
-          {paragraphs.map((p: ReaderParagraphType) => {
+          {store.viewerMode === 'edit' && (
+            <>
+              <ParagraphWrap key={0} paragraph={paragraphs[0]} id={0} idSelected={1} selectionType={'p'}>
+                {paragraphs[0].content}
+              </ParagraphWrap>
+              <Button style={{ marginTop: '-1rem', marginBottom: '1rem' }} onClick={() => { store.onModeChange('view'); store.save(); }}>Save</Button>
+              <FileviewEditable getContentInitial={store.getContentFromParagraphs} onChange={store.onContentChange} />
+            </>
+          )}
+          {store.viewerMode !== 'edit' && paragraphs.map((p: ReaderParagraphType) => {
             const pcontent = p.content;
             const pID = p.id;
             return (
@@ -75,12 +89,12 @@ export const Fileview = observer(() => {
       </div>
 
       <PageControls>
-        <FileviewSettings />
+        <FileviewSettings viewerMode={store.viewerMode} onModeChange={store.onModeChange} canEdit={canEditFile} />
         <NavBackButton />
         <PageButton empty />
         <NavModal />
 
-        <PageButton onClick={store.toggleEdit} iconSvgname="edit-button" />
+        <PageButton onClick={store.toggleEdit} iconSvgname="edit-button" disabled={!canEditLine} />
 
         {store.isSpeaking && <PageButton onClick={store.narratePause} iconSvgname="pause" />}
         {!store.isSpeaking && <PageButton onClick={store.isPaused ? store.narrateResume : store.narrateAll} iconSvgname="play" disabled={!narrateSupported} />}
@@ -109,10 +123,46 @@ export const Fileview = observer(() => {
         <PageButton iconSvgname="arrow-forward" onClick={() => store.changeSelection(1)} />
       </PageControls>
 
-      {store.isEditing && <Editor open={store.isEditing} text={store.getSelectedText()} toggle={store.toggleEdit} save={store.save} readonly={isShared} />}
+      {store.isEditing && (
+        <Editor
+          open={store.isEditing}
+          text={store.getSelectedText()}
+          toggle={store.toggleEdit}
+          save={(t) => { store.replaceParagraphs(t); store.save(); }}
+          readonly={isShared}
+        />
+      )}
     </div>
   );
 });
+
+
+function FileviewEditable(props: { getContentInitial: () => string, onChange: (val: string) => void }) {
+  const { onChange, getContentInitial } = props;
+  const [content, setContent] = useState<string>('');
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (divRef.current) {
+      divRef.current.innerHTML = getContentInitial();
+      onChange(divRef.current.innerHTML);
+    }
+  }, []);
+
+  const handleInput = () => {
+    if (divRef.current) {
+      setContent(divRef.current.innerHTML);
+      onChange(divRef.current.innerHTML);
+    }
+  };
+
+  return (
+    <>
+      <div ref={divRef} contentEditable onInput={handleInput} className="fview__editcontent"></div>
+      {/* <p>Content: {content}</p> */}
+    </>
+  );
+};
 
 
 function SelectParagraphButton(props: { pIDSelected: number, onClick: (pID: number) => void, paragraph: ReaderParagraphType }) {

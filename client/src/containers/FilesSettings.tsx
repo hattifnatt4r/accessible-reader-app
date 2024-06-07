@@ -4,7 +4,6 @@ import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { PageButton } from '../components/PageControls';
 import { FormFieldOptions } from '../components/FormButton';
 import { getNarrateSupported } from '../utils/misc';
-import './FileviewSettings.css';
 
 
 export const FilesSettings = observer((props : { className?: string }) => {
