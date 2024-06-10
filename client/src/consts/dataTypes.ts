@@ -41,6 +41,7 @@ export type UserProfile = {
 
 export type UserSettingsType = {
   globalVolume: '25' | '50' | '75' | '100',
+  globalNarrateRate: number, // 0-100 %
   filesNarrateSelection: '0' | '1',
   readerFontSize: string, // 100-300
   readerNarrateSelection: '0' | '1',

@@ -5,6 +5,7 @@ import { post } from "./utils/query";
 export class AppStore {
   @observable userSettings : UserSettingsType = {
     globalVolume: '100',
+    globalNarrateRate: 100,
     filesNarrateSelection: '1',
     readerFontSize: '100',
     readerNarrateSelection: '1',
