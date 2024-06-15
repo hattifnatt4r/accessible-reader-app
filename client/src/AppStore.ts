@@ -2,18 +2,21 @@ import { makeObservable, observable, action } from "mobx";
 import { UserInfoType, UserSettingsType } from "./consts/dataTypes";
 import { post } from "./utils/query";
 
+const userInfoDefault: UserInfoType = { login_name: '', id: 1, email: '', fullname: '' };
+const userSettingsDefault: UserSettingsType = {
+  globalVolume: '100',
+  globalNarrateRate: '100',
+  filesNarrateSelection: '1',
+  readerFontSize: '100',
+  readerNarrateSelection: '1',
+  editorFontSize: '125',
+  editorNarrateSelection: '1',
+  editorLayout: '2',
+};
+
 export class AppStore {
-  @observable userSettings : UserSettingsType = {
-    globalVolume: '100',
-    globalNarrateRate: 100,
-    filesNarrateSelection: '1',
-    readerFontSize: '100',
-    readerNarrateSelection: '1',
-    editorFontSize: '125',
-    editorNarrateSelection: '1',
-    editorLayout: '2',
-  };
-  @observable userInfo: UserInfoType | null = null;
+  @observable userSettings : UserSettingsType = userSettingsDefault;
+  @observable userInfo: UserInfoType = userInfoDefault;
   @observable userId: string = '';
   @observable token: string  = '';
   @observable isLoadingSession: boolean = true;
@@ -24,8 +27,7 @@ export class AppStore {
     const settings = localStorage.getItem('userSettings');
     if (settings) {
       const s = JSON.parse(settings);
-      if (s.filesNarrateSelection === undefined) s.filesNarrateSelection = 1;
-      if (s.readerNarrateSelection === undefined) s.readerNarrateSelection = 1;
+      this.userSettings = { ...userSettingsDefault, ...s };
       this.userSettings = s;
     }
 
@@ -49,7 +51,7 @@ export class AppStore {
   @action
   setSession = (token: string, userInfo: UserInfoType | null) => {
     this.token = token;
-    this.userInfo = userInfo ?? null;
+    this.userInfo = userInfo ?? userInfoDefault;
     this.userId = userInfo?.login_name || '';
     localStorage.setItem('token', token);
   }

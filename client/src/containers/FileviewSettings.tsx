@@ -64,6 +64,17 @@ export const FileviewSettings = observer((props: { viewerMode: string, onModeCha
               { v: '100', l: '100%' },
             ]}
           />
+          <FormFieldOptions
+            form={form}
+            name="globalNarrateRate"
+            title="Narrate Speed (global)"
+            onChange={setValue}
+            options={[
+              { v: '50', l: '50%' },
+              { v: '75', l: '75%' },
+              { v: '100', l: '100%' },
+            ]}
+          />
           <div style={{ marginTop: '-1.5rem', marginBottom: '3rem' }}>
             {!getNarrateSupported() && <div className="note_error">Narrate feature is not supported in your browser.</div>} 
           </div>
