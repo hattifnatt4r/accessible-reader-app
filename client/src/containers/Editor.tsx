@@ -131,6 +131,18 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
     setTextvalue(textvalue.substring(0, cursor) + char + textvalue.substring(cursor, textvalue.length));
     setCursor(cursor + 1);
   }
+
+  function handleKeyboardChar(char: string) {
+    const mapSomeKeys: {[key:string] : string} = { 'Enter': '\n' };
+    char = mapSomeKeys[char] || char;
+    setCursor((prevCursor) => {
+      setTextvalue((prevTextvalue) => {
+        const newTextvalue = prevTextvalue.substring(0, prevCursor) + char + prevTextvalue.substring(prevCursor);
+        return newTextvalue;
+      });
+      return prevCursor + 1;
+    });
+  }
   function handleSave() {
     save(textvalue);
   }
@@ -149,11 +161,13 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
   function onKeydown(event: KeyboardEvent) {
     // support keyboard input
     const key = event.key;
+
     if (key === 'Backspace') { document.getElementById('fedit-erase')?.click(); }
-    if (key === 'ArrowRight') { document.getElementById('fedit-next')?.click(); }
-    if (key === 'ArrowLeft') { document.getElementById('fedit-prev')?.click(); }
-    if (key === ' ') { document.getElementById('fedit-space')?.click(); }
-    if (/^[a-z0-9]+$/.test(key)) { document.getElementById('fedit-'+key)?.click(); }
+    else if (key === 'ArrowRight') { document.getElementById('fedit-next')?.click(); }
+    else if (key === 'ArrowLeft') { document.getElementById('fedit-prev')?.click(); }
+    else if ([...simpleChars, ' ', 'enter'].includes(key.toLowerCase())) {
+      handleKeyboardChar(key);
+    }
   }
 
   useEffect(() => {
@@ -169,7 +183,7 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
 
   if (!open) return null;
 
-  const layoutID = appStore.userSettings.editorLayout || 2;
+  const layoutID = appStore.userSettings.editorLayout || '2';
   const layout : LayoutType = layouts.find(l => l.id === layoutID) || layouts[0];
   const modeIndex : 'm1' | 'm2' = mode === 'm1' ? 'm1' : 'm2';
   const clContainer = {
@@ -206,17 +220,20 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
   ];
   const [textBeforeCursor, wordBeforeCursor, wordAfterCursor, textAfterCursor] = getTextAroundCursor(textvalue, cursor);
 
-
+  function getTextMultiline(text: string) {
+    const lines = text.split('\n');
+    return lines.map((t, i) => <span key={i}>{t}{i < lines.length-1 && <br />}</span>)
+  }
   return (
     <div className={classNames(clContainer)}>
       <div className={classNames(clText)} id="fedit__text">
-        {textBeforeCursor}
+        {getTextMultiline(textBeforeCursor)}
         <span className="fedit__cursor-word">
-          {wordBeforeCursor}
+          {getTextMultiline(wordBeforeCursor)}
           <span className="fedit__cursor">|</span>
-          {wordAfterCursor}
+          {getTextMultiline(wordAfterCursor)}
         </span>
-        {' '}{textAfterCursor}
+        {' '}{getTextMultiline(textAfterCursor)}
       </div>
 
       <div className="fedit__controls">
