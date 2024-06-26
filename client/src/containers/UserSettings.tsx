@@ -2,6 +2,8 @@ import React from 'react';
 import { PageSimple } from '../components/PageSimple';
 import { observer } from 'mobx-react-lite';
 import { FormFieldOptions } from '../components/FormButton';
+import { Button } from '../components/Button';
+import { Icon } from '../components/Icon';
 
 export const UserSettings: React.FC = observer(() => {
   const appStore = window.app;
@@ -77,6 +79,10 @@ export const UserSettings: React.FC = observer(() => {
             />
           </>
         )}
+      </div>
+
+      <div>
+        <Button linkButton onClick={() => { window.location.reload(); }}><Icon name="refresh" /> Reload page</Button>
       </div>
     </PageSimple>
   );
