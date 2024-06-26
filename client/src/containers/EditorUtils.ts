@@ -11,3 +11,17 @@ export function getTextAroundCursor(textvalue: string, cursor: number) : [string
   }
   return [textBeforeCursor, wordBeforeCursor, wordAfterCursor, textAfterCursor];
 }
+
+export function clickWithDelay() {
+  let lastClickTime : number | null = null;
+  return (cb: () => void) => {
+    const delaySetup = Number(window.app.userSettings.editorClickDelay) || 0;
+    let delay : number = delaySetup;
+  
+    const now = new Date().getTime();
+    if (!lastClickTime || now > lastClickTime + 1000 * delay) {
+      cb();
+      lastClickTime = now;
+    }
+  }
+}

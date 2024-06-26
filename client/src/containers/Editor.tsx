@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { Icon } from '../components/Icon';
 import { EditorSettings } from './EditorSettings';
-import { getTextAroundCursor } from './EditorUtils';
+import { clickWithDelay, getTextAroundCursor } from './EditorUtils';
 import { speakAll } from '../utils/narrate';
 import './Editor.css';
 
@@ -118,6 +118,7 @@ const layouts : LayoutType[] = [
   },
 ];
 
+const handleClickWithDelay = clickWithDelay();
 
 export const Editor = observer((props: { open: boolean, text: string, toggle: () => void, save: (textEdited: string) => void, readonly?: boolean }) => {
   const { open, text, toggle, save, readonly } = props;
@@ -130,7 +131,7 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
   const layout : LayoutType = layouts.find(l => l.id === layoutID.toString()) || layouts[0];
 
   function narrateOnInput(char: string) {
-    if (window.app.userSettings.editorNarrateInput === '1') {
+    if (window.app.userSettings.editorNarrateInput !== '0') {
       let lang;
       const langConfig = languages.find(l => l.id === layout.lang);
       if (langConfig){
@@ -144,28 +145,36 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
   }
   
   function handleNext() {
-    if (cursor < textvalue.length) {
-      setCursor(cursor + 1);
-      narrateOnInput(textvalue[cursor]);
-    }
+    handleClickWithDelay(() => {
+      if (cursor < textvalue.length) {
+        setCursor(cursor + 1);
+        narrateOnInput(textvalue[cursor]);
+      }
+    });
   }
   function handlePrev() {
-    if (cursor > 0) {
-      setCursor(cursor - 1);
+    handleClickWithDelay(() => {
+      if (cursor > 0) {
+        setCursor(cursor - 1);
 
-      narrateOnInput(textvalue[cursor - 1]);
-    }
+        narrateOnInput(textvalue[cursor - 1]);
+      }
+    });
   }
   function handleErase() {
-    if (cursor > 0) {
-      setTextvalue(textvalue.substring(0, cursor-1) + textvalue.substring(cursor, textvalue.length));
-      setCursor(cursor - 1);
-    }
+    handleClickWithDelay(() => {
+      if (cursor > 0) {
+        setTextvalue(textvalue.substring(0, cursor-1) + textvalue.substring(cursor, textvalue.length));
+        setCursor(cursor - 1);
+      }
+    });
   }
   function handleEnterChar(char: string) {
-    setTextvalue(textvalue.substring(0, cursor) + char + textvalue.substring(cursor, textvalue.length));
-    setCursor(cursor + 1);
-    narrateOnInput(char);
+    handleClickWithDelay(() => {
+      setTextvalue(textvalue.substring(0, cursor) + char + textvalue.substring(cursor, textvalue.length));
+      setCursor(cursor + 1);
+      narrateOnInput(char);
+    });
   }
 
   function handleKeyboardChar(char: string) {
@@ -191,24 +200,30 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
     speakAll([textvalue]);
   }
   function handleToggleMode() {
-    if (mode === 'm1') { setMode('m2'); }
-    else { setMode('m1'); }
+    handleClickWithDelay(() => {
+      if (mode === 'm1') { setMode('m2'); }
+      else { setMode('m1'); }
+    });
   }
   function handleToggleMode2() {
-    if (mode === 'm1') { setMode('m3'); }
-    else { setMode('m1'); }
+    handleClickWithDelay(() => {
+      if (mode === 'm1') { setMode('m3'); }
+      else { setMode('m1'); }
+    });
   }
 
   function onKeydown(event: KeyboardEvent) {
-    // support keyboard input
-    const key = event.key;
+    handleClickWithDelay(() => {
+      // support keyboard input
+      const key = event.key;
 
-    if (key === 'Backspace') { document.getElementById('fedit-erase')?.click(); }
-    else if (key === 'ArrowRight') { document.getElementById('fedit-next')?.click(); }
-    else if (key === 'ArrowLeft') { document.getElementById('fedit-prev')?.click(); }
-    else if ([...simpleChars, ' ', 'enter'].includes(key.toLowerCase())) {
-      handleKeyboardChar(key);
-    }
+      if (key === 'Backspace') { document.getElementById('fedit-erase')?.click(); }
+      else if (key === 'ArrowRight') { document.getElementById('fedit-next')?.click(); }
+      else if (key === 'ArrowLeft') { document.getElementById('fedit-prev')?.click(); }
+      else if ([...simpleChars, ' ', 'enter'].includes(key.toLowerCase())) {
+        handleKeyboardChar(key);
+      }
+    })
   }
 
   useEffect(() => {

@@ -31,7 +31,7 @@ export const EditorSettings = observer((props : { children: React.ReactNode, cla
           <FormFieldOptions
             form={form}
             name="editorFontSize"
-            title="Editor Font Size"
+            title="Editor font size"
             onChange={setValue}
             options={[
               { v: '100', l: '100%' },
@@ -45,16 +45,6 @@ export const EditorSettings = observer((props : { children: React.ReactNode, cla
             ]}
           />
 
-          <FormFieldOptions
-            form={form}
-            name="editorNarrateInput"
-            title="Narrate input"
-            onChange={setValue}
-            options={[
-              { v: '0', l: 'Off' },
-              { v: '1', l: 'On' },
-            ]}
-          />
           {/*
           <FormFieldOptions
             form={form}
@@ -71,13 +61,40 @@ export const EditorSettings = observer((props : { children: React.ReactNode, cla
           <FormFieldOptions
             form={form}
             name="editorLayout"
-            title="Buttons Layout"
+            title="Buttons layout"
             onChange={setValue}
             options={[
               { v: '1', l: 'English #1' },
               { v: '2', l: 'English #2' },
               { v: '3', l: 'English #3' },
               { v: '4', l: 'Russian' },
+            ]}
+          />
+
+          <FormFieldOptions
+            form={form}
+            name="editorClickDelay"
+            title="Input cooldown time, in seconds"
+            onChange={setValue}
+            options={[
+              { v: '0', l: '0 s' },
+              { v: '0.1', l: '0.1 s' },
+              { v: '0.2', l: '0.2 s' },
+              { v: '0.3', l: '0.3 s' },
+              { v: '0.5', l: '0.5 s' },
+              { v: '0.7', l: '0.7 s' },
+              { v: '1', l: '1 s' },
+            ]}
+          />
+
+          <FormFieldOptions
+            form={form}
+            name="editorNarrateInput"
+            title="Narrate input"
+            onChange={setValue}
+            options={[
+              { v: '0', l: 'Off' },
+              { v: '1', l: 'On' },
             ]}
           />
 

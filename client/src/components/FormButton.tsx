@@ -19,7 +19,7 @@ export function FormFieldOptions(props : { className?: string, title?: string, f
   function onClick(val: string, label?: string) {
     onChange(name, val);
 
-    if (window.app.userSettings.globalNarrateButtonclick === '1') {
+    if (window.app.userSettings.globalNarrateButtonclick !== '0') {
       speakAll([label || val]);
     }
   }

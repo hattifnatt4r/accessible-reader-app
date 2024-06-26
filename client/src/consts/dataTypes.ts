@@ -50,6 +50,7 @@ export type UserSettingsType = {
   editorNarrateSelection: '0' | '1',
   editorNarrateInput: '0' | '1',
   editorLayout: string,
+  editorClickDelay: string,
 };
 
 export type ChatMessage = {

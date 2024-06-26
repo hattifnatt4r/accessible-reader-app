@@ -14,6 +14,7 @@ const userSettingsDefault: UserSettingsType = {
   editorNarrateSelection: '1',
   editorNarrateInput: '1',
   editorLayout: '2',
+  editorClickDelay: '0'
 };
 
 export class AppStore {
