@@ -2,12 +2,13 @@ import classNames from 'classnames';
 import './Button.css';
 
 export function Button(props : { type?: string, className?: string, disabled?: boolean, children: React.ReactNode, onClick?: () => void, linkButton?: boolean, linkButton2?: boolean, style?: {[key:string] : string} }) {
-  const { children, className, onClick, linkButton, linkButton2, disabled, style = {} } = props;
+  const { children, className, onClick, linkButton, linkButton2, disabled, style = {}, type } = props;
   const cl = {
     'button': !linkButton && !linkButton2,
     'button_link': linkButton,
     'button_link2': linkButton2,
     'button_disabled': disabled,
+    'button_secondary': type === 'secondary',
     [className || '']: !!className,
   };
 

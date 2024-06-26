@@ -32,13 +32,12 @@
   cursor: pointer;
   padding: 1rem;
   border: 1px solid rgba(0,0,0,0.09);
+  background-color: rgba(0,0,0,0.04);
   border-radius: 0.15rem;
   text-align: center;
   margin-right: 1rem;
   margin-bottom: 1rem;
   min-width: 6rem;
-  background-color: rgba(0,0,0,0.04);
-
 }
 .form-button_selected {
   border: 1px solid rgba(0,0,0,0.1);

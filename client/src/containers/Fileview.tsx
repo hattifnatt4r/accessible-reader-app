@@ -65,7 +65,8 @@ export const Fileview = observer(() => {
               <ParagraphWrap key={0} paragraph={paragraphs[0]} id={0} idSelected={1} selectionType={'p'}>
                 {paragraphs[0].content}
               </ParagraphWrap>
-              <Button style={{ marginTop: '-1rem', marginBottom: '1rem' }} onClick={() => { store.onModeChange('view'); store.save(); }}>Save</Button>
+              <Button style={{ marginTop: '-1rem', marginBottom: '1rem', marginRight: '1rem' }} onClick={() => { store.onModeChange('view'); store.save(); }}>Save</Button>
+              <Button style={{ marginTop: '-1rem', marginBottom: '1rem' }} type="secondary" onClick={() => { store.onModeChange('view'); }}>Exit</Button>
               <FileviewEditable getContentInitial={store.getContentFromParagraphs} onChange={store.onContentChange} />
             </>
           )}

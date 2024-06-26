@@ -4,6 +4,7 @@ import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { PageButton } from '../components/PageControls';
 import { FormFieldOptions } from '../components/FormButton';
 import { getNarrateSupported } from '../utils/misc';
+import { Button } from '../components/Button';
 
 
 export const FileviewSettings = observer((props: { viewerMode: string, onModeChange: (val: string) => void, canEdit: boolean }) => {
@@ -79,18 +80,7 @@ export const FileviewSettings = observer((props: { viewerMode: string, onModeCha
             {!getNarrateSupported() && <div className="note_error">Narrate feature is not supported in your browser.</div>} 
           </div>
 
-          {canEdit && (
-            <FormFieldOptions
-              form={{ mode: viewerMode }}
-              name="mode"
-              title="View mode"
-              onChange={(name, val) => onModeChange(val)}
-              options={[
-                { v: 'view', l: 'View' },
-                { v: 'edit', l: 'Edit' },
-              ]}
-            />
-          )}
+          {canEdit && (<Button linkButton onClick={() => { onModeChange('edit'); toggle(); }} style={{ marginTop: '3rem' }}>Edit inline</Button>)}
         </ModalBody>
       </Modal>
     </>
