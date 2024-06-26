@@ -19,7 +19,7 @@ const detectLanguage = (text: string) => {
   return languageMap[langCode] || 'en-US';
 };
 
-export function speakAll(text: string[], cb?: () => void,) {
+export function speakAll(text: string[], cb?: () => void, lang?: string) {
   speechSynthesis.cancel();
   const volume = (window.app.userSettings.globalVolume ?? 100) / 100;
   const rate = (window.app.userSettings.globalNarrateRate ?? 100) / 100;
@@ -31,7 +31,7 @@ export function speakAll(text: string[], cb?: () => void,) {
     utterance.rate = rate ?? 1;
 
     // set language
-    const language = detectLanguage(t);
+    const language = lang || detectLanguage(t);
     const voices = getVoicesForLanguage(language);
     if (voices.length > 0) {
       utterance.voice = voices[0];

@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite';
 import { Icon } from '../components/Icon';
 import { EditorSettings } from './EditorSettings';
 import { getTextAroundCursor } from './EditorUtils';
-import './Editor.css';
 import { speakAll } from '../utils/narrate';
+import './Editor.css';
 
 type CharType = { id: string, val: string, label: string };
 const simpleChars: string[] = 'abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщьъыэюя.,1234567890+-=()*@":!?_'.split('');
@@ -15,7 +15,12 @@ let otherChars : CharType[] = [
 ];
 const allChars = [...otherChars, ...simpleChars.map(char => ({ id: char, val: char, label: char }))];
 
-type LayoutType = { id: string, label: string, cols: number, rows: number, m1: string[], m2: string[], keysTop: string[], doubleWidth: string[], tripleWidth: string[] };
+type LayoutType = { id: string, label: string, cols: number, rows: number, m1: string[], m2: string[], m3: string[], keysTop: string[], doubleWidth: string[], tripleWidth: string[], lang?: string };
+
+const languages = [
+  { id: 'en-US', char: 'abcdefghijklmnopqrstuvwxyz'},
+  { id: 'ru-RU', char: 'абвгдеёжзийклмнопрстуфхцчшщьъыэюя' }
+];
 
 const layouts : LayoutType[] = [
   { id: '1',
@@ -35,6 +40,7 @@ const layouts : LayoutType[] = [
       '', '.', ',', '!', '?', '"', ':', '-', '',
       'more', '', 'space', 'prev', 'next',
     ],
+    m3: [],
     keysTop: ['exit', 'settings'],
     doubleWidth: ['prev', 'next', 'read', 'erase'],
     tripleWidth: ['space'],
@@ -55,6 +61,7 @@ const layouts : LayoutType[] = [
       '', '.', ',', '!', '?', '"', ':', '-', '',
       'more', 'read', '', 'space', 'prev', 'next',
     ],
+    m3: [],
     keysTop: ['exit','settings', 'save', 'erase'],
     doubleWidth: ['prev', 'next', 'space'],
     tripleWidth: [],
@@ -75,6 +82,7 @@ const layouts : LayoutType[] = [
       '', '.', ',', '!', '?', '-', '"', ':',
       'more', '', '', 'space', 'read',  'prev', 'next',
     ],
+    m3: [],
     keysTop: ['exit','settings', 'save', 'erase'],
     doubleWidth: ['space'],
     tripleWidth: [],
@@ -84,7 +92,7 @@ const layouts : LayoutType[] = [
     label: '#4 Ru',
     cols: 9,
     rows: 5,
-    m1: ['reset', 'й','ж', 'э', 'х', 'read', 'erase',
+    m1: ['more2', 'й','ж', 'э', 'х', 'read', 'erase',
       'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з',
       'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д',
       'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю',
@@ -97,9 +105,16 @@ const layouts : LayoutType[] = [
       '', '.', ',', '!', '?', '"', ':', '-', '',
       'more', '', 'space', 'prev', 'next',
     ],
+    m3: ['more2', '','', '', '', 'read', 'erase',
+      'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o',
+      'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
+      'z', 'x', 'c', 'v', 'b', 'n', 'm', '.', 'p',
+      'more', '.', 'space', 'prev', 'next',
+    ],
     keysTop: ['exit', 'settings', 'save'],
     doubleWidth: ['prev', 'next', 'read', 'erase'],
     tripleWidth: ['space'],
+    lang: 'ru-RU',
   },
 ];
 
@@ -111,9 +126,20 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
   const [mode, setMode] = useState<string>('m1');
   const appStore = window.app;
 
+  const layoutID = appStore.userSettings.editorLayout || '2';
+  const layout : LayoutType = layouts.find(l => l.id === layoutID.toString()) || layouts[0];
+
   function narrateOnInput(char: string) {
     if (window.app.userSettings.editorNarrateInput === '1') {
-      speakAll([char]);
+      let lang;
+      const langConfig = languages.find(l => l.id === layout.lang);
+      if (langConfig){
+        const regex = new RegExp(`^[${langConfig.char}]*$`);
+        if (regex.test(char)) {
+          lang = layout.lang;
+        }
+      }
+      speakAll([char], undefined, lang);
     }
   }
   
@@ -168,6 +194,10 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
     if (mode === 'm1') { setMode('m2'); }
     else { setMode('m1'); }
   }
+  function handleToggleMode2() {
+    if (mode === 'm1') { setMode('m3'); }
+    else { setMode('m1'); }
+  }
 
   function onKeydown(event: KeyboardEvent) {
     // support keyboard input
@@ -194,9 +224,8 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
 
   if (!open) return null;
 
-  const layoutID = appStore.userSettings.editorLayout || '2';
-  const layout : LayoutType = layouts.find(l => l.id === layoutID.toString()) || layouts[0];
-  const modeIndex : 'm1' | 'm2' = mode === 'm1' ? 'm1' : 'm2';
+
+  const modeIndex : 'm1' | 'm2' | 'm3' = mode === 'm1' ? 'm1' : (mode === 'm2' ? 'm2' : 'm3');
   const clContainer = {
     'fedit': 1,
     ['fedit_l' + layoutID]: 1,
@@ -215,6 +244,7 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
     'fedit__btn_empty': !id,
     'fedit__btn_top': layout.keysTop.includes(id),
     'fedit__btn_func': idFunc,
+    'fedit__btn_lang': ['more2'].includes(id),
     'fedit__btn_colored': ['save', 'read'].includes(id),
     'fedit__btn_disabled': ['save'].includes(id) && readonly,
   });
@@ -227,6 +257,7 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
     { id: 'exit', comp: <div onClick={toggle} className={classNames(clButton('exit', true))} key="exit"><div className="fedit__btn-wrap"><Icon name="close" /></div></div> },
     { id: 'read', comp: <div onClick={handleRead} className={classNames(clButton('read', true))} key="read"><div className="fedit__btn-wrap"><Icon name="campaign" /></div></div> },
     { id: 'more', comp: <div onClick={handleToggleMode} className={classNames(clButton('toggleview', true))} key="toggleview"><div className="fedit__btn-wrap">...</div></div> },
+    { id: 'more2', comp: <div onClick={handleToggleMode2} className={classNames(clButton('more2', true))} key="toggleview2"><div className="fedit__btn-wrap">En/Ru</div></div> },
     { id: 'settings', comp: <EditorSettings className={classNames(clButton('settings', true))} key="settings"><div className="fedit__btn-wrap"><Icon name="settings" /></div></EditorSettings> },
   ];
   const [textBeforeCursor, wordBeforeCursor, wordAfterCursor, textAfterCursor] = getTextAroundCursor(textvalue, cursor);
@@ -249,7 +280,7 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
 
       <div className="fedit__controls">
         {layout[modeIndex].map((key: string, ii: number) => {
-            if (['prev', 'next', 'save', 'reset', 'erase', 'exit', 'settings', 'read', 'more'].includes(key)) {
+            if (['prev', 'next', 'save', 'reset', 'erase', 'exit', 'settings', 'read', 'more', 'more2'].includes(key)) {
               const btn = buttons.find(b => b.id === key);
               return btn?.comp;
             }

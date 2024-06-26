@@ -218,3 +218,7 @@
 .fedit__btn_top.fedit__btn_double {
   min-height: calc(2*var(--btn-h) + 2*var(--btn-my));
 }
+
+.fedit__btn_lang {
+  font-size: calc(var(--btn-fs) * 0.6);
+}
