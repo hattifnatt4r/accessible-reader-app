@@ -6,11 +6,13 @@ const userInfoDefault: UserInfoType = { login_name: '', id: 1, email: '', fullna
 const userSettingsDefault: UserSettingsType = {
   globalVolume: '100',
   globalNarrateRate: '100',
+  globalNarrateButtonclick: '1',
   filesNarrateSelection: '1',
   readerFontSize: '100',
   readerNarrateSelection: '1',
   editorFontSize: '125',
   editorNarrateSelection: '1',
+  editorNarrateInput: '1',
   editorLayout: '2',
 };
 

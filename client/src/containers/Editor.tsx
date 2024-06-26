@@ -5,6 +5,7 @@ import { Icon } from '../components/Icon';
 import { EditorSettings } from './EditorSettings';
 import { getTextAroundCursor } from './EditorUtils';
 import './Editor.css';
+import { speakAll } from '../utils/narrate';
 
 type CharType = { id: string, val: string, label: string };
 const simpleChars: string[] = 'abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщьъыэюя.,1234567890+-=()*@":!?_'.split('');
@@ -110,15 +111,23 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
   const [mode, setMode] = useState<string>('m1');
   const appStore = window.app;
 
+  function narrateOnInput(char: string) {
+    if (window.app.userSettings.editorNarrateInput === '1') {
+      speakAll([char]);
+    }
+  }
   
   function handleNext() {
     if (cursor < textvalue.length) {
       setCursor(cursor + 1);
+      narrateOnInput(textvalue[cursor]);
     }
   }
   function handlePrev() {
     if (cursor > 0) {
       setCursor(cursor - 1);
+
+      narrateOnInput(textvalue[cursor - 1]);
     }
   }
   function handleErase() {
@@ -130,6 +139,7 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
   function handleEnterChar(char: string) {
     setTextvalue(textvalue.substring(0, cursor) + char + textvalue.substring(cursor, textvalue.length));
     setCursor(cursor + 1);
+    narrateOnInput(char);
   }
 
   function handleKeyboardChar(char: string) {
@@ -142,6 +152,7 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
       });
       return prevCursor + 1;
     });
+    narrateOnInput(char);
   }
   function handleSave() {
     save(textvalue);
@@ -151,7 +162,7 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
     setCursor(0);
   }
   function handleRead() {
-    
+    speakAll([textvalue]);
   }
   function handleToggleMode() {
     if (mode === 'm1') { setMode('m2'); }
@@ -184,7 +195,7 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
   if (!open) return null;
 
   const layoutID = appStore.userSettings.editorLayout || '2';
-  const layout : LayoutType = layouts.find(l => l.id === layoutID) || layouts[0];
+  const layout : LayoutType = layouts.find(l => l.id === layoutID.toString()) || layouts[0];
   const modeIndex : 'm1' | 'm2' = mode === 'm1' ? 'm1' : 'm2';
   const clContainer = {
     'fedit': 1,

@@ -42,11 +42,13 @@ export type UserProfile = {
 export type UserSettingsType = {
   globalVolume: '25' | '50' | '75' | '100',
   globalNarrateRate: string, // 0-100 %
+  globalNarrateButtonclick: '0' | '1',
   filesNarrateSelection: '0' | '1',
   readerFontSize: string, // 100-300
   readerNarrateSelection: '0' | '1',
   editorFontSize: string, // 100-600
   editorNarrateSelection: '0' | '1',
+  editorNarrateInput: '0' | '1',
   editorLayout: string,
 };
 

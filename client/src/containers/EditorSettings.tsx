@@ -47,6 +47,17 @@ export const EditorSettings = observer((props : { children: React.ReactNode, cla
 
           <FormFieldOptions
             form={form}
+            name="editorNarrateInput"
+            title="Narrate input"
+            onChange={setValue}
+            options={[
+              { v: '0', l: 'Off' },
+              { v: '1', l: 'On' },
+            ]}
+          />
+          {/*
+          <FormFieldOptions
+            form={form}
             name="editorNarrateSelection"
             title="Narrate when cursor moves"
             onChange={setValue}
@@ -55,19 +66,7 @@ export const EditorSettings = observer((props : { children: React.ReactNode, cla
               { v: '1', l: 'On' },
             ]}
           />
-
-          <FormFieldOptions
-            form={form}
-            name="globalVolume"
-            title="Sound Volume (global)"
-            onChange={setValue}
-            options={[
-              { v: '25', l: '25%' },
-              { v: '50', l: '50%' },
-              { v: '75', l: '75%' },
-              { v: '100', l: '100%' },
-            ]}
-          />
+          */}
 
           <FormFieldOptions
             form={form}
