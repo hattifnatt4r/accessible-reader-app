@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import './Button.css';
 
-export function Button(props : { className?: string, disabled?: boolean, children: React.ReactNode, onClick?: () => void, linkButton?: boolean, linkButton2?: boolean, style?: {[key:string] : string} }) {
+export function Button(props : { type?: string, className?: string, disabled?: boolean, children: React.ReactNode, onClick?: () => void, linkButton?: boolean, linkButton2?: boolean, style?: {[key:string] : string} }) {
   const { children, className, onClick, linkButton, linkButton2, disabled, style = {} } = props;
   const cl = {
     'button': !linkButton && !linkButton2,
@@ -10,9 +10,14 @@ export function Button(props : { className?: string, disabled?: boolean, childre
     'button_disabled': disabled,
     [className || '']: !!className,
   };
+
+  function handleClick(event: any) {
+    event.preventDefault();
+    if (onClick) onClick();
+  }
   return (
-    <div className={classNames(cl)} onClick={onClick} style={style}>
+    <button className={classNames(cl)} onClick={handleClick} style={style}>
       {children}
-    </div>
+    </button>
   );
 };

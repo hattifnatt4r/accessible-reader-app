@@ -116,7 +116,7 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
               </>
             )}
             {mode === 'signin' && (
-              <>
+              <form>
                 <div className="form-field">
                   <div className="field-label">Username</div>
                   <input name="person_id" value={form.person_id} onChange={handleChange} className="field-input" /><br/>
@@ -134,11 +134,11 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
                 <div style={{ marginTop: '1rem' }}>
                   <Button linkButton onClick={() => toggleMode('forgot')} className="login__mode-btn">Forgot password</Button>
                 </div>
-              </>
+              </form>
             )}
             
             {mode === 'signup' && (
-              <>
+              <form>
                 <div className="form-field">
                   <div className="field-label">Username</div>
                   <input name="person_id" value={form.person_id} onChange={handleChange} className="field-input" /><br/>
@@ -160,7 +160,7 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
                 <div style={{ marginTop: '1rem' }}>
                   <Button linkButton onClick={() => toggleMode('forgot')} className="login__mode-btn">Forgot password</Button>
                 </div>
-              </>
+              </form>
             )}
   
           </div>
