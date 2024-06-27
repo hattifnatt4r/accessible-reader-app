@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import classNames from 'classnames';
-import './FormButton.css';
 import { speakAll } from '../utils/narrate';
 import { Icon } from './Icon';
+import { Editor } from '../containers/Editor';
+import './FormButton.css';
 
 
 export function FormFieldOptions(props : { className?: string, title?: string, form: {[key:string]: string}, name: string, options: {v: string, l: string}[], onChange?: (name: string, val:string) => void }) {
@@ -44,3 +46,60 @@ export function FormFieldOptions(props : { className?: string, title?: string, f
     </div>
   );
 };
+
+
+export function FormField(props: {
+    className?: string,
+    label: string,
+    name: string,
+    form: {[key:string]: string},
+    onChange: (name: string, val:string) => void,
+    editor?: boolean,
+    maxLength?: number,
+    textarea?: boolean,
+    rows?: number,
+    protect?: boolean }) {
+  const { className = '', label, name, onChange, form, editor, maxLength, textarea, rows, protect } = props;
+
+  const [editing, setEditing] = useState<boolean>(false);
+  const [showpw, setShowpw] = useState<boolean>(false);
+
+
+  function handleChange(ev : React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
+    const { name, value } = ev?.target;
+    if (!name) return;
+    onChange(name, value);
+  }
+
+  function toggleShowpw() {
+    setShowpw(!showpw);
+  }
+
+  const cl = {
+    'field': 1,
+    'field_w-editor': editor,
+    [className]: className,
+  };
+
+  return (
+    <div className={classNames(cl)}>
+      <div className="field-label">{label}</div>
+      {!textarea && <input name={name} value={form[name]} onChange={handleChange} className="field-input" maxLength={maxLength} type={protect && !showpw ? 'password' : 'text'}/>}
+      {textarea && <textarea name={name} value={form[name]} onChange={handleChange} className="field-input field-input_textarea" maxLength={maxLength} rows={rows} />}
+      
+      {protect && <div className="form-field__visibility" onClick={toggleShowpw}><Icon name={showpw ? 'visibility_off' : 'visibility'} /></div>}
+      
+      {editor && !textarea &&  <div onClick={() => setEditing(true)} className="field-input__editbtn"><Icon name="edit" /></div>}
+      <br/>
+
+      {editing && (
+        <Editor
+          open={!!editing}
+          text={form[name]}
+          toggle={() => setEditing(false)}
+          save={(t) => { onChange(name, t); setEditing(false); }}
+        />
+      )}
+    </div>
+  );
+}

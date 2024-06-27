@@ -62,3 +62,10 @@
 .fhome-file_selected .fhome-file__name {
   color: rgba(0,0,0,1);
 }
+
+
+/* options */
+.field-input.file-add-modal__text {
+  font-size: 0.9rem;
+  font-weight: 400;
+}

@@ -66,6 +66,7 @@ code {
 /* remove default styles */
 button {
   all: unset;
+  box-sizing: border-box;
 }
 button:focus {
   outline: revert;

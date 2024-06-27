@@ -8,6 +8,7 @@ import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { AppLink } from '../components/AppLink';
 import { PageButton } from '../components/PageControls';
 import { Button } from '../components/Button';
+import { FormField } from '../components/FormButton';
 import './FilesMisc.css';
 
 
@@ -97,9 +98,7 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null, onUpda
     }
   }
 
-  function handleChange(ev : React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
-    const { name, value } = ev?.target;
-    if (!name) return;
+  function onChange(name: string, value: string) {
     setForm({ ...form, [name]: value });
   }
 
@@ -126,13 +125,11 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null, onUpda
 
           {appStore.userId && file && !isSharedFile && (
             <>
-              <div style={{ marginBottom: '3rem' }}>
-                <div className="field-label">File Name</div>
-                <input name="filename" value={form.filename} onChange={handleChange} className="field-input" maxLength={20} /><br/>
-                <div className="field-label">Title</div>
-                <input name="title" value={form.title} onChange={handleChange} className="field-input" maxLength={100} /><br/>
+              <form style={{ marginBottom: '3rem' }}>
+                <FormField label="File Name" name="filename" form={form} onChange={onChange} maxLength={20} editor />
+                <FormField label="Title" name="title" form={form} onChange={onChange} maxLength={100} editor />
                 <Button onClick={handleFileRename}>Update</Button>
-              </div>
+              </form>
 
               <div>
                 <Button linkButton2 onClick={handleFileDelete}>Delete file</Button>
@@ -150,9 +147,9 @@ export const FilesEdit = observer((props : { file: ReaderFileType | null, onUpda
 
 export const FilesAdd = observer((props : { onUpdated: () => void, selectFile: (id: FileIDType) => void }) => {
   const { onUpdated, selectFile } = props;
-  const [open, setOpen] = useState(false);
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
+  const [open, setOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
   const [form, setForm] = useState({ filename: 'New file', filecontent: '', title: '' });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const appStore = window.app;
@@ -209,9 +206,7 @@ export const FilesAdd = observer((props : { onUpdated: () => void, selectFile: (
     }
   };
 
-  function handleChange(ev : React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
-    const { name, value } = ev?.target;
-    if (!name) return;
+  function onChange(name: string, value: string) {
     setForm({ ...form, [name]: value });
   }
 
@@ -219,7 +214,7 @@ export const FilesAdd = observer((props : { onUpdated: () => void, selectFile: (
     <>
       <PageButton onClick={toggle} iconSvgname="plus" />
 
-      <Modal isOpen={open} toggle={toggle}>
+      <Modal isOpen={open} toggle={toggle} className="file-add-modal">
         <ModalHeader toggle={toggle}>
           Create new file
         </ModalHeader>
@@ -235,18 +230,12 @@ export const FilesAdd = observer((props : { onUpdated: () => void, selectFile: (
 
           {appStore.userId && (
             <>
-              <div>
-                <div className="field-label">File Name</div>
-                <input name="filename" value={form.filename} onChange={handleChange} className="field-input" maxLength={20}/><br/>
-                <div className="field-label">Title</div>
-                <input name="title" value={form.title} onChange={handleChange} className="field-input" maxLength={100} /><br/>
-              </div>
-
-              <div style={{ marginBottom: '3rem' }}>
-                <div className="field-label">Paste Text</div>
-                <textarea name="filecontent" value={form.filecontent} onChange={handleChange} className="field-input" rows={10} maxLength={65535} /><br/>
-                <Button onClick={handleFileCreate}>Create</Button>
-              </div>
+              <form style={{ marginBottom: '3rem' }}>
+                  <FormField label="File Name" name="filename" form={form} onChange={onChange} maxLength={20} editor />
+                  <FormField label="Title" name="title" form={form} onChange={onChange} maxLength={100} editor />
+                  <FormField label="Paste Text" name="filecontent" form={form} onChange={onChange} rows={10} maxLength={65535} textarea editor />
+                  <Button onClick={handleFileCreate}>Create</Button>
+              </form>
 
               <div style={{ marginBottom: '3rem' }}>
                 <div className="field-label">Or upload text file</div>
@@ -256,7 +245,7 @@ export const FilesAdd = observer((props : { onUpdated: () => void, selectFile: (
                 </form>
               </div>
             </>
-          )}          
+          )}
 
         </ModalBody>
       </Modal>

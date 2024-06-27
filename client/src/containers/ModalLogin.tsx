@@ -4,6 +4,7 @@ import { post } from '../utils/query';
 import { Modal, ModalBody, ModalHeader } from '../components/Modal';
 import { Icon } from '../components/Icon';
 import { Button } from '../components/Button';
+import { FormField } from '../components/FormButton';
 import './ModalLogin.css';
 
 
@@ -27,7 +28,6 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
   const { children } = props;
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState('signin');
-  const [showpw, setShowpw] = useState(false);
   const [form, setForm] = useState<LoginForm>({ person_id: '', person_pw: '', email: '' });
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -37,10 +37,6 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
     setOpen(!open);
     setError('');
     setForm({ person_id: '', person_pw: '', email: '' });
-  }
-
-  function toggleShowpw() {
-    setShowpw(!showpw);
   }
 
   function toggleMode(newMode: string) {
@@ -81,13 +77,9 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
     }
   }
 
-  function handleChange(ev : React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = ev?.target;
-    if (!name) return;
-
+  function onChange(name: string, value: string) {
     setForm({ ...form, [name]: value });
   }
-
 
   const disabled = false;
   
@@ -117,15 +109,8 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
             )}
             {mode === 'signin' && (
               <form>
-                <div className="form-field">
-                  <div className="field-label">Username</div>
-                  <input name="person_id" value={form.person_id} onChange={handleChange} className="field-input" /><br/>
-                </div>
-                <div className="form-field">
-                  <div className="field-label">Password</div>
-                  <input name="person_pw" value={form.person_pw} onChange={handleChange} className="field-input" type={showpw ? 'text' : 'password'} />
-                  <div className="form-field__visibility" onClick={toggleShowpw}><Icon name={showpw ? 'visibility_off' : 'visibility'} /></div>
-                </div>
+                <FormField label="Username" name="person_id" form={form} onChange={onChange} />
+                <FormField label="Password" name="person_pw" form={form} onChange={onChange} protect />
 
                 <Button disabled={disabled} onClick={handleLogin} className="login__login-btn">Sign In</Button><br/>
                 <span style={{ marginRight: '0.5rem' }}>Don't have an account? </span>
@@ -139,19 +124,9 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
             
             {mode === 'signup' && (
               <form>
-                <div className="form-field">
-                  <div className="field-label">Username</div>
-                  <input name="person_id" value={form.person_id} onChange={handleChange} className="field-input" /><br/>
-                </div>
-                <div className="form-field">
-                  <div className="field-label">Email</div>
-                  <input name="email" value={form.email} onChange={handleChange} className="field-input" /><br/>
-                </div>
-                <div className="form-field">
-                  <div className="field-label">Password</div>
-                  <input name="person_pw" value={form.person_pw} onChange={handleChange} className="field-input" type={showpw ? 'text' : 'password'} />
-                  <div className="form-field__visibility" onClick={toggleShowpw}><Icon name={showpw ? 'visibility_off' : 'visibility'} /></div>
-                </div>
+                <FormField label="Username" name="person_id" form={form} onChange={onChange} />
+                <FormField label="Email" name="email" form={form} onChange={onChange} />
+                <FormField label="Password" name="person_pw" form={form} onChange={onChange} protect />
 
                 <Button disabled={disabled} onClick={handleRegister} className="login__login-btn">Sign Up</Button><br/>
                 <span style={{ marginRight: '0.5rem' }}>Already have an account? </span>
