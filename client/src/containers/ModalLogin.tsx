@@ -51,12 +51,12 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
       return;
     }
 
-    const res = await post('login', { name: form.person_id, pass: form.person_pw });
-    if (res.value?.id && res?.token) {
-      appStore.setSession(res.token, res.value)
+    const res = await post('login', { login_name: form.person_id, login_pass: form.person_pw });
+    if (res.status === 'success') {
+      appStore.setSession(res.value);
       toggle();
     } else {
-      setError(res.message);
+      setError(res.error);
     }
   }
 
@@ -67,13 +67,13 @@ export const ModalLogin = observer((props : { children: React.ReactNode }) => {
       return;
     }
   
-    const res = await post('person_add', { name: form.person_id, pass: form.person_pw, email: form.email });
-    if (res.value?.id) {
+    const res = await post('person_add', { login_name: form.person_id, login_pass: form.person_pw, email: form.email });
+    if (res.status === 'success') {
       setMessage('Success! You can now sign in.');
       setMode('signin');
       setError('');
     } else {
-      setError(res.message);
+      setError(res.error);
     }
   }
 

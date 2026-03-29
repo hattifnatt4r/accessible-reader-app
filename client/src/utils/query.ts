@@ -11,43 +11,38 @@ export type PostDataType = {
   value?: {[key:string] : any}[],
 };
 
-export async function post(apiName : string, body : {[key:string] : any}, options? : { token?: string }) {
+export async function post(apiName : string, body : {[key:string] : any}) {
   const url = getURL(apiName);
   const fetch = getFetch();
-
-  const token = window.app?.token || options?.token;
 
   const response = await fetch(url, {
     method: 'POST',
     mode: 'cors',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
-      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(body),
   });
-  const result = await response.json();
-
-  return result;
+  return await response.json();
 }
 
 export async function upload(apiName : string, formData: FormData, filename: string) {
   const url = getURL(apiName);
   const fetch = getFetch();
 
-  const token = window.app?.token;
-
   const response = await fetch(url, {
     method: 'POST',
+    mode: 'cors',
+    credentials: 'include',
     body: formData,
     headers: {
-      'Authorization': `Bearer ${token}`,
       'Filename': filename,
     }
   });
   const result = await response.json();
-  if (result.message === 'Invalid token' && window.app) {
-    window.app.setSession(null, null);
+  if (response.status === 401 && window.app) {
+    window.app.setSession(null);
   }
 
   return result;

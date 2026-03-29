@@ -21,9 +21,8 @@ export class AppStore {
   @observable userSettings : UserSettingsType = userSettingsDefault;
   @observable userInfo: UserInfoType = userInfoDefault;
   @observable userId: string = '';
-  @observable token: string  = '';
   @observable isLoadingSession: boolean = true;
-  
+
   constructor() {
     makeObservable(this);
 
@@ -39,24 +38,19 @@ export class AppStore {
   }
 
   loadUser = async () => {
-    const token = localStorage.getItem('token');
-    if (token) { 
-      const res = await post('session', {}, { token: token || '' });
-      if (res.token && res.value?.id) {
-        this.setSession(token, res.value);
-      }
+    const res = await post('session', {});
+    if (res.status === 'success') {
+      this.setSession(res.value);
     } else {
-      this.setSession('', null);
+      this.setSession(null);
     }
     this.isLoadingSession = false;
   }
 
   @action
-  setSession = (token: string, userInfo: UserInfoType | null) => {
-    this.token = token;
+  setSession = (userInfo: UserInfoType | null) => {
     this.userInfo = userInfo ?? userInfoDefault;
     this.userId = userInfo?.login_name || '';
-    localStorage.setItem('token', token);
   }
 
   @action

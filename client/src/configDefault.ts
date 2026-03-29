@@ -3,5 +3,5 @@
 import { ApiConfigType } from "./consts/dataTypes";
 
 export const apiConfig : ApiConfigType = {
-    apiUrl: 'https://eazyreadapp.com/api/',
+    apiUrl: 'https://api.eazyreadapp.com/',
 };

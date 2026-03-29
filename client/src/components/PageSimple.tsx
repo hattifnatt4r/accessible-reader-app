@@ -15,8 +15,8 @@ export const PageSimple = observer((props : { className?: string, children: Reac
   const isLoggedIn = appStore.getIsLoggedIn();
   
   async function handleLogout() {
-    await post('logout', { token: appStore.token });
-    appStore.setSession(null, null)
+    await post('logout', {});
+    appStore.setSession(null);
   }
 
   const cl = {
