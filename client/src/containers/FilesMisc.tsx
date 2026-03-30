@@ -200,6 +200,8 @@ export const FilesAdd = observer((props : { onUpdated: () => void, selectFile: (
     if (response.status === 'success') {
       setError('');
       setMessage("File created: " + form.filename);
+      onUpdated();
+      toggle();
     } else {
       setError("Failed to upload file");
       setMessage("");
@@ -230,18 +232,18 @@ export const FilesAdd = observer((props : { onUpdated: () => void, selectFile: (
 
           {appStore.userId && (
             <>
-              <form style={{ marginBottom: '3rem' }}>
+              <form style={{ marginBottom: '7rem' }}>
                   <FormField label="File Name" name="filename" form={form} onChange={onChange} maxLength={20} editor />
                   <FormField label="Title" name="title" form={form} onChange={onChange} maxLength={100} editor />
                   <FormField label="Paste Text" name="filecontent" form={form} onChange={onChange} rows={10} maxLength={65535} textarea editor />
                   <Button onClick={handleFileCreate}>Create</Button>
               </form>
 
-              <div style={{ marginBottom: '3rem' }}>
+              <div>
                 <div className="field-label">Or upload text file</div>
                 <form onSubmit={handleFileUpload}>
                     <input type="file" name="myFile" onChange={handleFileChange} />
-                    <button type="submit">Upload</button>
+                    <button type="submit" className={selectedFile ? 'button' : 'button button_secondary'}>Upload</button>
                 </form>
               </div>
             </>

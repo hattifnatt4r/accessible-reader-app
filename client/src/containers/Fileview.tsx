@@ -11,6 +11,7 @@ import { FileviewStore } from './FileviewStore';
 import { NavBackButton, NavModal } from '../components/Nav';
 import { FileviewSettings } from './FileviewSettings';
 import { Editor } from './Editor';
+import { ChatView } from './ChatView';
 import './Fileview.css';
 
 
@@ -27,6 +28,10 @@ export const Fileview = observer(() => {
 
 
   if (!store) return null;
+
+  if (store.file?.is_chat) {
+    return <ChatView />;
+  }
 
   const file = store?.file;
   const isShared = file?.person_id === 0;

@@ -24,7 +24,6 @@ export class FilesStore {
     if (this.readerFiles.find(f => f.id === fileId)) {
       this.selectedFileID = fileId;
     }
-
   }
 
   @action setFileID = (id : FileIDType) => {

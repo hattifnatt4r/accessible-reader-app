@@ -1,0 +1,136 @@
+.chatview {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.chatview__main {
+  position: absolute;
+  width: calc(100vw - var(--rwidth));
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.chatview__header {
+  padding: 1rem 2rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-bottom: 1px solid var(--color_b2);
+  flex-shrink: 0;
+}
+
+.chatview__messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.chatview__msg-wrap {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+}
+
+.chatview__msg-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.chatview__msg-wrap_right {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.chatview__msg-wrap_left {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.chatview__msg-time {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.4);
+  margin-bottom: 0.25rem;
+}
+
+.chatview__msg {
+  padding: 0.6rem 1rem;
+  border-radius: 1rem;
+  font-size: var(--fontsize, 1rem);
+  line-height: calc(var(--fontsize, 1rem) * 1.8);
+  word-break: break-word;
+}
+
+.chatview__msg_own {
+  background-color: var(--color_b1);
+  color: white;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.chatview__msg_other {
+  background-color: var(--color_b2);
+  color: var(--color_f1);
+  border-bottom-left-radius: 0.25rem;
+}
+
+.chatview__circle {
+  cursor: pointer;
+  padding: 0.3rem;
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+  border-radius: 1rem;
+}
+.chatview__circle .icon {
+  font-size: 1.3rem;
+  color: var(--color_b2);
+}
+.chatview__circle_selected .icon,
+.chatview__circle:hover .icon {
+  color: var(--color_b1l);
+}
+
+.chatview__msg_selected {
+  background-color: rgb(166, 204, 107, 0.4);
+}
+
+.chatview__sentence_selected {
+  background-color: rgb(166, 204, 107, 0.6);
+  border-radius: 2px;
+}
+
+.chatview__word_selected {
+  background-color: rgb(166, 204, 107, 0.8);
+  border-radius: 2px;
+}
+
+.chatview__input-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border-top: 1px solid var(--color_b2);
+  flex-shrink: 0;
+}
+
+.chatview__input {
+  flex: 1;
+  resize: none;
+  border: 1px solid var(--color_b2);
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  outline: none;
+}
+
+.chatview__input:focus {
+  border-color: var(--color_b1);
+}

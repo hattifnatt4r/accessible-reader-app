@@ -65,6 +65,9 @@
 
 
 /* options */
+.file-add-modal {
+  padding-bottom: 10rem;
+}
 .field-input.file-add-modal__text {
   font-size: 0.9rem;
   font-weight: 400;

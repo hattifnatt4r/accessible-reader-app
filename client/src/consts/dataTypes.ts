@@ -15,6 +15,17 @@ export type ReaderFileType = {
   author_id: number | null,
   filetype: string,
   config: string,
+  is_chat: boolean,
+  person_1: number | null,
+  person_2: number | null,
+};
+
+export type EntryType = {
+  id: number,
+  file_id: number,
+  person_id: number,
+  content: string,
+  created_at: string,
 };
 
 export type ReaderParagraphType = {
