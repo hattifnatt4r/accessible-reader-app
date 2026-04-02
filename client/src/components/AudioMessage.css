@@ -1,0 +1,53 @@
+.audio-msg {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 180px;
+}
+
+.audio-msg__btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
+
+.audio-msg__waveform {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 40px;
+  flex: 1;
+}
+
+.audio-msg__bar {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--color_b1, #4a7fcb);
+  opacity: 0.3;
+  flex-shrink: 0;
+}
+
+.audio-msg__bar_played {
+  opacity: 1;
+}
+
+.audio-msg_own .audio-msg__bar {
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+}
+
+.audio-msg_own .audio-msg__bar_played {
+  background: white;
+}
+
+.audio-msg__duration {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  min-width: 2.5rem;
+  text-align: right;
+}

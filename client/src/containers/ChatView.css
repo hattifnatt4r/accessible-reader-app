@@ -134,3 +134,66 @@
 .chatview__input:focus {
   border-color: var(--color_b1);
 }
+
+.chatview__mic {
+  flex-shrink: 0;
+}
+
+.rec-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.rec-modal {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  min-width: 280px;
+}
+
+.rec-modal__indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rec-modal__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e53935;
+  animation: rec-pulse 1s ease-in-out infinite;
+}
+
+@keyframes rec-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.rec-modal__timer {
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.rec-modal__stop {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.rec-modal__actions {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+  justify-content: flex-end;
+}

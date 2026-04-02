@@ -13,7 +13,7 @@ type LoginForm = { person_id: string, person_pw: string, email: string }
 function validateRegister(form: LoginForm): string {
   if (!form.email) return 'Email is required';
   if (form.person_id.length < 4) return 'Username should be at least 4 characters long';
-  if (form.person_pw.length < 6) return 'Password should be at least 6 characters long';
+  if (form.person_pw.length < 4) return 'Password should be at least 4 characters long';
   return '';
 }
 

@@ -4,9 +4,11 @@ import { useParams } from 'react-router-dom';
 import { EntryType, ReaderFileType } from '../consts/dataTypes';
 import { SelectionTypeType, getSplitParagraph } from './FileviewUtils';
 import { post } from '../utils/query';
+import fixWebmDuration from 'fix-webm-duration';
 import { speakAll } from '../utils/narrate';
 import { getNarrateSupported } from '../utils/misc';
 import { Icon } from '../components/Icon';
+import { AudioMessage } from '../components/AudioMessage';
 import { NavBackButton, NavModal } from '../components/Nav';
 import { PageButton, PageControls } from '../components/PageControls';
 import { FileviewSettings } from './FileviewSettings';
@@ -27,12 +29,30 @@ export const ChatView = observer(() => {
   const [wID, setWID] = useState(0);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [showRecordingModal, setShowRecordingModal] = useState(false);
+  const [recordingPhase, setRecordingPhase] = useState<'recording' | 'preview'>('recording');
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [recordingSeconds, setRecordingSeconds] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const [audioUrls, setAudioUrls] = useState<Record<string, string>>({});
   const appStore = window.app;
   const currentUserId = appStore.userInfo.id;
   const bottomRef = useRef<HTMLDivElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const audioBlobRef = useRef<Blob | null>(null);
+  const recordingStartRef = useRef<number>(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const narrateSupported = getNarrateSupported();
 
   useEffect(() => { loadData(); }, []);
+
+  useEffect(() => {
+    entries.forEach(e => {
+      const key = getAudioKey(e.content);
+      if (key && !audioUrls[key]) loadAudioUrl(key);
+    });
+  }, [entries]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -43,6 +63,94 @@ export const ChatView = observer(() => {
     if (fileRes.value?.length) setFile(fileRes.value[0]);
     const entryRes = await post('entry_list', { file_id: Number(fileID) });
     if (entryRes.status === 'success') setEntries(entryRes.value || []);
+  };
+
+  const getAudioKey = (content: string) => {
+    const m = content.match(/^\[audio:([^:\]]+)/);
+    return m ? m[1] : null;
+  };
+
+  const loadAudioUrl = async (key: string) => {
+    const res = await post('audio_url', { key });
+    if (res.status === 'success' && res.value?.[0]?.url) {
+      setAudioUrls(prev => ({ ...prev, [key]: res.value![0].url }));
+    }
+  };
+
+  const formatRecordingTime = (s: number) =>
+    `${Math.floor(s / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
+
+  const openRecordingModal = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      audioChunksRef.current = [];
+      recorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunksRef.current.push(e.data); };
+      recorder.onstop = handleRecordingStop;
+      recorder.start();
+      mediaRecorderRef.current = recorder;
+      recordingStartRef.current = Date.now();
+      setRecordingSeconds(0);
+      timerRef.current = setInterval(() => setRecordingSeconds(s => s + 1), 1000);
+      setRecordingPhase('recording');
+      setPreviewUrl(null);
+      setShowRecordingModal(true);
+    } catch (err) {
+      console.error('Microphone access denied', err);
+    }
+  };
+
+  const stopRecording = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    mediaRecorderRef.current?.stop();
+    mediaRecorderRef.current?.stream.getTracks().forEach(t => t.stop());
+  };
+
+  const handleRecordingStop = async () => {
+    const mimeType = mediaRecorderRef.current?.mimeType || 'audio/webm';
+    const duration = Date.now() - recordingStartRef.current;
+    const rawBlob = new Blob(audioChunksRef.current, { type: mimeType });
+    const blob = mimeType.includes('webm')
+      ? await fixWebmDuration(rawBlob, duration)
+      : rawBlob;
+    audioBlobRef.current = blob;
+    const url = URL.createObjectURL(blob);
+    setPreviewUrl(url);
+    setRecordingPhase('preview');
+  };
+
+  const handleDiscard = () => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    audioBlobRef.current = null;
+    setPreviewUrl(null);
+    setShowRecordingModal(false);
+  };
+
+  const handleSaveAudio = async () => {
+    const blob = audioBlobRef.current;
+    if (!blob) return;
+    const mimeType = blob.type || 'audio/webm';
+    const ext = mimeType.includes('mp4') ? 'mp4' : mimeType.includes('ogg') ? 'ogg' : 'webm';
+    const formData = new FormData();
+    formData.append('file', blob, `audio.${ext}`);
+    setIsUploading(true);
+    try {
+      const apiUrl = (window as any).apiConfig?.apiUrl || '';
+      const res = await fetch(apiUrl + 'audio_upload', {
+        method: 'POST', mode: 'cors', credentials: 'include', body: formData,
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        await post('entry_add', { file_id: Number(fileID), content: `[audio:${data.key}]` });
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        audioBlobRef.current = null;
+        setPreviewUrl(null);
+        setShowRecordingModal(false);
+        loadData();
+      }
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const narrateAt = (entry: EntryType, split: string[][], si: number, wi: number) => {
@@ -60,6 +168,11 @@ export const ChatView = observer(() => {
   };
 
   const selectEntry = (entry: EntryType, si = 0, wi = 0) => {
+    if (getAudioKey(entry.content)) {
+      setSelectedEntryId(entry.id);
+      setSentences([]);
+      return;
+    }
     const p = { id: entry.id, content: entry.content, type: '' };
     const split = getSplitParagraph(p);
     setSentences(split);
@@ -194,18 +307,26 @@ export const ChatView = observer(() => {
                     <Icon name="radio_button_unchecked" filled />
                   </div>
                   <div className={'chatview__msg' + (isOwn ? ' chatview__msg_own' : ' chatview__msg_other') + (isSelected && selectionType === 'p' ? ' chatview__msg_selected' : '')}>
-                    {isSelected && selectionType !== 'p'
-                      ? sentences.map((words, si) => (
-                          <span key={si} className={'chatview__sentence' + (si === sID && selectionType === 's' ? ' chatview__sentence_selected' : '')}>
-                            {selectionType === 'w'
-                              ? words.map((word, wi) => (
-                                  <span key={wi} className={'chatview__word' + (si === sID && wi === wID ? ' chatview__word_selected' : '')}>{word} </span>
-                                ))
-                              : words.join(' ')}
-                            {' '}
-                          </span>
-                        ))
-                      : entry.content}
+                    {(() => {
+                      const audioKey = getAudioKey(entry.content);
+                      if (audioKey) {
+                        const url = audioUrls[audioKey];
+                        if (!url) return <span className="chatview__audio-loading">...</span>;
+                        return <AudioMessage url={url} own={isOwn} />;
+                      }
+                      return isSelected && selectionType !== 'p'
+                        ? sentences.map((words, si) => (
+                            <span key={si} className={'chatview__sentence' + (si === sID && selectionType === 's' ? ' chatview__sentence_selected' : '')}>
+                              {selectionType === 'w'
+                                ? words.map((word, wi) => (
+                                    <span key={wi} className={'chatview__word' + (si === sID && wi === wID ? ' chatview__word_selected' : '')}>{word} </span>
+                                  ))
+                                : words.join(' ')}
+                              {' '}
+                            </span>
+                          ))
+                        : entry.content;
+                    })()}
                   </div>
                 </div>
               </div>
@@ -223,9 +344,42 @@ export const ChatView = observer(() => {
             placeholder="Type a message..."
             rows={2}
           />
+          <button className="button chatview__mic" onClick={openRecordingModal}>
+            <Icon name="mic" />
+          </button>
           <button className="button" onClick={handleSend}>Send</button>
         </div>
       </div>
+
+      {showRecordingModal && (
+        <div className="rec-modal__overlay">
+          <div className="rec-modal">
+            {recordingPhase === 'recording' ? (
+              <>
+                <div className="rec-modal__indicator">
+                  <span className="rec-modal__dot" />
+                  <span className="rec-modal__timer">{formatRecordingTime(recordingSeconds)}</span>
+                </div>
+                <button className="button rec-modal__stop" onClick={stopRecording}>
+                  <Icon name="stop" /> Stop
+                </button>
+              </>
+            ) : (
+              <>
+                <AudioMessage url={previewUrl || ''} />
+                <div className="rec-modal__actions">
+                  <button className="button button_secondary" onClick={handleDiscard} disabled={isUploading}>
+                    Discard
+                  </button>
+                  <button className="button" onClick={handleSaveAudio} disabled={isUploading}>
+                    {isUploading ? '...' : 'Send'}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       <PageControls>
         <FileviewSettings viewerMode="view" onModeChange={() => {}} canEdit={false} />
