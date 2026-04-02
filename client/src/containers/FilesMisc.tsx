@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
 import { post, upload } from '../utils/query';
@@ -249,6 +249,141 @@ export const FilesAdd = observer((props : { onUpdated: () => void, selectFile: (
             </>
           )}
 
+        </ModalBody>
+      </Modal>
+    </>
+  );
+});
+
+
+type ContactOption = { id: number; login: string; fullname: string };
+
+export const ChatAdd = observer((props: { onUpdated: () => void, selectFile: (id: FileIDType) => void }) => {
+  const { onUpdated, selectFile } = props;
+  const [open, setOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+  const [title, setTitle] = useState('');
+  const [personInput, setPersonInput] = useState('');
+  const [selectedPerson, setSelectedPerson] = useState<ContactOption | null>(null);
+  const [contacts, setContacts] = useState<ContactOption[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const appStore = window.app;
+  const currentUserId = appStore.userInfo.id;
+
+  const toggle = () => {
+    setOpen(!open);
+    setError('');
+    setMessage('');
+  };
+
+  useEffect(() => {
+    if (!open || !appStore.userId) return;
+    post('contact_list', {}).then(res => {
+      if (res.status !== 'success') return;
+      const opts: ContactOption[] = (res.value || [])
+        .filter((c: any) => c.status === 'accepted')
+        .map((c: any) => c.person_1 === currentUserId
+          ? { id: c.person_2, login: c.person_2_login, fullname: c.person_2_fullname }
+          : { id: c.person_1, login: c.person_1_login, fullname: c.person_1_fullname }
+        );
+      setContacts(opts);
+    });
+  }, [open]);
+
+  const suggestions = personInput.trim()
+    ? contacts.filter(c =>
+        c.login.toLowerCase().includes(personInput.toLowerCase()) ||
+        c.fullname.toLowerCase().includes(personInput.toLowerCase())
+      )
+    : [];
+
+  const handlePersonInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPersonInput(e.target.value);
+    setSelectedPerson(null);
+    setShowSuggestions(true);
+  };
+
+  const handleSelect = (c: ContactOption) => {
+    setSelectedPerson(c);
+    setPersonInput(c.fullname + ' (@' + c.login + ')');
+    setShowSuggestions(false);
+  };
+
+  const handleCreate = async () => {
+    if (!selectedPerson) {
+      setError('Select a person from your contacts');
+      return;
+    }
+    const response = await post('file_add', { is_chat: true, title, person_2: selectedPerson.id });
+    if (response.status === 'success' && response.value?.length) {
+      setError('');
+      onUpdated();
+      setTitle('');
+      setPersonInput('');
+      setSelectedPerson(null);
+      toggle();
+      selectFile(response.value[0]?.id);
+    } else {
+      setError(response.error || 'Failed to create chat');
+    }
+  };
+
+  return (
+    <>
+      <PageButton onClick={toggle} iconSvgname="comment" />
+
+      <Modal isOpen={open} toggle={toggle}>
+        <ModalHeader toggle={toggle}>
+          New chat
+        </ModalHeader>
+        <ModalBody>
+          <div style={{ marginBottom: '1rem' }}>
+            <div className="note_error">{error}</div>
+          </div>
+
+          {!appStore.userId && (
+            <div><AppLink to="/home" className="button_link2">Sign In</AppLink> to create chats.</div>
+          )}
+
+          {appStore.userId && (
+            <form style={{ marginBottom: '3rem' }}>
+              <div className="field">
+                <div className="field-label">Title</div>
+                <input className="field-input" value={title} onChange={e => setTitle(e.target.value)} maxLength={100} />
+              </div>
+              <div className="field" style={{ position: 'relative' }}>
+                <div className="field-label">Invite person</div>
+                <input
+                  className="field-input"
+                  value={personInput}
+                  onChange={handlePersonInput}
+                  onFocus={() => setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                  maxLength={100}
+                  autoComplete="off"
+                />
+                {showSuggestions && suggestions.length > 0 && (
+                  <div style={{
+                    position: 'absolute', top: '100%', left: 0, right: 0,
+                    background: 'white', border: '1px solid #ddd', borderRadius: '0.4rem',
+                    zIndex: 10, boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                  }}>
+                    {suggestions.map(c => (
+                      <div
+                        key={c.id}
+                        onMouseDown={() => handleSelect(c)}
+                        style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}
+                      >
+                        {c.fullname} <span style={{ color: '#888', fontSize: '0.85rem' }}>@{c.login}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <Button onClick={handleCreate} disabled={!selectedPerson}>Create</Button>
+            </form>
+          )}
         </ModalBody>
       </Modal>
     </>

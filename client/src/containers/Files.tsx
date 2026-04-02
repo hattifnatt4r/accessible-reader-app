@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { FilesStore } from './FilesStore';
-import { FilesFile, FilesEdit, FilesAdd } from './FilesMisc';
+import { FilesFile, FilesEdit, FilesAdd, ChatAdd } from './FilesMisc';
 import { NavBackButton, NavModal } from '../components/Nav';
 import { PageButton, PageControls } from '../components/PageControls';
 import { useNavigate } from 'react-router-dom';
@@ -53,6 +53,7 @@ export const Files = observer((props) => {
         <NavModal />
 
         <FilesAdd onUpdated={store.loadFiles} selectFile={store.setFileID} />
+        <ChatAdd onUpdated={store.loadFiles} selectFile={store.setFileID} />
         <PageButton iconSvgname="right2" onClick={openFile} disabled={!selectedFile} />
         <PageButton empty />
         <PageButton empty />
