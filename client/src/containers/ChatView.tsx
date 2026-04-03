@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
-import { EntryType, ReaderFileType } from '../consts/dataTypes';
+import { EntryType, ReaderFileType, UserInfoType } from '../consts/dataTypes';
 import { SelectionTypeType, getSplitParagraph } from './FileviewUtils';
 import { post } from '../utils/query';
 import fixWebmDuration from 'fix-webm-duration';
@@ -9,7 +9,8 @@ import { speakAll } from '../utils/narrate';
 import { getNarrateSupported } from '../utils/misc';
 import { Icon } from '../components/Icon';
 import { AudioMessage } from '../components/AudioMessage';
-import { NavBackButton, NavModal } from '../components/Nav';
+import { ImagePreview } from '../components/ImagePreview';
+import { NavBackButton, NavChatPerson, NavModal } from '../components/Nav';
 import { PageButton, PageControls } from '../components/PageControls';
 import { FileviewSettings } from './FileviewSettings';
 import './ChatView.css';
@@ -35,6 +36,9 @@ export const ChatView = observer(() => {
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [audioUrls, setAudioUrls] = useState<Record<string, string>>({});
+  const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
+  const [imagePreviews, setImagePreviews] = useState<{ file: File; url: string }[]>([]);
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const appStore = window.app;
   const currentUserId = appStore.userInfo.id;
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -49,8 +53,10 @@ export const ChatView = observer(() => {
 
   useEffect(() => {
     entries.forEach(e => {
-      const key = getAudioKey(e.content);
-      if (key && !audioUrls[key]) loadAudioUrl(key);
+      const audioKey = getAudioKey(e.content);
+      if (audioKey && !audioUrls[audioKey]) loadAudioUrl(audioKey);
+      const imgKey = getImageKey(e.content);
+      if (imgKey && !imageUrls[imgKey]) loadImageUrl(imgKey);
     });
   }, [entries]);
 
@@ -75,6 +81,62 @@ export const ChatView = observer(() => {
     if (res.status === 'success' && res.value?.[0]?.url) {
       setAudioUrls(prev => ({ ...prev, [key]: res.value![0].url }));
     }
+  };
+
+  const getImageKey = (content: string) => {
+    const m = content.match(/^\[image:([^:\]]+)/);
+    return m ? m[1] : null;
+  };
+
+  const loadImageUrl = async (key: string) => {
+    const res = await post('image_url', { key });
+    if (res.status === 'success' && res.value?.[0]?.url) {
+      setImageUrls(prev => ({ ...prev, [key]: res.value![0].url }));
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    e.target.value = '';
+    if (!files.length) return;
+    const previews = files.map(file => ({ file, url: URL.createObjectURL(file) }));
+    setImagePreviews(prev => [...prev, ...previews]);
+  };
+
+  const handleImageRemove = (index: number) => {
+    setImagePreviews(prev => {
+      URL.revokeObjectURL(prev[index].url);
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const handleImageCancel = () => {
+    imagePreviews.forEach(p => URL.revokeObjectURL(p.url));
+    setImagePreviews([]);
+  };
+
+  const handleImageSend = async (files: File[]) => {
+    const apiUrl = (window as any).apiConfig?.apiUrl || '';
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append('file', file);
+      let data: any;
+      try {
+        const res = await fetch(apiUrl + 'image_upload', {
+          method: 'POST', mode: 'cors', credentials: 'include', body: formData,
+        });
+        data = await res.json();
+      } catch {
+        throw new Error(`Failed to upload "${file.name}" — file may be too large`);
+      }
+      if (data.status !== 'success') {
+        throw new Error(data.error || `Failed to upload "${file.name}"`);
+      }
+      await post('entry_add', { file_id: Number(fileID), content: `[image:${data.key}]` });
+    }
+    imagePreviews.forEach(p => URL.revokeObjectURL(p.url));
+    setImagePreviews([]);
+    loadData();
   };
 
   const formatRecordingTime = (s: number) =>
@@ -287,6 +349,8 @@ export const ChatView = observer(() => {
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  const person2 : UserInfoType = { image_url: '', login_name: 'test', id: 1, email: 'test@email.com', fullname: 'Full Name' };
+
   return (
     <div className={'chatview page-w-controls fview_' + (appStore.userSettings.readerFontSize || '100')}>
       <div className="chatview__main">
@@ -313,6 +377,12 @@ export const ChatView = observer(() => {
                         const url = audioUrls[audioKey];
                         if (!url) return <span className="chatview__audio-loading">...</span>;
                         return <AudioMessage url={url} own={isOwn} />;
+                      }
+                      const imgKey = getImageKey(entry.content);
+                      if (imgKey) {
+                        const url = imageUrls[imgKey];
+                        if (!url) return <span className="chatview__audio-loading">...</span>;
+                        return <img src={url} alt="" className="chatview__image" />;
                       }
                       return isSelected && selectionType !== 'p'
                         ? sentences.map((words, si) => (
@@ -344,12 +414,32 @@ export const ChatView = observer(() => {
             placeholder="Type a message..."
             rows={2}
           />
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            style={{ display: 'none' }}
+            onChange={handleImageChange}
+          />
+          <button className="button chatview__mic" onClick={() => imageInputRef.current?.click()}>
+            <Icon name="image" />
+          </button>
           <button className="button chatview__mic" onClick={openRecordingModal}>
             <Icon name="mic" />
           </button>
           <button className="button" onClick={handleSend}>Send</button>
         </div>
       </div>
+
+      {imagePreviews.length > 0 && (
+        <ImagePreview
+          previews={imagePreviews}
+          onRemove={handleImageRemove}
+          onCancel={handleImageCancel}
+          onSend={handleImageSend}
+        />
+      )}
 
       {showRecordingModal && (
         <div className="rec-modal__overlay">
@@ -382,14 +472,14 @@ export const ChatView = observer(() => {
       )}
 
       <PageControls>
-        <FileviewSettings viewerMode="view" onModeChange={() => {}} canEdit={false} />
+        <NavChatPerson person={person2} />
         <NavBackButton />
-        <PageButton empty />
+        <FileviewSettings viewerMode="view" onModeChange={() => {}} canEdit={false} />
         <NavModal />
+        <PageButton empty />
         <PageButton empty />
 
         {isSpeaking && <PageButton onClick={narratePause} iconSvgname="pause" />}
-        {!isSpeaking && <PageButton onClick={isPaused ? narrateResume : narrateAll} iconSvgname="play" disabled={!narrateSupported} />}
 
         <PageButton onClick={cycleSelectionType} className="fview__btn-select">
           <div className="icon-mask page-button__svg">

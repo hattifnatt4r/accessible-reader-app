@@ -139,6 +139,14 @@
   flex-shrink: 0;
 }
 
+.chatview__image {
+  display: block;
+  max-width: 100%;
+  max-height: 320px;
+  border-radius: 0.5rem;
+  object-fit: contain;
+}
+
 .rec-modal__overlay {
   position: absolute;
   inset: 0;

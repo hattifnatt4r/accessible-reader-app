@@ -7,6 +7,7 @@ import { SvgIcon } from './Icon';
 import { PageButton } from './PageControls';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Nav.css';
+import { UserInfoType } from '../consts/dataTypes';
 
 
 export const NavModal = observer((props : { className?: string }) => {
@@ -84,5 +85,19 @@ export function NavBackButton() {
       onClick={back}
       iconSvgname="arrowback"
     />
+  );
+}
+
+export function NavChatPerson(person : UserInfoType) {
+  const [titleOpen, setTitleOpen] = useState(false);
+
+  const image = person?.image_url;
+  return (
+    <PageButton
+      onClick={() => setTitleOpen(!titleOpen)}
+      iconSvgname={!image ? "person" : ''}
+    >
+      {image && <img src={image} className="navbutton_person"/>}
+    </PageButton>
   );
 }

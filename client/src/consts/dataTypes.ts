@@ -79,4 +79,5 @@ export type UserInfoType = {
   id: number,
   email: string,
   fullname: string,
+  image_url?: string,
 }
