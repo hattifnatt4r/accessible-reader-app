@@ -6,8 +6,8 @@ import { AppLink } from './AppLink';
 import { SvgIcon } from './Icon';
 import { PageButton } from './PageControls';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './Nav.css';
 import { UserInfoType } from '../consts/dataTypes';
+import './Nav.css';
 
 
 export const NavModal = observer((props : { className?: string }) => {
@@ -95,7 +95,7 @@ export function NavChatPerson(person : UserInfoType) {
   return (
     <PageButton
       onClick={() => setTitleOpen(!titleOpen)}
-      iconSvgname={!image ? "person" : ''}
+      iconSvgname={!image ? "person2" : ''}
     >
       {image && <img src={image} className="navbutton_person"/>}
     </PageButton>
