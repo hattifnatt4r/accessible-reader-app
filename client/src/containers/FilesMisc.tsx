@@ -25,15 +25,20 @@ export function FilesFile(props : { file: ReaderFileType, className?: string, se
   }
 
   const isSharedFile = file.person_id == 0;
-  
+  const currentUserId = window.app.userInfo.id;
+
+  let displayName: React.ReactNode;
+  if (file.is_chat) {
+    const otherName = file.person_1 === currentUserId ? file.person_2_name : file.person_1_name;
+    displayName = <><Icon name="chat" filled className="fhome-file__icon" /><div className="fhome-file__name">{otherName} <span className="fhome-file__title">- {file.title}</span></div></>;
+  } else {
+    displayName = <><Icon name={isSharedFile ? 'lock' : 'draft'} filled className="fhome-file__icon" /><div className="fhome-file__name">{file?.filename} <span className="fhome-file__title">- {file?.title}</span></div></>;
+  }
+
   return (
     <div className={classNames(cl)} onClick={selectFile}>
       <div className="fhome-file__flex">
-        <Icon name={isSharedFile ? 'lock' : 'draft'} filled className="fhome-file__icon" />
-        
-        <div className="fhome-file__name">
-          {file?.filename} <span className="fhome-file__title">- {file?.title}</span>
-        </div>
+        {displayName}
       </div>
     </div>
   );
@@ -315,7 +320,7 @@ export const ChatAdd = observer((props: { onUpdated: () => void, selectFile: (id
       setError('Select a person from your contacts');
       return;
     }
-    const fullTitle = selectedPerson.fullname + (title ? ' — ' + title : '');
+    const fullTitle = title || '';
     const response = await post('file_add', { is_chat: true, title: fullTitle, person_1: currentUserId, person_2: selectedPerson.id });
     if (response.status === 'success' && response.value?.length) {
       setError('');

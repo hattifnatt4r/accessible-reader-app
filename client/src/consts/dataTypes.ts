@@ -18,6 +18,8 @@ export type ReaderFileType = {
   is_chat: boolean,
   person_1: number | null,
   person_2: number | null,
+  person_1_name?: string | null,
+  person_2_name?: string | null,
 };
 
 export type EntryType = {

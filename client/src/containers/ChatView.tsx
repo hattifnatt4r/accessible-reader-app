@@ -43,6 +43,7 @@ export const ChatView = observer(() => {
   const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
   const [imagePreviews, setImagePreviews] = useState<{ file: File; url: string }[]>([]);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const lastEntryIdRef = useRef<number>(0);
   const appStore = window.app;
   const currentUserId = appStore.userInfo.id;
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -54,6 +55,22 @@ export const ChatView = observer(() => {
   const narrateSupported = getNarrateSupported();
 
   useEffect(() => { loadData(); }, []);
+
+  useEffect(() => {
+    if (showEditor) return;
+    const pollRef = setInterval(async () => {
+      const afterId = lastEntryIdRef.current;
+      const entryRes = await post('entry_list', { file_id: Number(fileID), after_id: afterId });
+      if (entryRes.status === 'success') {
+        const newEntries: EntryType[] = entryRes.value || [];
+        if (newEntries.length) {
+          lastEntryIdRef.current = newEntries[newEntries.length - 1].id;
+          setEntries(prev => [...prev, ...newEntries]);
+        }
+      }
+    }, 10000);
+    return () => clearInterval(pollRef);
+  }, [showEditor]);
 
   useEffect(() => {
     entries.forEach(e => {
@@ -88,7 +105,11 @@ export const ChatView = observer(() => {
       }
     }
     const entryRes = await post('entry_list', { file_id: Number(fileID) });
-    if (entryRes.status === 'success') setEntries(entryRes.value || []);
+    if (entryRes.status === 'success') {
+      const loaded: EntryType[] = entryRes.value || [];
+      setEntries(loaded);
+      if (loaded.length) lastEntryIdRef.current = loaded[loaded.length - 1].id;
+    }
   };
 
   const getAudioKey = (content: string) => {
@@ -381,15 +402,15 @@ export const ChatView = observer(() => {
   return (
     <div className={'chatview page-w-controls fview_' + (appStore.userSettings.readerFontSize || '100')}>
       <div className="chatview__main">
-        <div className="chatview__header">{file?.title || ''}</div>
 
         <div className="chatview__messages">
+          <div className="chatview__header">{[otherPerson?.fullname || otherPerson?.login_name, file?.title].filter(Boolean).join(' — ')}</div>
           {entries.map((entry) => {
             const isOwn = entry.person_id === currentUserId;
             const isSelected = entry.id === selectedEntryId;
             return (
               <div key={entry.id} className={'chatview__msg-wrap' + (isOwn ? ' chatview__msg-wrap_right' : ' chatview__msg-wrap_left')}>
-                <div className="chatview__msg-time">{formatTime(entry.created_at)}</div>
+                {/* <div className="chatview__msg-time">{formatTime(entry.created_at)}</div> */}
                 <div className="chatview__msg-row">
                   <div
                     className={'chatview__circle' + (isSelected ? ' chatview__circle_selected' : '')}
@@ -521,7 +542,7 @@ export const ChatView = observer(() => {
       )}
 
       <PageControls>
-        <NavChatPerson person={otherPerson} />
+        <NavChatPerson person={otherPerson} title={file?.title || ''} />
         <NavBackButton />
         <FileviewSettings viewerMode="view" onModeChange={() => {}} canEdit={false} />
         <NavModal />

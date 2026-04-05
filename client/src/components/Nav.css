@@ -56,3 +56,37 @@
 .navbutton_person {
 
 }
+
+.nav-chat-person-modal {
+  width: 320px;
+  max-width: 92vw;
+}
+
+.nav-chat-person-modal__img {
+  display: block;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem;
+}
+
+.nav-chat-person-modal__no-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--color_b2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+.nav-chat-person-modal__name {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.nav-chat-person-modal .modal-header__close {
+  display: none;
+}
