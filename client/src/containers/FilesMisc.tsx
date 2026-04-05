@@ -315,7 +315,8 @@ export const ChatAdd = observer((props: { onUpdated: () => void, selectFile: (id
       setError('Select a person from your contacts');
       return;
     }
-    const response = await post('file_add', { is_chat: true, title, person_2: selectedPerson.id });
+    const fullTitle = selectedPerson.fullname + (title ? ' — ' + title : '');
+    const response = await post('file_add', { is_chat: true, title: fullTitle, person_1: currentUserId, person_2: selectedPerson.id });
     if (response.status === 'success' && response.value?.length) {
       setError('');
       onUpdated();

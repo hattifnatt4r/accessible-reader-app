@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { PageSimple } from '../components/PageSimple';
 import { observer } from 'mobx-react-lite';
 import { FormFieldOptions } from '../components/FormButton';
@@ -11,10 +11,23 @@ import { ImagePreview } from '../components/ImagePreview';
 export const UserSettings: React.FC = observer(() => {
   const { fileID } = useParams();
   const [imagePreviews, setImagePreviews] = useState<{ file: File; url: string }[]>([]);
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   const appStore = window.app;
   const isLoggedIn = appStore.getIsLoggedIn();
+
+  useEffect(() => {
+    const value = appStore.userInfo.image_url;
+    if (!value) { setProfileImageUrl(null); return; }
+    if (value.startsWith('image/')) {
+      post('image_url', { key: value }).then(res => {
+        setProfileImageUrl(res.value?.[0]?.url || null);
+      });
+    } else {
+      setProfileImageUrl(value);
+    }
+  }, [appStore.userInfo.image_url]);
 
   const form = appStore.userSettings;
 
@@ -59,9 +72,7 @@ export const UserSettings: React.FC = observer(() => {
     if (data.status !== 'success') {
       throw new Error(data.error || `Failed to upload "${file.name}"`);
     }
-    const urlRes = await post('image_url', { key: data.key });
-    const imageUrl = urlRes.value?.[0]?.url;
-    await post('person_upd', { id: appStore.userInfo.id, image_url: imageUrl });
+    await post('person_upd', { id: appStore.userInfo.id, image_url: data.key });
     imagePreviews.forEach(p => URL.revokeObjectURL(p.url));
     setImagePreviews([]);
     appStore.loadUser();
@@ -82,7 +93,7 @@ export const UserSettings: React.FC = observer(() => {
             <br/>
             Email: {appStore.userInfo.email}
             <br/>
-            <img src={appStore.userInfo.image_url} style={{ width: 200, height: 200, objectFit: 'cover' }}></img>
+            {profileImageUrl && <img src={profileImageUrl} style={{ width: 200, height: 200, objectFit: 'cover' }}></img>}
             <br/>
             <input
               ref={imageInputRef}

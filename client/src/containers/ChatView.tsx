@@ -20,6 +20,7 @@ import './ChatView.css';
 export const ChatView = observer(() => {
   const { fileID } = useParams();
   const [file, setFile] = useState<ReaderFileType | null>(null);
+  const [otherPerson, setOtherPerson] = useState<UserInfoType | null>(null);
   const [entries, setEntries] = useState<EntryType[]>([]);
   const [message, setMessage] = useState('');
   const [selectedEntryId, setSelectedEntryId] = useState<number | null>(null);
@@ -69,7 +70,23 @@ export const ChatView = observer(() => {
 
   const loadData = async () => {
     const fileRes = await post('file', { id: Number(fileID) });
-    if (fileRes.value?.length) setFile(fileRes.value[0]);
+    const fileData = fileRes.value?.[0];
+    if (fileData) {
+      setFile(fileData);
+      const otherPersonId = fileData.person_1 === appStore.userInfo.id ? fileData.person_2 : fileData.person_1;
+      console.log('other person:', otherPersonId, fileData);
+      if (otherPersonId) {
+        const personRes = await post('person_by_id', { id: otherPersonId });
+        if (personRes.status === 'success') {
+          const person = personRes.value;
+          if (person.image_url) {
+            const urlRes = await post('image_url', { key: person.image_url });
+            person.image_url = urlRes.value?.[0]?.url || null;
+          }
+          setOtherPerson(person);
+        }
+      }
+    }
     const entryRes = await post('entry_list', { file_id: Number(fileID) });
     if (entryRes.status === 'success') setEntries(entryRes.value || []);
   };
@@ -360,7 +377,6 @@ export const ChatView = observer(() => {
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  const person2 : UserInfoType = { image_url: '', login_name: 'test', id: 1, email: 'test@email.com', fullname: 'Full Name' };
 
   return (
     <div className={'chatview page-w-controls fview_' + (appStore.userSettings.readerFontSize || '100')}>
@@ -425,17 +441,18 @@ export const ChatView = observer(() => {
             style={{ display: 'none' }}
             onChange={handleImageChange}
           />
-          <button className="button chatview__mic" onClick={() => imageInputRef.current?.click()}>
-            <Icon name="image" />
-          </button>
-          <button className="button chatview__mic" onClick={() => setShowEditor(true)}>
-            <Icon name="edit" />
-          </button>
           <button className="button chatview__mic" onClick={() => setShowTextInput(true)}>
             <Icon name="edit_note" />
           </button>
+          <button className="button chatview__mic" onClick={() => imageInputRef.current?.click()}>
+            <Icon name="image" />
+          </button>
+          
           <button className="button chatview__mic" onClick={openRecordingModal}>
             <Icon name="mic" />
+          </button>
+          <button className="button chatview__mic" onClick={() => setShowEditor(true)}>
+            <Icon name="edit" />
           </button>
         </div>
       </div>
@@ -504,7 +521,7 @@ export const ChatView = observer(() => {
       )}
 
       <PageControls>
-        <NavChatPerson person={person2} />
+        <NavChatPerson person={otherPerson} />
         <NavBackButton />
         <FileviewSettings viewerMode="view" onModeChange={() => {}} canEdit={false} />
         <NavModal />
