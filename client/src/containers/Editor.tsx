@@ -120,8 +120,8 @@ const layouts : LayoutType[] = [
 
 const handleClickWithDelay = clickWithDelay();
 
-export const Editor = observer((props: { open: boolean, text: string, toggle: () => void, save: (textEdited: string) => void, readonly?: boolean }) => {
-  const { open, text, toggle, save, readonly } = props;
+export const Editor = observer((props: { open: boolean, text: string, toggle: () => void, save: (textEdited: string) => void, readonly?: boolean, isChat?: boolean }) => {
+  const { open, text, toggle, save, readonly, isChat } = props;
   const [textvalue, setTextvalue] = useState<string>('');
   const [cursor, setCursor] = useState<number>(0);
   const [mode, setMode] = useState<string>('m1');
@@ -268,7 +268,7 @@ export const Editor = observer((props: { open: boolean, text: string, toggle: ()
     { id: 'next', comp: <div onClick={handleNext} className={classNames(clButton('next', true))} id="fedit-next" key="next"><div className="fedit__btn-wrap"><Icon name="keyboard_arrow_right" /></div></div> },
     { id: 'erase', comp: <div onClick={handleErase} className={classNames(clButton('erase', true))} id="fedit-erase" key="erase"><div className="fedit__btn-wrap"><Icon name="backspace" /></div></div> },
     { id: 'reset', comp: <div onClick={handleReset} className={classNames(clButton('reset', true))} key="reset"><div className="fedit__btn-wrap"><Icon name="refresh" /></div></div> },
-    { id: 'save', comp: <div onClick={handleSave} className={classNames(clButton('save', true))} key="save"><div className="fedit__btn-wrap"><Icon name="save" /></div></div> },
+    { id: 'save', comp: <div onClick={handleSave} className={classNames(clButton('save', true))} key="save"><div className="fedit__btn-wrap"><Icon name={isChat ? 'send' : 'save'} /></div></div> },
     { id: 'exit', comp: <div onClick={toggle} className={classNames(clButton('exit', true))} key="exit"><div className="fedit__btn-wrap"><Icon name="close" /></div></div> },
     { id: 'read', comp: <div onClick={handleRead} className={classNames(clButton('read', true))} key="read"><div className="fedit__btn-wrap"><Icon name="campaign" /></div></div> },
     { id: 'more', comp: <div onClick={handleToggleMode} className={classNames(clButton('toggleview', true))} key="toggleview"><div className="fedit__btn-wrap">...</div></div> },

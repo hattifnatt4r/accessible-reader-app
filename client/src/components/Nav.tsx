@@ -88,7 +88,7 @@ export function NavBackButton() {
   );
 }
 
-export function NavChatPerson(person : UserInfoType) {
+export function NavChatPerson({ person } : { person: UserInfoType }) {
   const [titleOpen, setTitleOpen] = useState(false);
 
   const image = person?.image_url;

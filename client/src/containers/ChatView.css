@@ -147,6 +147,11 @@
   object-fit: contain;
 }
 
+.chatview__text-popup-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .rec-modal__overlay {
   position: absolute;
   inset: 0;

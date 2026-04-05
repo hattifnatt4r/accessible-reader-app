@@ -13,6 +13,7 @@ import { ImagePreview } from '../components/ImagePreview';
 import { NavBackButton, NavChatPerson, NavModal } from '../components/Nav';
 import { PageButton, PageControls } from '../components/PageControls';
 import { FileviewSettings } from './FileviewSettings';
+import { Editor } from './Editor';
 import './ChatView.css';
 
 
@@ -35,6 +36,8 @@ export const ChatView = observer(() => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
+  const [showTextInput, setShowTextInput] = useState(false);
   const [audioUrls, setAudioUrls] = useState<Record<string, string>>({});
   const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
   const [imagePreviews, setImagePreviews] = useState<{ file: File; url: string }[]>([]);
@@ -337,10 +340,18 @@ export const ChatView = observer(() => {
     loadData();
   };
 
+  const handleEditorSend = async (text: string) => {
+    if (!text.trim()) return;
+    await post('entry_add', { file_id: Number(fileID), content: text.trim() });
+    setShowEditor(false);
+    loadData();
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
+      setShowTextInput(false);
     }
   };
 
@@ -406,14 +417,6 @@ export const ChatView = observer(() => {
         </div>
 
         <div className="chatview__input-bar">
-          <textarea
-            className="chatview__input"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Type a message..."
-            rows={2}
-          />
           <input
             ref={imageInputRef}
             type="file"
@@ -425,10 +428,15 @@ export const ChatView = observer(() => {
           <button className="button chatview__mic" onClick={() => imageInputRef.current?.click()}>
             <Icon name="image" />
           </button>
+          <button className="button chatview__mic" onClick={() => setShowEditor(true)}>
+            <Icon name="edit" />
+          </button>
+          <button className="button chatview__mic" onClick={() => setShowTextInput(true)}>
+            <Icon name="edit_note" />
+          </button>
           <button className="button chatview__mic" onClick={openRecordingModal}>
             <Icon name="mic" />
           </button>
-          <button className="button" onClick={handleSend}>Send</button>
         </div>
       </div>
 
@@ -439,6 +447,30 @@ export const ChatView = observer(() => {
           onCancel={handleImageCancel}
           onSend={handleImageSend}
         />
+      )}
+
+      {showTextInput && (
+        <div className="rec-modal__overlay">
+          <div className="rec-modal">
+            <textarea
+              className="chatview__input chatview__text-popup-input"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Type a message..."
+              rows={4}
+              autoFocus
+            />
+            <div className="rec-modal__actions">
+              <button className="button button_secondary" onClick={() => { setShowTextInput(false); setMessage(''); }}>
+                Cancel
+              </button>
+              <button className="button" onClick={() => { handleSend(); setShowTextInput(false); }} disabled={!message.trim()}>
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {showRecordingModal && (
@@ -500,6 +532,14 @@ export const ChatView = observer(() => {
         <PageButton iconSvgname="arrow-back" onClick={() => changeSelection(-1)} />
         <PageButton iconSvgname="arrow-forward" onClick={() => changeSelection(1)} />
       </PageControls>
+
+      <Editor
+        open={showEditor}
+        text=""
+        toggle={() => setShowEditor(false)}
+        save={handleEditorSend}
+        isChat
+      />
     </div>
   );
 });

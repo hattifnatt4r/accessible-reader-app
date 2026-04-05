@@ -6,10 +6,10 @@ import { Button } from '../components/Button';
 import { Icon } from '../components/Icon';
 import { post } from '../utils/query';
 import { useParams } from 'react-router-dom';
+import { ImagePreview } from '../components/ImagePreview';
 
 export const UserSettings: React.FC = observer(() => {
   const { fileID } = useParams();
-  const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
   const [imagePreviews, setImagePreviews] = useState<{ file: File; url: string }[]>([]);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
@@ -22,28 +22,49 @@ export const UserSettings: React.FC = observer(() => {
     appStore.updateSettings({ [name]: value });
   }
 
-  const handleImageUpdate = async (files: File[]) => {
-    const apiUrl = (window as any).apiConfig?.apiUrl || '';
-    for (const file of files) {
-      const formData = new FormData();
-      formData.append('file', file);
-      let data: any;
-      try {
-        const res = await fetch(apiUrl + 'image_upload', {
-          method: 'POST', mode: 'cors', credentials: 'include', body: formData,
-        });
-        data = await res.json();
-      } catch {
-        throw new Error(`Failed to upload "${file.name}" — file may be too large`);
-      }
-      if (data.status !== 'success') {
-        throw new Error(data.error || `Failed to upload "${file.name}"`);
-      }
-      await post('person_upd', { id: appStore.userId, image_url: URL.revokeObjectURL(imagePreviews[0].url) });
-    }
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    e.target.value = '';
+    if (!files.length) return;
+    const previews = files.map(file => ({ file, url: URL.createObjectURL(file) }));
+    setImagePreviews(prev => [...prev, ...previews]);
+  };
+
+  const handleImageRemove = (index: number) => {
+    setImagePreviews(prev => {
+      URL.revokeObjectURL(prev[index].url);
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const handleImageCancel = () => {
     imagePreviews.forEach(p => URL.revokeObjectURL(p.url));
     setImagePreviews([]);
-    // loadData();
+  };
+
+  const handleImageUpdate = async (files: File[]) => {
+    const apiUrl = (window as any).apiConfig?.apiUrl || '';
+    const file = files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    let data: any;
+    try {
+      const res = await fetch(apiUrl + 'image_upload', {
+        method: 'POST', mode: 'cors', credentials: 'include', body: formData,
+      });
+      data = await res.json();
+    } catch {
+      throw new Error(`Failed to upload "${file.name}" — file may be too large`);
+    }
+    if (data.status !== 'success') {
+      throw new Error(data.error || `Failed to upload "${file.name}"`);
+    }
+    const urlRes = await post('image_url', { key: data.key });
+    const imageUrl = urlRes.value?.[0]?.url;
+    await post('person_upd', { id: appStore.userInfo.id, image_url: imageUrl });
+    imagePreviews.forEach(p => URL.revokeObjectURL(p.url));
+    setImagePreviews([]);
+    appStore.loadUser();
   };
   
 
@@ -61,8 +82,15 @@ export const UserSettings: React.FC = observer(() => {
             <br/>
             Email: {appStore.userInfo.email}
             <br/>
-            Image: <img src={appStore.userInfo.image_url}></img>
+            <img src={appStore.userInfo.image_url} style={{ width: 200, height: 200, objectFit: 'cover' }}></img>
             <br/>
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={handleImageChange}
+            />
             <button className="button chatview__mic" onClick={() => imageInputRef.current?.click()}>
               <Icon name="image" />
             </button>
@@ -122,6 +150,15 @@ export const UserSettings: React.FC = observer(() => {
       <div>
         <Button linkButton onClick={() => { window.location.reload(); }}><Icon name="refresh" /> Reload page</Button>
       </div>
+
+      {imagePreviews.length > 0 && (
+        <ImagePreview
+          previews={imagePreviews}
+          onRemove={handleImageRemove}
+          onCancel={handleImageCancel}
+          onSend={handleImageUpdate}
+        />
+      )}
     </PageSimple>
   );
 });
