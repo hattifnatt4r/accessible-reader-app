@@ -156,9 +156,41 @@ export const ChatView = observer(() => {
     setImagePreviews([]);
   };
 
+  const compressToUnder1MB = (file: File): Promise<File> => {
+    return new Promise((resolve) => {
+      const MAX = 1024 * 1024;
+      if (file.size <= MAX) { resolve(file); return; }
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const scale = Math.min(1, Math.sqrt(MAX / file.size));
+        const width = Math.round(img.width * scale);
+        const height = Math.round(img.height * scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
+        const tryBlob = (q: number) => {
+          canvas.toBlob((blob) => {
+            if (!blob) { resolve(file); return; }
+            if (blob.size <= MAX || q <= 0.3) {
+              resolve(new File([blob], file.name.replace(/\.\w+$/, '.jpg'), { type: 'image/jpeg' }));
+            } else {
+              tryBlob(q - 0.1);
+            }
+          }, 'image/jpeg', q);
+        };
+        tryBlob(0.85);
+      };
+      img.src = url;
+    });
+  };
+
   const handleImageSend = async (files: File[]) => {
     const apiUrl = (window as any).apiConfig?.apiUrl || '';
-    for (const file of files) {
+    for (const rawFile of files) {
+      const file = await compressToUnder1MB(rawFile);
       const formData = new FormData();
       formData.append('file', file);
       let data: any;
@@ -451,9 +483,7 @@ export const ChatView = observer(() => {
             );
           })}
           <div ref={bottomRef} />
-        </div>
 
-        <div className="chatview__input-bar">
           <input
             ref={imageInputRef}
             type="file"
@@ -462,21 +492,10 @@ export const ChatView = observer(() => {
             style={{ display: 'none' }}
             onChange={handleImageChange}
           />
-          <button className="button chatview__mic" onClick={() => setShowTextInput(true)}>
-            <Icon name="edit_note" />
-          </button>
-          <button className="button chatview__mic" onClick={() => imageInputRef.current?.click()}>
-            <Icon name="image" />
-          </button>
-          
-          <button className="button chatview__mic" onClick={openRecordingModal}>
-            <Icon name="mic" />
-          </button>
-          <button className="button chatview__mic" onClick={() => setShowEditor(true)}>
-            <Icon name="edit" />
-          </button>
         </div>
-      </div>
+        </div>
+
+        
 
       {imagePreviews.length > 0 && (
         <ImagePreview
@@ -545,11 +564,9 @@ export const ChatView = observer(() => {
         <NavChatPerson person={otherPerson} title={file?.title || ''} />
         <NavBackButton />
         <FileviewSettings viewerMode="view" onModeChange={() => {}} canEdit={false} />
-        <NavModal />
-        <PageButton empty />
-        <PageButton empty />
+        
 
-        {isSpeaking && <PageButton onClick={narratePause} iconSvgname="pause" />}
+        {/* isSpeaking && <PageButton onClick={narratePause} iconSvgname="pause" /> */}
 
         <PageButton onClick={cycleSelectionType} className="fview__btn-select">
           <div className="icon-mask page-button__svg">
@@ -563,12 +580,15 @@ export const ChatView = observer(() => {
             </div>
           </div>
         </PageButton>
+        <PageButton iconSvgname="arrow-back" onClick={() => changeSelection(-1)} />
+        <PageButton iconSvgname="arrow-forward" onClick={() => changeSelection(1)} />
 
         {isSpeaking && <PageButton onClick={narratePause} iconSvgname="pause" />}
         {!isSpeaking && <PageButton onClick={narrateResume} iconSvgname="marketing" disabled={!narrateSupported} />}
 
-        <PageButton iconSvgname="arrow-back" onClick={() => changeSelection(-1)} />
-        <PageButton iconSvgname="arrow-forward" onClick={() => changeSelection(1)} />
+        <PageButton onClick={() => imageInputRef.current?.click()} iconSvgname="image" className="page-button_chat" />
+        <PageButton onClick={openRecordingModal} iconSvgname="mic" className="page-button_chat" />
+        <PageButton onClick={() => setShowEditor(true)} iconSvgname="edit-button" className="page-button_chat"/>
       </PageControls>
 
       <Editor

@@ -56,7 +56,6 @@ export const Files = observer((props) => {
         <ChatAdd onUpdated={store.loadFiles} selectFile={store.setFileID} />
         <PageButton iconSvgname="right2" onClick={openFile} disabled={!selectedFile} />
         <PageButton empty />
-        <PageButton empty />
         <PageButton iconSvgname="arrow-back" onClick={() => store.nextPrevFile(-1)} />
         <PageButton iconSvgname="arrow-forward" onClick={() => store.nextPrevFile(1)} />
       </PageControls>
